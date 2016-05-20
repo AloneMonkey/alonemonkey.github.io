@@ -1,0 +1,974 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.useso.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Android源码的下载和编译完成过程，其中会有很多坑，一不注意就要折腾很久，先来填一波坑！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android源码下载编译">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/05/03/android-source-compile/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="Android源码的下载和编译完成过程，其中会有很多坑，一不注意就要折腾很久，先来填一波坑！">
+<meta property="og:image" content="http://7xtdl4.com2.z0.glb.clouddn.com/monkey_1461406330240.png">
+<meta property="og:image" content="http://7xtdl4.com2.z0.glb.clouddn.com/monkey_2016-04-26_101319.png">
+<meta property="og:updated_time" content="2016-05-14T06:58:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android源码下载编译">
+<meta name="twitter:description" content="Android源码的下载和编译完成过程，其中会有很多坑，一不注意就要折腾很久，先来填一波坑！">
+<meta name="twitter:image" content="http://7xtdl4.com2.z0.glb.clouddn.com/monkey_1461406330240.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android源码下载编译 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android源码下载编译
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-03T00:00:00+08:00" content="2016-05-03">
+              2016-05-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/03/android-source-compile/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/03/android-source-compile/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>编译平台：Ubuntu 14.04 64bit<br>编译版本：Android 4.1.1</p>
+</blockquote>
+<h2 id="Android-体系结构"><a href="#Android-体系结构" class="headerlink" title="Android 体系结构"></a>Android 体系结构</h2><p>Android分为四层，分别是：</p>
+<ol>
+<li>应用层</li>
+<li>应用框架层</li>
+<li>Android运行环境和系统运行库层</li>
+<li>Linux内核层</li>
+</ol>
+<p><img src="http://7xtdl4.com2.z0.glb.clouddn.com/monkey_1461406330240.png" alt=""></p>
+<a id="more"></a>
+<h2 id="Android-源码下载和编译"><a href="#Android-源码下载和编译" class="headerlink" title="Android 源码下载和编译"></a>Android 源码下载和编译</h2><p>Android Jelly Bean(Android 4.1)的编译依赖Sun JDK 1.6，由于Ubuntu默认使用Open JDK，所以需要首先安装JDK1.6。</p>
+<h3 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h3><p>首先从<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk6-jsp-136632.html" target="_blank" rel="external">oracle</a>下载JDK1.6，得到文件jdk-6u45-linux-x64.bin 运行直接运行解包，得到文件夹jdk1.6.0_45。</p>
+<p>设置环境变量，编辑文件gedit /etc/profile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/home/monkey/Documents/jdk1.6.0_45</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</span><br><span class="line">export PATH=$PATH:$&#123;JAVA_HOME&#125;/bin:$&#123;JRE_HOME&#125;/bin</span><br></pre></td></tr></table></figure>
+<h3 id="安装依赖软件包"><a href="#安装依赖软件包" class="headerlink" title="安装依赖软件包"></a>安装依赖软件包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip bison flex xsltproc gperf</span><br></pre></td></tr></table></figure>
+<h3 id="下载Android代码"><a href="#下载Android代码" class="headerlink" title="下载Android代码"></a>下载Android代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//建立repo工作目录</span><br><span class="line">mkdir ~/bin </span><br><span class="line">PATH=~/bin:<span class="variable">$PATH</span></span><br><span class="line">//下载repo脚本</span><br><span class="line">$ curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</span><br><span class="line">$ chmod a+x ~/bin/repo</span><br><span class="line">//建立Android源码目录</span><br><span class="line">mkdir -p ~/android/jellybean</span><br><span class="line"><span class="built_in">cd</span> ~/android/jellybean</span><br><span class="line">//初始化repo</span><br><span class="line">repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r3</span><br><span class="line">//查看分支情况</span><br><span class="line">git ls-remote --tags https://android.googlesource.com/platform/manifest</span><br><span class="line">//下载Android源代码</span><br><span class="line">repo sync</span><br></pre></td></tr></table></figure>
+<h3 id="下载指定模块源码"><a href="#下载指定模块源码" class="headerlink" title="下载指定模块源码"></a>下载指定模块源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo manifest -o -</span><br></pre></td></tr></table></figure>
+<p>其中，name表示项目模块名称以及在源码服务器上的相对路径，path表示项目的本地路径。</p>
+<p>repo manifest -o - 命令读取的是本地源码目录(~/android/jellybean)下的.repo/manifest/default/xml文件。</p>
+<p>知道了有哪些项目可以单独下载，只要将项目模块名指定给repo sync即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo sync platfoem/system/core</span><br></pre></td></tr></table></figure>
+<h3 id="下载Android-Linux-Kernel源码"><a href="#下载Android-Linux-Kernel源码" class="headerlink" title="下载Android Linux Kernel源码"></a>下载Android Linux Kernel源码</h3><p>Kernel部分的源码没有采用repo工具管理，可以直接通过git下载。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/android/jellybean</span><br><span class="line">mkdir kernel</span><br><span class="line">cd kernel</span><br></pre></td></tr></table></figure>
+<p>下载通用版，其余是针对特定处理器的版本，执行第一条指令即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone https://android.googlesource.com/kernel/common.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/goldfish.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/msm.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/omap.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/samsung.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/tegra.git</span><br></pre></td></tr></table></figure>
+<p>由于Android JellyBean使用的是Linux 3.0内核，还需要切换到Kernel 3.0分支。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd common</span><br><span class="line">git branch -a</span><br><span class="line">git checkout remotes/origin/Android-3.0</span><br></pre></td></tr></table></figure>
+<h3 id="编译Android上层系统源码"><a href="#编译Android上层系统源码" class="headerlink" title="编译Android上层系统源码"></a>编译Android上层系统源码</h3><p>导入预设脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. build/envsetup.sh </span><br><span class="line">或者</span><br><span class="line">source build/envsetup.sh</span><br></pre></td></tr></table></figure>
+<p>指定产品名和编译变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lunch</span><br><span class="line">//选择full-eng 模拟器设备</span><br></pre></td></tr></table></figure>
+<p>编译源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+<p>Mac环境配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hdiutil create -type SPARSE -fs &apos;Case-sensitive Journaled HFS+&apos; -size 40g ~/android.dmg</span><br><span class="line"></span><br><span class="line">hdiutil resize -size &lt;new-size-you-want&gt;g ~/android.dmg.sparseimage</span><br><span class="line"></span><br><span class="line">hdiutil attach ~/android.dmg -mountpoint /Volumes/android</span><br></pre></td></tr></table></figure>
+<h3 id="编译指定模块源码"><a href="#编译指定模块源码" class="headerlink" title="编译指定模块源码"></a>编译指定模块源码</h3><ul>
+<li>make 模块名</li>
+<li>mm 来自于envsetup.sh脚本中注册的函数</li>
+<li>mmm 来自于envsetup.sh脚本中注册的函数</li>
+</ul>
+<p><strong>make 模块名</strong></p>
+<p>适合第一次编译，会把依赖块一并编译。<br>编译应用层源码，查看Android.mk文件的LOCAL_PACKAGE_NAME。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat packages/apps/Phone/Android.mk</span><br><span class="line">...</span><br><span class="line">LOCAL_PACKAGE_NAME := Phone</span><br><span class="line">...</span><br><span class="line">make Phone</span><br></pre></td></tr></table></figure>
+<p>编译框架层和系统运行库源码，查看LOCAL_MODULE变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">find frameworks -name Android.mk</span><br><span class="line">cat frameworks/base/cmds/app_process/Android.mk</span><br><span class="line">...</span><br><span class="line">LOCAL_MODULE := app_process</span><br><span class="line">...</span><br><span class="line">make app_process</span><br></pre></td></tr></table></figure>
+<p><strong>mmm命令</strong></p>
+<p>用于在源码根目录编译指定模块，参数为模块的相对路径。只能在第一编译后使用，比如要编译Phone部分源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmm packages/apps/phone</span><br></pre></td></tr></table></figure>
+<p><strong>mm命令</strong></p>
+<p>用于在模块根目录编译这个模块，只能在第一次编译后使用。比如要编译Phone部分源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd packages/apps/phone</span><br><span class="line">mm</span><br></pre></td></tr></table></figure>
+<p>mmm和mm命令必须在执行. build/envsetup.sh之后才能使用，并且只编译发生变化的文件，如果需要编译模块的所有文件，需要加-B。如：mm -B</p>
+<h2 id="Android-源码结构"><a href="#Android-源码结构" class="headerlink" title="Android 源码结构"></a>Android 源码结构</h2><table>
+<thead>
+<tr>
+<th>包名</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abi</td>
+<td>二进制兼容性检查</td>
+</tr>
+<tr>
+<td>bionic</td>
+<td>Bionic C库实现代码</td>
+</tr>
+<tr>
+<td>boottable</td>
+<td>启动引导程序的源码，包含bootloader，diskinstall和recovery</td>
+</tr>
+<tr>
+<td>build</td>
+<td>编译系统，包含各种make和shell脚本</td>
+</tr>
+<tr>
+<td>cts</td>
+<td>兼容性检测源码，Android手机如果需要Google认证，就需要通过Google的兼容性检测，目的是确保该手机系统具备标准的SDK API接口</td>
+</tr>
+<tr>
+<td>dalvik</td>
+<td>Dalvik虚拟机源码</td>
+</tr>
+<tr>
+<td>development</td>
+<td>Android开发所使用的一些配置文件</td>
+</tr>
+<tr>
+<td>device</td>
+<td>不同厂商设备相关的编译脚本，包含三星和摩托罗拉等</td>
+</tr>
+<tr>
+<td>docs</td>
+<td>source.android.com文档</td>
+</tr>
+<tr>
+<td>external</td>
+<td>Android依赖的扩展库，包括bluetooth、skia、sqlite、webkit、wpa_supplicant等功能库和一些工具库，如oprofile用于JNI层的性能调试。系统运行库层大部分代码位于这里</td>
+</tr>
+<tr>
+<td>frameworks</td>
+<td>框架层源码，应用框架层位于这里</td>
+</tr>
+<tr>
+<td>gdk</td>
+<td>提供NDK build的封装脚本</td>
+</tr>
+<tr>
+<td>hardware</td>
+<td>硬件抽象层相关源码</td>
+</tr>
+<tr>
+<td>libcore</td>
+<td>核心Java库。Android2.3 以前位于/dalvik/libcore目录下</td>
+</tr>
+<tr>
+<td>libnativehelper</td>
+<td>JNI的一些头文件</td>
+</tr>
+<tr>
+<td>Makefile</td>
+<td>编译入口，指向/build/main.mk</td>
+</tr>
+<tr>
+<td>ndk</td>
+<td>NDK(Native Development Kit)开发环境相关源码</td>
+</tr>
+<tr>
+<td>out</td>
+<td>编译输出目录，编译后的所有输出都在这个目录，分为主机部分和目标机部分</td>
+</tr>
+<tr>
+<td>packages</td>
+<td>包含各种内置应用程序、内容提供器、输入法等。应用层开发主要集中在这部分</td>
+</tr>
+<tr>
+<td>prebuilt</td>
+<td>编译所需的程序文件，主要包含不同平台下的ARM编译器</td>
+</tr>
+<tr>
+<td>sdk</td>
+<td>编译SDK工具所需的文件，包含hierachyviewer、eclipse插件、emulator、raceview等主要工具</td>
+</tr>
+<tr>
+<td>system</td>
+<td>Linux所需的一些系统工具程序，比如adb、debuggerd、fastboot、logcat等。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="编译遇到的问题"><a href="#编译遇到的问题" class="headerlink" title="编译遇到的问题"></a>编译遇到的问题</h2><p>出现错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">make: *** Waiting for unfinished jobs....</span><br><span class="line">make: *** [out/host/linux-x86/obj/STATIC_LIBRARIES/libhost_intermediates/CopyFile.o] Error 127</span><br><span class="line">host C++: libandroidfw &lt;= frameworks/base/libs/androidfw/Asset.cpp</span><br><span class="line">prebuilts/tools/gcc-sdk/g++: line 40: prebuilts/tools/gcc-sdk/../../gcc/linux-x86/host/i686-linux-glibc2.7-4.6/bin/i686-linux-g++: No such file or directory</span><br><span class="line">make: *** [out/host/linux-x86/obj/STATIC_LIBRARIES/libandroidfw_intermediates/Asset.o] Error 127</span><br><span class="line">Note: Some input files use or override a deprecated API.</span><br><span class="line">Note: Recompile with -Xlint:deprecation for details.</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gcc-multilib</span><br></pre></td></tr></table></figure>
+<p>出现错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/monkey/android/4.1.1/prebuilts/gcc/linux-x86/host/i686-linux-glibc2.7-4.6/bin/../lib/gcc/i686-linux/4.6.x-google/../../../../i686-linux/bin/as: error while loading shared libraries: libz.so.1: cannot open shared object file: No such file or directory</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install zlib1g:i386</span><br></pre></td></tr></table></figure>
+<p>出现错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc: error trying to exec &apos;cc1plus&apos;: execvp: No such file or directory</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc和g++版本不匹配</span><br><span class="line">$ sudo apt-get install gcc-4.4 g++-4.4</span><br><span class="line">$ sudo rm -f /usr/bin/gcc /usr/bin/g++</span><br><span class="line">$ sudo ln -s /usr/bin/gcc-4.4 /usr/bin/gcc</span><br><span class="line">$ sudo ln -s /usr/bin/g++-4.4 /usr/bin/g++</span><br></pre></td></tr></table></figure>
+<p>出现错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libstdc++.so.6: cannot open shared object file: No such file or directory</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install lib32stdc++6</span><br></pre></td></tr></table></figure>
+<p>出现错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Can&apos;t locate Switch.pm in @INC (you may need to install the Switch module)</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libswitch-perl</span><br></pre></td></tr></table></figure>
+<p>出现错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash: xmllint: command not found</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libxml2-utils</span><br></pre></td></tr></table></figure>
+<h2 id="编译成功"><a href="#编译成功" class="headerlink" title="编译成功"></a>编译成功</h2><p>编译完成后，运行emulator<br><img src="http://7xtdl4.com2.z0.glb.clouddn.com/monkey_2016-04-26_101319.png" alt="|center|"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/12/linux-fork-pip/" rel="prev" title="Linux 从文件描述符到管道">
+                Linux 从文件描述符到管道 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/03/android-source-compile/"
+     data-title="Android源码下载编译"
+     data-content=""
+     data-url="http://www.alonemonkey.com/2016/05/03/android-source-compile/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/03/android-source-compile/"
+           data-title="Android源码下载编译" data-url="http://www.alonemonkey.com/2016/05/03/android-source-compile/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-体系结构"><span class="nav-number">1.</span> <span class="nav-text">Android 体系结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-源码下载和编译"><span class="nav-number">2.</span> <span class="nav-text">Android 源码下载和编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装JDK"><span class="nav-number">2.1.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装依赖软件包"><span class="nav-number">2.2.</span> <span class="nav-text">安装依赖软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载Android代码"><span class="nav-number">2.3.</span> <span class="nav-text">下载Android代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载指定模块源码"><span class="nav-number">2.4.</span> <span class="nav-text">下载指定模块源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载Android-Linux-Kernel源码"><span class="nav-number">2.5.</span> <span class="nav-text">下载Android Linux Kernel源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译Android上层系统源码"><span class="nav-number">2.6.</span> <span class="nav-text">编译Android上层系统源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译指定模块源码"><span class="nav-number">2.7.</span> <span class="nav-text">编译指定模块源码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-源码结构"><span class="nav-number">3.</span> <span class="nav-text">Android 源码结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译遇到的问题"><span class="nav-number">4.</span> <span class="nav-text">编译遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译成功"><span class="nav-number">5.</span> <span class="nav-text">编译成功</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alonemonkey"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,858 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.useso.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="FBRetainCycleDetector是facebook开源的一个用来检测强引用循环的静态库，本文将分析其检测的方法以及原理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FBRetainCycleDetector源码分析">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/05/15/fbretaincycledetector-analyse/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="FBRetainCycleDetector是facebook开源的一个用来检测强引用循环的静态库，本文将分析其检测的方法以及原理。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463317587771.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463288832349.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463318490153.png">
+<meta property="og:updated_time" content="2016-05-15T13:25:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FBRetainCycleDetector源码分析">
+<meta name="twitter:description" content="FBRetainCycleDetector是facebook开源的一个用来检测强引用循环的静态库，本文将分析其检测的方法以及原理。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463317587771.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> FBRetainCycleDetector源码分析 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                FBRetainCycleDetector源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-15T00:00:00+08:00" content="2016-05-15">
+              2016-05-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/15/fbretaincycledetector-analyse/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/15/fbretaincycledetector-analyse/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>FBRetainCycleDetector</code>是facebook开源的一个用来检测对象是否有强引用循环的静态库。</p>
+<h3 id="strong和weak"><a href="#strong和weak" class="headerlink" title="strong和weak"></a>strong和weak</h3><p><code>strong</code>和<code>weak</code>在声明中使用表示这是一个强引用还是弱引用对象。</p>
+<ul>
+<li>强引用：只要引用存在，对象就不能被销毁。</li>
+<li>弱引用：弱引用不会导致对象不能销毁，只要没有强引用了，对象就会销毁，对象销毁后，弱引用会自动设置为nil。</li>
+<li>当一个对象不再有strong类型的指针指向它的时候，它就会被释放，即使该对象还有weak类型的指针指向它。</li>
+<li>一旦最后一个指向该对象的strong类型的指针离开，这个对象将被释放，如果这个时候还有weak指针指向该对象，则会清除所有剩余的weak指针。</li>
+</ul>
+<p>在OC中strong就相当于retain属性，而weak相当于assign。使用weak也就是为了避免retain cycles，比如父类中含有子类对象(retain了子类)，子类中又有父类的对象(子类又retain了父类)，这样就会形成retain cycles，导致两个对象都无法release。而FBRetainCycleDetector做的事情就是去检测是否存在这样的retain cycles。下面是循环引用的一个例图：</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463317587771.png" alt=""></p>
+<p>在 Objective-C 中找循环引用类似于在一个有向无环图(directed acyclic graph)中找环, 而节点就是对象，边就是对象之间的引用(如果对象A持有对象B，那么，A到B之间就存在着引用)。我们的 Objective-C 对象已经在我们的图中，我们要做的就是用深度优先搜索遍历它。</p>
+<p style="text-align: center;"><br><iframe height="300" width="500" allowfullscreen="true" src="http://7xtdl4.com1.z0.glb.clouddn.com/blogvideo_memoryleak_1.mp4"></iframe><br></p>
+
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>构建一个引用循环，然后使用FBRetainCycleDetector提供的接口来进行检测，具体代码如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">MyObject1* obj1 = [MyObject1 new];</span><br><span class="line">MyObject2* obj2 = [MyObject2 new];</span><br><span class="line">MyObject3* obj3 = [MyObject3 new];</span><br><span class="line"></span><br><span class="line">obj1.object1 = obj2;</span><br><span class="line">obj1.name = <span class="string">@"obj1"</span>;</span><br><span class="line">obj2.object2 = obj3;</span><br><span class="line">obj2.name = <span class="string">@"obj2"</span>;</span><br><span class="line">obj3.object3 = obj1;</span><br><span class="line">obj3.name = <span class="string">@"obj3"</span>;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//初始化一个引用循环检测器</span></span><br><span class="line">FBRetainCycleDetector *detector = [FBRetainCycleDetector new];</span><br><span class="line"><span class="comment">//增加需要检测的对象</span></span><br><span class="line">[detector addCandidate:obj1];</span><br><span class="line"><span class="comment">//寻找引用循环</span></span><br><span class="line"><span class="built_in">NSSet</span>&lt;<span class="built_in">NSArray</span>&lt;FBObjective<span class="built_in">CGraphElement</span> *&gt; *&gt; *retainCycles = [detector findRetainCycles];</span><br><span class="line"><span class="comment">//输出结果</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, retainCycles);</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2016-05-15 12:38:25.208 FBRetainCycleDetectorDemo[57524:6267406] &#123;(</span><br><span class="line">        (</span><br><span class="line">        &quot;-&gt; _object3 -&gt; MyObject1 &quot;,</span><br><span class="line">        &quot;-&gt; _object1 -&gt; MyObject2 &quot;,</span><br><span class="line">        &quot;-&gt; _object2 -&gt; MyObject3 &quot;</span><br><span class="line">    )</span><br><span class="line">)&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是说检测的对象存在引用循环。</p>
+<h2 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h2><p>首先需要初始化一个FBRetainCycleDetector检测器，先来分析这个类都有什么接口及其功能。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FBRetainCycleDetector *detector = [FBRetainCycleDetector new];</span><br></pre></td></tr></table></figure>
+<p>new 相当于<code>[[alloc] init]</code>，所以会调用FBRetainCycleDetector的init函数。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (instancetype)init</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//默认初始化一个标准的过滤器，并检查NSTimer</span></span><br><span class="line">  <span class="keyword">return</span> [<span class="keyword">self</span> initWithConfiguration:</span><br><span class="line">          [[FBObjectGraphConfiguration alloc] initWithFilterBlocks:FBGetStandardGraphEdgeFilters()</span><br><span class="line">                                               shouldInspectTimers:<span class="literal">YES</span>]];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用了<code>initWithConfiguration:</code>初始化了一个标准的过滤器，这个过滤器是为了过滤引用循环中的一些类和方法。</p>
+<p>然后调用<code>addCandidate</code>添加一个需要被检测的对象。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)addCandidate:(<span class="keyword">id</span>)candidate</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//初始化一个FBObjectiveCGraphElement对象</span></span><br><span class="line">  FBObjective<span class="built_in">CGraphElement</span> *graphElement = FBWrapObjectGraphElement(candidate, _configuration);</span><br><span class="line">  <span class="comment">//加入NSMutableArray</span></span><br><span class="line">  [_candidates addObject:graphElement];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跟进FBWrapObjectGraphElement函数，发现里面调用了<code>-[FBObjectiveCGraphElement initWithObject:configuration:namePath:]</code>方法，其中就是初始化一个FBObjectiveCGraphElement。</p>
+<p>重点是<code>findRetainCycles</code>这个方法来查找是否存在引用循环。这个方法调用了<code>findRetainCyclesWithMaxCycleLength:</code>来根据指定的深度进行深度搜索，默认深度是10。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSSet</span>&lt;<span class="built_in">NSArray</span>&lt;FBObjective<span class="built_in">CGraphElement</span> *&gt; *&gt; *)findRetainCyclesWithMaxCycleLength:(<span class="built_in">NSUInteger</span>)length</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">NSMutableSet</span>&lt;<span class="built_in">NSArray</span>&lt;FBObjective<span class="built_in">CGraphElement</span> *&gt; *&gt; *allRetainCycles = [<span class="built_in">NSMutableSet</span> new];</span><br><span class="line">  <span class="comment">//遍历需要检测的对象，逐个进行检测</span></span><br><span class="line">  <span class="keyword">for</span> (FBObjective<span class="built_in">CGraphElement</span> *graphElement <span class="keyword">in</span> _candidates) &#123;</span><br><span class="line">    <span class="built_in">NSSet</span>&lt;<span class="built_in">NSArray</span>&lt;FBObjective<span class="built_in">CGraphElement</span> *&gt; *&gt; *retainCycles = [<span class="keyword">self</span> _findRetainCyclesInObject:graphElement</span><br><span class="line">                                                                                      stackDepth:length];</span><br><span class="line">    <span class="comment">//合并集合                                                                           </span></span><br><span class="line">    [allRetainCycles unionSet:retainCycles];</span><br><span class="line">  &#125;</span><br><span class="line">  [_candidates removeAllObjects];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> allRetainCycles;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继续跟进<code>_findRetainCyclesInObject:stackDepth:</code></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSSet</span>&lt;<span class="built_in">NSArray</span>&lt;FBObjective<span class="built_in">CGraphElement</span> *&gt; *&gt; *)_findRetainCyclesInObject:(FBObjective<span class="built_in">CGraphElement</span> *)graphElement</span><br><span class="line">                                                                 stackDepth:(<span class="built_in">NSUInteger</span>)stackDepth</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">NSMutableSet</span>&lt;<span class="built_in">NSArray</span>&lt;FBObjective<span class="built_in">CGraphElement</span> *&gt; *&gt; *retainCycles = [<span class="built_in">NSMutableSet</span> new];</span><br><span class="line">  <span class="comment">//初始化深度搜索树中的一个节点</span></span><br><span class="line">  FBNodeEnumerator *wrappedObject = [[FBNodeEnumerator alloc] initWithObject:graphElement];</span><br><span class="line"></span><br><span class="line">  <span class="comment">//根据需要检测的对象进行深度搜索</span></span><br><span class="line">  <span class="comment">// We will be doing DFS over graph of objects</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//保存当前DFS搜索树中的搜索路径</span></span><br><span class="line">  <span class="comment">// Stack will keep current path in the graph</span></span><br><span class="line">  <span class="built_in">NSMutableArray</span>&lt;FBNodeEnumerator *&gt; *stack = [<span class="built_in">NSMutableArray</span> new];</span><br><span class="line">  <span class="comment">//保存搜索路径中访问过的对象</span></span><br><span class="line">  <span class="comment">// To make the search non-linear we will also keep</span></span><br><span class="line">  <span class="comment">// a set of previously visited nodes.</span></span><br><span class="line">  <span class="built_in">NSMutableSet</span>&lt;FBNodeEnumerator *&gt; *objectsOnPath = [<span class="built_in">NSMutableSet</span> new];</span><br><span class="line">  <span class="comment">//增加根节点，从根节点开始搜索</span></span><br><span class="line">  <span class="comment">// Let's start with the root</span></span><br><span class="line">  [stack addObject:wrappedObject];</span><br><span class="line">  <span class="comment">//判断是否已经搜索完毕</span></span><br><span class="line">  <span class="keyword">while</span> ([stack count] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// Algorithm creates many short-living objects. It can contribute to few</span></span><br><span class="line">    <span class="comment">// hundred megabytes memory jumps if not handled correctly, therefore</span></span><br><span class="line">    <span class="comment">// we're gonna drain the objects with our autoreleasepool.</span></span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">      <span class="comment">// Take topmost node in stack and mark it as visited</span></span><br><span class="line">      <span class="comment">//访问搜索栈中的最上面一个节点</span></span><br><span class="line">      FBNodeEnumerator *top = [stack lastObject];</span><br><span class="line">      <span class="comment">//添加到objectsOnPath</span></span><br><span class="line">      [objectsOnPath addObject:top];</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Take next adjecent node to that child. Wrapper object can</span></span><br><span class="line">      <span class="comment">// persist iteration state. If we see that node again, it will</span></span><br><span class="line">      <span class="comment">// give us new adjacent node unless it runs out of them</span></span><br><span class="line">      <span class="comment">//寻找下一个未访问的节点</span></span><br><span class="line">      FBNodeEnumerator *firstAdjacent = [top nextObject];</span><br><span class="line">      <span class="comment">//如果存在未访问到的节点</span></span><br><span class="line">      <span class="keyword">if</span> (firstAdjacent) &#123;</span><br><span class="line">        <span class="comment">// Current node still has some adjacent not-visited nodes</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">BOOL</span> shouldPushToStack = <span class="literal">NO</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Check if child was already seen in that path</span></span><br><span class="line">        <span class="comment">//如果该节点已经存在被访问过的对象中，说明构成了retain cycle</span></span><br><span class="line">        <span class="keyword">if</span> ([objectsOnPath containsObject:firstAdjacent]) &#123;</span><br><span class="line">          <span class="comment">// We have caught a retain cycle</span></span><br><span class="line">		 </span><br><span class="line">          <span class="comment">// Ignore the first element which is equal to firstAdjacent, use firstAdjacent</span></span><br><span class="line">          <span class="comment">// we're doing that because firstAdjacent has set all contexts, while its</span></span><br><span class="line">          <span class="comment">// first occurence could be a root without any context</span></span><br><span class="line">          <span class="built_in">NSUInteger</span> index = [stack indexOfObject:firstAdjacent];</span><br><span class="line">          <span class="built_in">NSInteger</span> length = [stack count] - index;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (index == <span class="built_in">NSNotFound</span>) &#123;</span><br><span class="line">            <span class="comment">// Object got deallocated between checking if it exists and grabbing its index</span></span><br><span class="line">            shouldPushToStack = <span class="literal">YES</span>;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">NSRange</span> cycleRange = <span class="built_in">NSMakeRange</span>(index, length);</span><br><span class="line">            <span class="built_in">NSMutableArray</span>&lt;FBNodeEnumerator *&gt; *cycle = [[stack subarrayWithRange:cycleRange] mutableCopy];</span><br><span class="line">            [cycle replaceObjectAtIndex:<span class="number">0</span> withObject:firstAdjacent];</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 1. Unwrap the cycle</span></span><br><span class="line">            <span class="comment">// 2. Shift to lowest address (if we omit that, and the cycle is created by same class,</span></span><br><span class="line">            <span class="comment">//    we might have duplicates)</span></span><br><span class="line">            <span class="comment">// 3. Shift by class (lexicographically)</span></span><br><span class="line">			<span class="comment">//为了判断是不是同一个环</span></span><br><span class="line">            [retainCycles addObject:[<span class="keyword">self</span> _shiftToUnifiedCycle:[<span class="keyword">self</span> _unwrapCycle:cycle]]];</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// Node is clear to check, add it to stack and continue</span></span><br><span class="line">          shouldPushToStack = <span class="literal">YES</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (shouldPushToStack) &#123;</span><br><span class="line">          <span class="keyword">if</span> ([stack count] &lt; stackDepth) &#123;</span><br><span class="line">            [stack addObject:firstAdjacent];</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Node has no more adjacent nodes, it itself is done, move on</span></span><br><span class="line">        [stack removeLastObject];</span><br><span class="line">        [objectsOnPath removeObject:top];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> retainCycles;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个函数就是DFS深度搜索的代码，以搜索对象相关的所有属性构成的搜索树进行深度搜索，一旦发现构成了环就记录下，然后继续搜索直接到达到指定的深度或搜索完毕。以上面的例子为例，搜索图是这样的：</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463288832349.png" alt=""></p>
+<p>图中从obj1节点开始搜索，依次遍历，n1、obj2、n2、obj3、n3、obj1，然后发现构成了环，然后保存环节点。</p>
+<h2 id="获取强引用"><a href="#获取强引用" class="headerlink" title="获取强引用"></a>获取强引用</h2><p>怎样获取自己所持有的所有引用的对象，FBRetainCycleDetector把传入的对象都封装成了一个FBObjectiveCGraphElement对象，根据对象的不同类型分为派生出子类FBObjectiveCBlock(Block)对象，FBObjectiveCBlock对象以及FBObjectiveCNSCFTimer(NSTimer)对象，不同对象获取所持有的引用时都会调用父类的allRetainedObjects，然后再进行自己的处理。</p>
+<p>先来看看FBObjectiveCGraphElement的allRetainedObjects方法：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSSet</span> *)allRetainedObjects</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">NSArray</span> *retainedObjectsNotWrapped = [FBAssociationManager associationsForObject:_object];</span><br><span class="line">  <span class="built_in">NSMutableSet</span> *retainedObjects = [<span class="built_in">NSMutableSet</span> new];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">id</span> obj <span class="keyword">in</span> retainedObjectsNotWrapped) &#123;</span><br><span class="line">    [retainedObjects addObject:FBWrapObjectGraphElementWithContext(obj,</span><br><span class="line">                                                                   _configuration,</span><br><span class="line">                                                                   @[<span class="string">@"__associated_object"</span>])];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> retainedObjects;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>[FBAssociationManager associationsForObject:]</code>获取该对象所有通过<code>objc_setAssociatedObject</code>关联的对象。因为后者会增加对象的引用，为了做到这一点，必须<code>main.m</code>中调用<code>[FBAssociationManager hook]</code>进行fishhook。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)hook</span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> _INTERNAL_RCD_ENABLED</span></span><br><span class="line">  <span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; l(*FB::AssociationManager::hookMutex);</span><br><span class="line">  rcd_rebind_symbols((struct rcd_rebinding[<span class="number">2</span>])&#123;</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"objc_setAssociatedObject"</span>,</span><br><span class="line">      (void *)FB::AssociationManager::fb_objc_setAssociatedObject,</span><br><span class="line">      (void **)&amp;FB::AssociationManager::fb_orig_objc_setAssociatedObject</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"objc_removeAssociatedObjects"</span>,</span><br><span class="line">      (void *)FB::AssociationManager::fb_objc_removeAssociatedObjects,</span><br><span class="line">      (void **)&amp;FB::AssociationManager::fb_orig_objc_removeAssociatedObjects</span><br><span class="line">    &#125;&#125;, <span class="number">2</span>);</span><br><span class="line">  FB::AssociationManager::hookTaken = <span class="literal">true</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">//_INTERNAL_RCD_ENABLED</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该函数hook了<code>objc_setAssociatedObject</code>和<code>objc_removeAssociatedObjects</code>这两个C函数来监控。接下来看看子类的不同处理。</p>
+<h3 id="FBObjectiveCObject"><a href="#FBObjectiveCObject" class="headerlink" title="FBObjectiveCObject"></a>FBObjectiveCObject</h3><p>FBObjectiveCObject的<code>allRetainedObjects</code>方法中首先调用了<code>_unfilteredRetainedObjects</code>获取所有引用对象，然后调用了<code>filterObjects:</code>调用过滤接口来进行过滤。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSArray</span> *)_unfilteredRetainedObjects</span><br><span class="line">&#123;</span><br><span class="line">  Class aCls = object_getClass(<span class="keyword">self</span>.object);</span><br><span class="line">  <span class="keyword">if</span> (!<span class="keyword">self</span>.object || !aCls) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">  <span class="comment">//获取一个对象的所有强引用属性</span></span><br><span class="line">  <span class="built_in">NSArray</span> *strongIvars = FBGetObjectStrongReferences(<span class="keyword">self</span>.object);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">NSMutableArray</span> *retainedObjects = [[[<span class="keyword">super</span> allRetainedObjects] allObjects] mutableCopy];</span><br><span class="line"></span><br><span class="line">  <span class="comment">//获取强引用的引用对象</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">id</span>&lt;FBObjectReference&gt; ref <span class="keyword">in</span> strongIvars) &#123;</span><br><span class="line">    <span class="keyword">id</span> referencedObject = [ref objectReferenceFromObject:<span class="keyword">self</span>.object];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (referencedObject) &#123;</span><br><span class="line">      <span class="built_in">NSArray</span>&lt;<span class="built_in">NSString</span> *&gt; *namePath = [ref namePath];</span><br><span class="line">      [retainedObjects addObject:FBWrapObjectGraphElementWithContext(referencedObject,</span><br><span class="line">                                                                     <span class="keyword">self</span>.configuration,</span><br><span class="line">                                                                     namePath)];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ([<span class="built_in">NSStringFromClass</span>(aCls) hasPrefix:<span class="string">@"__NSCF"</span>]) &#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     If we are dealing with toll-free bridged collections, we are not guaranteed that the collection</span><br><span class="line">     will hold only Objective-C objects. We are not able to check in runtime what callbacks it uses to</span><br><span class="line">     retain/release (if any) and we could easily crash here.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">return</span> retainedObjects;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (class_isMetaClass(aCls)) &#123;</span><br><span class="line">    <span class="comment">// If it's a meta-class it can conform to following protocols,</span></span><br><span class="line">    <span class="comment">// but it would crash when trying enumerating</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//获取集合类的引用</span></span><br><span class="line">  <span class="keyword">if</span> ([aCls conformsToProtocol:<span class="class"><span class="keyword">@protocol</span>(<span class="title">NSFastEnumeration</span>)]) </span>&#123;</span><br><span class="line">    <span class="built_in">BOOL</span> retainsKeys = [<span class="keyword">self</span> _objectRetainsEnumerableKeys];</span><br><span class="line">    <span class="built_in">BOOL</span> retainsValues = [<span class="keyword">self</span> _objectRetainsEnumerableValues];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">BOOL</span> isKeyValued = <span class="literal">NO</span>;</span><br><span class="line">    <span class="keyword">if</span> ([aCls instancesRespondToSelector:<span class="keyword">@selector</span>(objectForKey:)]) &#123;</span><br><span class="line">      isKeyValued = <span class="literal">YES</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     This codepath is prone to errors. When you enumerate a collection that can be mutated while enumeration</span><br><span class="line">     we fall into risk of crash. To save ourselves from that we will catch such exception and try again.</span><br><span class="line">     We should not try this endlessly, so at some point we will simply give up.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="built_in">NSInteger</span> tries = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">NSInteger</span> i = <span class="number">0</span>; i &lt; tries; ++i) &#123;</span><br><span class="line">      <span class="comment">// If collection is mutated we want to rollback and try again - let's keep refs in temporary set</span></span><br><span class="line">      <span class="built_in">NSMutableSet</span> *temporaryRetainedObjects = [<span class="built_in">NSMutableSet</span> new];</span><br><span class="line">      <span class="keyword">@try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">id</span> subobject <span class="keyword">in</span> <span class="keyword">self</span>.object) &#123;</span><br><span class="line">          <span class="keyword">if</span> (retainsKeys) &#123;</span><br><span class="line">            [temporaryRetainedObjects addObject:FBWrapObjectGraphElement(subobject, <span class="keyword">self</span>.configuration)];</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">if</span> (isKeyValued &amp;&amp; retainsValues) &#123;</span><br><span class="line">            [temporaryRetainedObjects addObject:FBWrapObjectGraphElement([<span class="keyword">self</span>.object objectForKey:subobject],</span><br><span class="line">                                                                         <span class="keyword">self</span>.configuration)];</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">@catch</span> (<span class="built_in">NSException</span> *exception) &#123;</span><br><span class="line">        <span class="comment">// mutation happened, we want to try enumerating again</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// If we are here it means no exception happened and we want to break outer loop</span></span><br><span class="line">      [retainedObjects addObjectsFromArray:[temporaryRetainedObjects allObjects]];</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> retainedObjects;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该函数首先调用父类方法<code>allRetainedObjects</code>获取associated objects。然后调用<code>FBGetObjectStrongReferences</code>获取强引用的属性，并得到属性的对象，最后判断是否为集合来获取集合里面的引用。FBGetObjectStrongReferences内部调用了<code>FBGetStrongReferencesForClass</code>通过类来获取强引用，后者先通过<code>FBGetClassReferences</code>获取所有引用。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSArray</span>&lt;<span class="keyword">id</span>&lt;FBObjectReference&gt;&gt; *FBGetClassReferences(Class aCls) &#123;</span><br><span class="line">  <span class="built_in">NSMutableArray</span>&lt;<span class="keyword">id</span>&lt;FBObjectReference&gt;&gt; *result = [<span class="built_in">NSMutableArray</span> new];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> count;</span><br><span class="line">  <span class="comment">//获取变量列表</span></span><br><span class="line">  Ivar *ivars = class_copyIvarList(aCls, &amp;count);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; ++i) &#123;</span><br><span class="line">    Ivar ivar = ivars[i];</span><br><span class="line">    <span class="comment">//包装成FBIvarReference</span></span><br><span class="line">    FBIvarReference *wrapper = [[FBIvarReference alloc] initWithIvar:ivar];</span><br><span class="line">	<span class="comment">//针对struct类型的处理</span></span><br><span class="line">    <span class="keyword">if</span> (wrapper.type == FBStructType) &#123;</span><br><span class="line">      <span class="built_in">NSString</span> *encoding = @(ivar_getTypeEncoding(wrapper.ivar));</span><br><span class="line">      <span class="built_in">NSArray</span>&lt;FBObjectInStructReference *&gt; *references = FBGetReferencesForObjectsInStructEncoding(wrapper, encoding);</span><br><span class="line"></span><br><span class="line">      [result addObjectsFromArray:references];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      [result addObject:wrapper];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  free(ivars);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> [result <span class="keyword">copy</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>获得所有引用后，再通过<code>class_getIvarLayout</code>来提取强引用。</p>
+<h3 id="FBObjectiveCBlock"><a href="#FBObjectiveCBlock" class="headerlink" title="FBObjectiveCBlock"></a>FBObjectiveCBlock</h3><p>流程类似先获取引用然后过滤，只是获取强引用的方法是通过<code>FBGetBlockStrongReferences</code>来实现的。判断是不是Block的方式是新建一个空的Block然后判断该对象的是不是其子类。具体获取方法<code>_GetBlockStrongLayout</code>。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">NSIndexSet</span> *_GetBlockStrongLayout(<span class="keyword">void</span> *block) &#123;</span><br><span class="line">  <span class="keyword">struct</span> BlockLiteral *blockLiteral = block;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   BLOCK_HAS_CTOR - Block has a C++ constructor/destructor, which gives us a good chance it retains</span><br><span class="line">   objects that are not pointer aligned, so omit them.</span><br><span class="line"></span><br><span class="line">   !BLOCK_HAS_COPY_DISPOSE - Block doesn't have a dispose function, so it does not retain objects and</span><br><span class="line">   we are not able to blackbox it.</span><br><span class="line">   */</span></span><br><span class="line">  <span class="keyword">if</span> ((blockLiteral-&gt;flags &amp; BLOCK_HAS_CTOR)</span><br><span class="line">      || !(blockLiteral-&gt;flags &amp; BLOCK_HAS_COPY_DISPOSE)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> (*dispose_helper)(<span class="keyword">void</span> *src) = blockLiteral-&gt;descriptor-&gt;dispose_helper;</span><br><span class="line">  <span class="keyword">const</span> size_t ptrSize = <span class="keyword">sizeof</span>(<span class="keyword">void</span> *);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Figure out the number of pointers it takes to fill out the object, rounding up.</span></span><br><span class="line">  <span class="keyword">const</span> size_t elements = (blockLiteral-&gt;descriptor-&gt;size + ptrSize - <span class="number">1</span>) / ptrSize;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Create a fake object of the appropriate length.</span></span><br><span class="line">  <span class="keyword">void</span> *obj[elements];</span><br><span class="line">  <span class="keyword">void</span> *detectors[elements];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (size_t i = <span class="number">0</span>; i &lt; elements; ++i) &#123;</span><br><span class="line">    FBBlockStrongRelationDetector *detector = [FBBlockStrongRelationDetector new];</span><br><span class="line">    obj[i] = detectors[i] = detector;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">    dispose_helper(obj);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Run through the release detectors and add each one that got released to the object's</span></span><br><span class="line">  <span class="comment">// strong ivar layout.</span></span><br><span class="line">  <span class="built_in">NSMutableIndexSet</span> *layout = [<span class="built_in">NSMutableIndexSet</span> indexSet];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (size_t i = <span class="number">0</span>; i &lt; elements; ++i) &#123;</span><br><span class="line">    FBBlockStrongRelationDetector *detector = (FBBlockStrongRelationDetector *)(detectors[i]);</span><br><span class="line">    <span class="keyword">if</span> (detector.isStrong) &#123;</span><br><span class="line">      [layout addIndex:i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Destroy detectors</span></span><br><span class="line">    [detector trueRelease];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> layout;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过block的size_t大小创建相同大小的数组类型，其对象类型是FBBlockStrongRelationDetector，然后调用<code>dispose_helper</code>，根据判断是否调用了FBBlockStrongRelationDetector对象的release方法来判断是不是强引用，最后返回一个表示位置的数组，然后根据该数组获取具体的对象</p>
+<p>这里使用了一个黑盒技术。创建一个对象来假扮想要调查的Block。因为知道Block的接口，知道在哪可以找到Block持有的引用。伪造的对象将会拥有“释放检测(release detectors)”来代替这些引用。释放检测器是一些很小的对象，这里是FBBlockStrongRelationDetector，它们会观察发送给它们的释放消息。当持有者想要放弃它的持有的时候，这些消息会发送给强引用对象。当释放伪造的对象的时候，可以检测哪些检测器接收到了这些消息。只要知道哪些索引在伪造的对象的检测器中，就可以找到原来Block中实际持有的对象。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463318490153.png" alt="image"></p>
+<h3 id="FBObjectiveCNSCFTimer"><a href="#FBObjectiveCNSCFTimer" class="headerlink" title="FBObjectiveCNSCFTimer"></a>FBObjectiveCNSCFTimer</h3><p>主要是通过<code>CFRunLoopTimerGetContext</code>获取<code>CFRunLoopTimerContext</code>然后获取<code>target</code>和<code>userInfo</code>。</p>
+<h2 id="过滤配置器"><a href="#过滤配置器" class="headerlink" title="过滤配置器"></a>过滤配置器</h2><p><code>FBObjectGraphConfiguration</code>是一个过滤的配置器，根据传入的Block来过滤的Block调用，以及是否检查NSTimer。传入<code>FBGraphEdgeFilterBlock</code>的定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">FBGraphEdgeType</span> <span class="params">(^FBGraphEdgeFilterBlock)</span><span class="params">(FBObjectiveCGraphElement *_Nullable fromObject,</span><br><span class="line">                                                  FBObjectiveCGraphElement *_Nullable toObject)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>fromObject是传入的对象，toObject是传入对象引用的对象，根据指定的规则来判断是否需要过滤，过滤的话就相当于断掉两个节点之间的连线，来看看官方的使用例子：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSMutableArray</span> *filters = @[</span><br><span class="line">  FBFilterBlockWithObjectIvarRelation([<span class="built_in">UIView</span> class], <span class="string">@"_subviewCache"</span>),</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// Configuration object can describe filters as well as some options</span></span><br><span class="line">FBObjectGraphConfiguration *configuration =</span><br><span class="line">[[FBObjectGraphConfiguration alloc] initWithFilterBlocks:filters</span><br><span class="line">                                     shouldInspectTimers:<span class="literal">YES</span>];</span><br><span class="line">FBRetainCycleDetector *detector = [[FBRetainCycleDetector alloc] initWithConfiguration:configuration];</span><br><span class="line">[detector addCandidate:myObject];</span><br><span class="line"><span class="built_in">NSSet</span> *retainCycles = [detector findRetainCycles];</span><br></pre></td></tr></table></figure>
+<p>这里过滤的是<code>UIView</code>类的<code>_subviewCache</code>属性的引用。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>FBRetainCycleDetector</code>目前来说肯定还存在一些问题，还有引用关系比较复杂的话，DFS占用的内存还是挺大的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/12/linux-fork-pip/" rel="next" title="Linux 从文件描述符到管道">
+                <i class="fa fa-chevron-left"></i> Linux 从文件描述符到管道
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/20/blog-by-jekyll-hexo/" rel="prev" title="使用jekyll和hexo搭建免费博客">
+                使用jekyll和hexo搭建免费博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/15/fbretaincycledetector-analyse/"
+     data-title="FBRetainCycleDetector源码分析"
+     data-content=""
+     data-url="http://www.alonemonkey.com/2016/05/15/fbretaincycledetector-analyse/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/15/fbretaincycledetector-analyse/"
+           data-title="FBRetainCycleDetector源码分析" data-url="http://www.alonemonkey.com/2016/05/15/fbretaincycledetector-analyse/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#strong和weak"><span class="nav-number">1.1.</span> <span class="nav-text">strong和weak</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">2.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行流程"><span class="nav-number">3.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取强引用"><span class="nav-number">4.</span> <span class="nav-text">获取强引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FBObjectiveCObject"><span class="nav-number">4.1.</span> <span class="nav-text">FBObjectiveCObject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FBObjectiveCBlock"><span class="nav-number">4.2.</span> <span class="nav-text">FBObjectiveCBlock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FBObjectiveCNSCFTimer"><span class="nav-number">4.3.</span> <span class="nav-text">FBObjectiveCNSCFTimer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤配置器"><span class="nav-number">5.</span> <span class="nav-text">过滤配置器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alonemonkey"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,893 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.useso.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux,管道," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="文件描述符的本质是什么？fork对文件描述符有什么影响？Linux管道是怎么实现的？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 从文件描述符到管道">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/05/12/linux-fork-pip/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="文件描述符的本质是什么？fork对文件描述符有什么影响？Linux管道是怎么实现的？">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463051325459.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463053626831.png">
+<meta property="og:updated_time" content="2016-05-15T07:18:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 从文件描述符到管道">
+<meta name="twitter:description" content="文件描述符的本质是什么？fork对文件描述符有什么影响？Linux管道是怎么实现的？">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463051325459.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Linux 从文件描述符到管道 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 从文件描述符到管道
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-12T00:00:00+08:00" content="2016-05-12">
+              2016-05-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/12/linux-fork-pip/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/12/linux-fork-pip/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>文件描述符的本质是数组元素的下标：</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463051325459.png" alt="image"></p>
+<p>右侧的表成为<code>i</code>节点表，该数组的一个元素对应于一个物理文件。</p>
+<p>中间的表称为文件表，一个结构体中有很多字段，其中3个字段比较重要：</p>
+<ul>
+<li>file status flags：用于记录文件被打开来读的，还是写的。其实记录的就是<code>open</code>调用中用户指定的第2个参数</li>
+<li>current file offset：用于记录文件的当前读写位置(指针)。</li>
+<li>v-node ptr：该字段是指针，指向右侧表的一个元素，从而关联了物理文件。</li>
+</ul>
+<p>左侧的表成为文件描述符，每个进程只有一张，数组的元素指向文件表的一个元素，数组元素的下标就是<code>文件描述符</code>。</p>
+<a id="more"></a>
+<p><code>open</code>系统调用执行的操作：新建一个<code>i</code>节点表元素，让其对应打开的物理文件(如果对应的i节点元素已建立，不做操作)。新建一个文件表的元素，根据<code>open</code>第2个参数设置<code>file status flags</code>字段，将<code>current file offset</code>字段置0，将<code>v-node ptr</code>指向刚建立的i节点表元素。在文件描述符表中，寻找1个尚未使用的元素，在该元素中填入一个指针值，让其指向刚刚建立的文件表元素。并将该元素的下标作为<code>open</code>的返回值返回。</p>
+<h2 id="fork与文件描述符"><a href="#fork与文件描述符" class="headerlink" title="fork与文件描述符"></a>fork与文件描述符</h2><p><code>fork</code>会导致子进程继承父进程打开的文件描述符，本质是将父进程的整个文件描述符表复制一份，放到子进程的PCB中。因此父子进程中有相同的文件描述符指向同一个文件表元素。导致父(子)进程读取文件后，子(父)进程将读取同一文件的后续内容。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import &lt;stdio.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;fcntl.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;sys/types.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;unistd.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        <span class="keyword">int</span> fd,pid,status;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">char</span> buf[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">if</span>((fd = open(<span class="string">"./test.txt"</span>,O_RDONLY)) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            perror(<span class="string">"open"</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((pid = fork()) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            perror(<span class="string">"fork"</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">            read(fd,buf,<span class="number">2</span>);</span><br><span class="line">            write(STDOUT_FILENO,buf,<span class="number">2</span>);</span><br><span class="line">            close(fd);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            wait(&amp;status);</span><br><span class="line">            lseek(fd,SEEK_CUR,<span class="number">1</span>);</span><br><span class="line">            read(fd,buf,<span class="number">3</span>);</span><br><span class="line">            write(STDOUT_FILENO,buf,<span class="number">3</span>);</span><br><span class="line">            write(STDOUT_FILENO,<span class="string">"\n"</span>,<span class="number">1</span>);</span><br><span class="line">            close(fd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>test.txt的内容为<code>123456789</code>，上面代码运行结果为<code>12456</code>。因为父进程调用wait等待子进程结束，所以子进程开始执行，读到字符<code>12</code>，由于父子进程的文件描述符<code>fd</code>都指向同一个文件表元素，因此当父进程执行时，<code>fd</code>对应的文件读写指针将移动到字符<code>4</code>,而不是字符<code>2</code>。所以父进程读到的是<code>456</code>，而不是<code>234</code>。</p>
+<p>如果是两个独立进程调用<code>open</code>去打开同一个物理文件，就会有2个文件表元素被创建，并且他们都指向同一个<code>i</code>节点表元素。两个文件表元素都有自己独立的<code>current file offset</code>字段，这将导致2个进程独立的对同一个物理文件进行读写。</p>
+<p>还有一点，当子进程读写完文件后，关闭了文件描述符，父进程还是能继续读取，并且在原子进程读取的偏移上。因为fork后，文件表的引用将变为2，子进程关闭了文件描述符后，只是使文件表的引用变成了1，并不会影响父进程的读取结果。</p>
+<p>但是如果我写成这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import &lt;stdio.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;fcntl.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;sys/types.h&gt;</span></span><br><span class="line"><span class="meta">#import &lt;unistd.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        <span class="keyword">int</span> fd,pid,status;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">char</span> buf[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">if</span>((fd = open(<span class="string">"./test.txt"</span>,O_RDONLY)) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            perror(<span class="string">"open"</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((pid = fork()) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            perror(<span class="string">"fork"</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">            close(fd);</span><br><span class="line">            fd = open(<span class="string">"./test.txt"</span>, O_RDONLY);</span><br><span class="line">            read(fd,buf,<span class="number">2</span>);</span><br><span class="line">            write(STDOUT_FILENO,buf,<span class="number">2</span>);</span><br><span class="line">            close(fd);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            wait(&amp;status);</span><br><span class="line">            lseek(fd,SEEK_CUR,<span class="number">1</span>);</span><br><span class="line">            read(fd,buf,<span class="number">3</span>);</span><br><span class="line">            write(STDOUT_FILENO,buf,<span class="number">3</span>);</span><br><span class="line">            write(STDOUT_FILENO,<span class="string">"\n"</span>,<span class="number">1</span>);</span><br><span class="line">            close(fd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么输出的结构就是<code>12234</code>，因为子进程先关闭了文件描述符，然后重新生成了一个自己的文件描述符，指向一个新的文件表，并没有改变父进程文件表的<code>current file offset</code>。所以父进程读取的就是<code>234</code>。</p>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p><code>管道</code>作为进程间通信的方式之一，指的是从一个进程连接数据流到另一个进程。管道有以下特点：</p>
+<ul>
+<li>管道是半双工的，数据只能向一个方向流动；需要双方通信时，需要建立起两个管道；</li>
+<li>只能用于父子进程或者兄弟进程之间（具有亲缘关系的进程）；</li>
+<li>单独构成一种独立的文件系统：管道对于管道两端的进程而言，就是一个文件，但它不是普通的文件，它不属于某种文件系统，而是自立门户，单独构成一种文件系统，并且只存在与内存中；</li>
+<li>数据的读出和写入：一个进程向管道中写的内容被管道另一端的进程读出。写入的内容每次都添加在管道缓冲区的末尾，并且每次都是从缓冲区的头部读出数据。</li>
+</ul>
+<h2 id="pip进程管道"><a href="#pip进程管道" class="headerlink" title="pip进程管道"></a>pip进程管道</h2><p>利用pipe创建的管道包含两个文件描述符fd[0]以及fd[1]，需要注意的是，该处是文件描述符而不是文件流，对该文件描述符进行读写必须采用read和write系统调用，管道的两端是固定了任务的。即一端只能用于读，由描述字fd[0]表示，称其为管道读端；另一端则只能用于写，由描述字fd[1]来表示，称其为管道写端。如果试图从管道写端读取数据，或者向管道读端写入数据都将导致错误发生。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463053626831.png" alt=""></p>
+<ol>
+<li>父进程调用pipe开辟管道，得到两个文件描述符指向管道的两端。</li>
+<li>父进程调用fork创建子进程，那么子进程也有两个文件描述符指向同一管道。</li>
+<li>父进程关闭管道读端，子进程关闭管道写端。父进程可以往管道里写，子进程可以从管道里读。</li>
+</ol>
+<h3 id="从管道中读取数据"><a href="#从管道中读取数据" class="headerlink" title="从管道中读取数据"></a>从管道中读取数据</h3><ul>
+<li>如果管道的写端不存在，则认为已经读到了数据的末尾，读函数返回的读取字节数为0；</li>
+<li>当管道的写端存在时，如果请求的字节数目大于PIPE_BUF，则返回管道中现有的数据字节数，如果请求的字节数目不大于PIPE_BUF，则返回管道中现有数据字节数（此时，管道中数据量小于请求的数据量）；或者返回请求的字节数（此时，管道中数据量不小于请求的数据量)。</li>
+</ul>
+<h3 id="向管道中写入数据"><a href="#向管道中写入数据" class="headerlink" title="向管道中写入数据"></a>向管道中写入数据</h3><ul>
+<li>向管道中写入数据时，linux将不保证写入的原子性(原子操作就是不可分割的操作，不保证就是说可以分几次完成管道写入)，管道缓冲区一有空闲区域，写进程就会试图向管道写入数据。如果读进程不读走管道缓冲区中的数据，那么写操作将一直阻塞。 </li>
+<li>只有在管道的读端存在时，向管道中写入数据才有意义。否则，向管道中写入数据的进程将收到内核传来的SIFPIPE信号，应用程序可以处理该信号，也可以忽略（默认动作则是应用程序终止）。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        <span class="keyword">int</span> pipe_fd[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">pid_t</span> pid;</span><br><span class="line">        <span class="keyword">char</span> w_buf[<span class="number">4096</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(pipe(pipe_fd) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"pip crate error\n"</span>);</span><br><span class="line">            return <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>((pid = fork()) == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">//子进程关闭写端</span></span><br><span class="line">            close(pipe_fd[<span class="number">1</span>]);</span><br><span class="line">            <span class="comment">//直接把读端也关闭了</span></span><br><span class="line">            close(pipe_fd[<span class="number">0</span>]);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            wait(<span class="number">0</span>);</span><br><span class="line">            <span class="comment">//父进程关闭读端</span></span><br><span class="line">            close(pipe_fd[<span class="number">0</span>]);</span><br><span class="line">            </span><br><span class="line">            write(pipe_fd[<span class="number">1</span>], w_buf, <span class="number">4096</span>);</span><br><span class="line">            close(pipe_fd[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面程序，子进程把读端也关闭了后，父进程再去写就会收到SIFPIPE信号。</p>
+<h3 id="使用管道的shell"><a href="#使用管道的shell" class="headerlink" title="使用管道的shell"></a>使用管道的shell</h3><p>考虑一个使用管道的shell命令行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l | grep test</span><br></pre></td></tr></table></figure></p>
+<p>则上面的进程A相当于shell，进程B执行<code>grep test</code>，而进程C执行<code>ls -l</code>。不过，在进程C中要将<code>标准输出通道</code>stdout重定向到管道的写端，而在进程B中则要将<code>标准输入通道</code>stdin重定向到管道的读端。看一个实例代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> child_B, child_C;</span><br><span class="line">    <span class="keyword">int</span> pipfds[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">char</span>* args1[] = &#123;<span class="string">"grep"</span>,<span class="string">"test"</span>,<span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span>* args2[] = &#123;<span class="string">"ls"</span>,<span class="string">"-l"</span>,<span class="literal">NULL</span>&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*process A*/</span></span><br><span class="line">    pipe(pipfds);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(!(child_B = fork()))&#123; <span class="comment">//fork process B</span></span><br><span class="line">        close(pipfds[<span class="number">1</span>]); <span class="comment">//close the write</span></span><br><span class="line">        close(<span class="number">0</span>); <span class="comment">//redirect stdin</span></span><br><span class="line">        dup2(pipfds[<span class="number">0</span>], <span class="number">0</span>);</span><br><span class="line">        close(pipfds[<span class="number">0</span>]);</span><br><span class="line">        execve(<span class="string">"/usr/bin/grep"</span>, args1, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"pid %d: I am back,something is wrong!\n"</span>,getpid());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*process A continues*/</span></span><br><span class="line">    close(pipfds[<span class="number">0</span>]);  <span class="comment">//close the read</span></span><br><span class="line">    <span class="keyword">if</span>(!(child_C = fork()))&#123;</span><br><span class="line">        <span class="comment">/*process C*/</span></span><br><span class="line">        close(<span class="number">1</span>);<span class="comment">//redirect stdout</span></span><br><span class="line">        dup2(pipfds[<span class="number">1</span>], <span class="number">1</span>);</span><br><span class="line">        close(pipfds[<span class="number">1</span>]);</span><br><span class="line">        execve(<span class="string">"/bin/ls"</span>, args2, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"pid %d: I am back, something is wrong!\n"</span>,getpid());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*process A continues*/</span></span><br><span class="line">    close(pipfds[<span class="number">1</span>]); <span class="comment">//close the write</span></span><br><span class="line">    wait4(child_B, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Done !\n"</span>);</span><br><span class="line">    </span><br><span class="line">    return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面就是父进程A fork出来两个子进程，然后两个子进程通过重定位自己的标准输入输出到读/写端，来实现进程间的通信，也就是shell中的管道通信。</p>
+<h3 id="管道的局限性"><a href="#管道的局限性" class="headerlink" title="管道的局限性"></a>管道的局限性</h3><ul>
+<li>只支持单向数据流；</li>
+<li>只能用于具有亲缘关系的进程之间；</li>
+<li>没有名字；</li>
+<li>管道的缓冲区是有限的（管道制存在于内存中，在管道创建时，为缓冲区分配一个页面大小）；</li>
+<li>管道所传送的是无格式字节流，这就要求管道的读出方和写入方必须事先约定好数据的格式，比如多少字节算作一个消息（或命令、或记录）等等；</li>
+</ul>
+<h2 id="命名管道"><a href="#命名管道" class="headerlink" title="命名管道"></a>命名管道</h2><p>管道应用的一个重大限制是它没有名字，因此，只能用于具有亲缘关系的进程间通信，在有名管道（named pipe或<code>FIFO</code>）提出后，该限制得到了克服。FIFO不同于管道之处在于它提供一个路径名与之关联，以FIFO的文件形式存在于文件系统中。这样，即使与FIFO的创建进程不存在亲缘关系的进程，只要可以访问该路径，就能够彼此通过FIFO相互通信（能够访问该路径的进程以及FIFO的创建进程之间），因此，通过FIFO不相关的进程也能交换数据。值得注意的是，FIFO严格遵循先进先出（first in first out），对管道及FIFO的读总是从开始处返回数据，对它们的写则把数据添加到末尾。它们不支持诸如lseek()等文件定位操作。对命名管道的操作和对文件操作相似，包括创建，打开，读写，和关闭操作。</p>
+<h3 id="命名管道的创建"><a href="#命名管道的创建" class="headerlink" title="命名管道的创建"></a>命名管道的创建</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, mode_t mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>该函数的第一个参数是一个普通的路径名，也就是创建后FIFO的名字。第二个参数与打开普通文件的open()函数中的mode 参数相同。如果mkfifo的第一个参数是一个已经存在的路径名时，会返回EEXIST错误，所以一般典型的调用代码首先会检查是否返回该错误，如果确实返回该错误，那么只要调用打开FIFO的函数就可以了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if(access(FIFO_NAME,F_OK)==-1)&#123;</span><br><span class="line">       res=mkfifo(FIFO_NAME,0777);</span><br><span class="line">       if(res!=0)&#123;</span><br><span class="line">               fprintf(stderr,&quot;Could not create fifo %s\n&quot;,FIFO_NAME);</span><br><span class="line">               exit(EXIT_FAILURE);</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br><span class="line">res=open(FIFO_NAME,open_mode);</span><br></pre></td></tr></table></figure>
+<h3 id="命名管道的打开"><a href="#命名管道的打开" class="headerlink" title="命名管道的打开"></a>命名管道的打开</h3><p>打开的FIFO的限制是：由于FIFO是单向数据传输，程序不能以O_RDWR方式打开FIFO同时进行读写操作，只能是O_RDONLY或者O_WRONLY方式，打开函数如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>打开FIFO文件和普通文件的另外一个差别是：O_NONBLOCK选项对open的阻塞的影响，主要分为下面几种情况：</p>
+<ul>
+<li>flags=O_RDONLY：open将会调用阻塞，除非有另外一个进程以写的方式打开同一个FIFO，否则一直等待。</li>
+<li>flags=O_WRONLY：open将会调用阻塞，除非有另外一个进程以读的方式打开同一个FIFO，否则一直等待。</li>
+<li>flags=O_RDONLY|O_NONBLOCK：如果此时没有其他进程以写的方式打开FIFO，此时open也会成功返回，此时FIFO被读打开，而不会返回错误。</li>
+<li>flags=O_WRONLY|O_NONBLOCK：立即返回，如果此时没有其他进程以读的方式打开，open会失败打开，此时FIFO没有被打开，返回-1。</li>
+</ul>
+<p>命名管道创建和打开测试程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FIFO_NAME <span class="string">"/tmp/my_fifo"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span><br><span class="line"></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res;</span><br><span class="line">        <span class="keyword">int</span> open_mode=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(argc &lt; <span class="number">2</span>)&#123;</span><br><span class="line">                <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"Usage:%s&lt;some combination of \</span><br><span class="line">                        O_RDONLY,O_WRONLY,O_NONBLOCK\n"</span>,*argv);</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">        &#125;</span><br><span class="line">        argv++;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strncmp</span>(*argv,<span class="string">"O_RDONLY"</span>,<span class="number">8</span>)==<span class="number">0</span>)open_mode|=O_RDONLY;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strncmp</span>(*argv,<span class="string">"O_WRONLY"</span>,<span class="number">8</span>)==<span class="number">0</span>)open_mode|=O_WRONLY;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strncmp</span>(*argv,<span class="string">"O_NONBLOCK"</span>,<span class="number">10</span>)==<span class="number">0</span>)open_mode|=O_NONBLOCK;</span><br><span class="line">        argv++;</span><br><span class="line">        <span class="keyword">if</span>(*argv)&#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">strncmp</span>(*argv,<span class="string">"O_RDONLY"</span>,<span class="number">8</span>)==<span class="number">0</span>)open_mode|=O_RDONLY;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">strncmp</span>(*argv,<span class="string">"O_WRONLY"</span>,<span class="number">8</span>)==<span class="number">0</span>)open_mode|=O_WRONLY;</span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">strncmp</span>(*argv,<span class="string">"O_NONBLOCK"</span>,<span class="number">10</span>)==<span class="number">0</span>)open_mode|=O_NONBLOCK;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(access(FIFO_NAME,F_OK)==<span class="number">-1</span>)&#123;</span><br><span class="line">                res=mkfifo(FIFO_NAME,<span class="number">0777</span>);</span><br><span class="line">                <span class="keyword">if</span>(res!=<span class="number">0</span>)&#123;</span><br><span class="line">                        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"Could not create fifo %s\n"</span>,FIFO_NAME);</span><br><span class="line">                        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"process %d open FIFO with %d\n"</span>,getpid(),open_mode);</span><br><span class="line">        res=open(FIFO_NAME,open_mode);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"process %d result %d\n"</span>,getpid(),res);</span><br><span class="line">        sleep(<span class="number">5</span>);</span><br><span class="line">        <span class="keyword">if</span>(res!=<span class="number">-1</span>)close(res);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"process %d finished\n"</span>,getpid());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="命名管道的读写"><a href="#命名管道的读写" class="headerlink" title="命名管道的读写"></a>命名管道的读写</h3><p>对命名管道的读写需要利用系统调用read函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ssize_t</span> read(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count);</span><br><span class="line"><span class="keyword">ssize_t</span> write(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> count);</span><br></pre></td></tr></table></figure>
+<p>在读取管道时，是否采用O_NONBLOCK非阻塞标志对管道的读有影响：</p>
+<ul>
+<li>对一个空的，阻塞的FIFO文件的read调用将会等待，直到有数据可以读时才继续执行。</li>
+<li>对一个空的，非阻塞的FIFO的read系统调用将会立即返回0字节。</li>
+</ul>
+<p>在写管道时，需要考虑FIFO可以存在的数据长度是有限制的，在limits.h文件中由#definde PIPE_BUF语句定义，通常是4096字节。</p>
+<p>对于设置了阻塞标志的写操作：</p>
+<ul>
+<li>当要写入的数据量不大于PIPE_BUF时，linux将保证写入的原子性。如果此时管道空闲缓冲区不足以容纳要写入的字节数，则进入睡眠，直到当缓冲区中能够容纳要写入的字节数时，才开始进行一次性写操作。</li>
+<li>当要写入的数据量大于PIPE_BUF时，linux将不再保证写入的原子性。FIFO缓冲区一有空闲区域，写进程就会试图向管道写入数据，写操作在写完所有请求写的数据后返回。</li>
+</ul>
+<p>对于没有设置阻塞标志的写操作：</p>
+<ul>
+<li>当要写入的数据量大于PIPE_BUF时，linux将不再保证写入的原子性。在写满所有FIFO空闲缓冲区后，写操作返回。</li>
+<li>当要写入的数据量不大于PIPE_BUF时，linux将保证写入的原子性。如果当前FIFO空闲缓冲区能够容纳请求写入的字节数，写完后成功返回；如果当前FIFO空闲缓冲区不能够容纳请求写入的字节数，则返回EAGAIN错误，提醒以后再写；</li>
+</ul>
+<h3 id="命名管道的关闭"><a href="#命名管道的关闭" class="headerlink" title="命名管道的关闭"></a>命名管道的关闭</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>管道常用于两个方面：在shell中时常会用到管道（作为输入输入的重定向），在这种应用方式下，管道的创建对于用户来说是透明的；用于具有亲缘关系的进程间通信，用户自己创建管道，并完成读写操作。FIFO可以说是管道的推广，克服了管道无名字的限制，使得无亲缘关系的进程同样可以采用先进先出的通信机制进行通信。管道和FIFO的数据是字节流，应用程序之间必须事先确定特定的传输”协议”，采用传播具有特定意义的消息。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag">#Linux</a>
+          
+            <a href="/tags/管道/" rel="tag">#管道</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/03/android-source-compile/" rel="next" title="Android源码下载编译">
+                <i class="fa fa-chevron-left"></i> Android源码下载编译
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/15/fbretaincycledetector-analyse/" rel="prev" title="FBRetainCycleDetector源码分析">
+                FBRetainCycleDetector源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/12/linux-fork-pip/"
+     data-title="Linux 从文件描述符到管道"
+     data-content=""
+     data-url="http://www.alonemonkey.com/2016/05/12/linux-fork-pip/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/12/linux-fork-pip/"
+           data-title="Linux 从文件描述符到管道" data-url="http://www.alonemonkey.com/2016/05/12/linux-fork-pip/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件描述符"><span class="nav-number">1.</span> <span class="nav-text">文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork与文件描述符"><span class="nav-number">2.</span> <span class="nav-text">fork与文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管道"><span class="nav-number">3.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pip进程管道"><span class="nav-number">4.</span> <span class="nav-text">pip进程管道</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从管道中读取数据"><span class="nav-number">4.1.</span> <span class="nav-text">从管道中读取数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向管道中写入数据"><span class="nav-number">4.2.</span> <span class="nav-text">向管道中写入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用管道的shell"><span class="nav-number">4.3.</span> <span class="nav-text">使用管道的shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道的局限性"><span class="nav-number">4.4.</span> <span class="nav-text">管道的局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命名管道"><span class="nav-number">5.</span> <span class="nav-text">命名管道</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命名管道的创建"><span class="nav-number">5.1.</span> <span class="nav-text">命名管道的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名管道的打开"><span class="nav-number">5.2.</span> <span class="nav-text">命名管道的打开</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名管道的读写"><span class="nav-number">5.3.</span> <span class="nav-text">命名管道的读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名管道的关闭"><span class="nav-number">5.4.</span> <span class="nav-text">命名管道的关闭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alonemonkey"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

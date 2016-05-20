@@ -1,0 +1,937 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.useso.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="blog," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="笔者原来使用的WordPress搭建的blog，但是感觉已经被我折腾的不像博客了，不如一起来搭建一个静态博客。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用jekyll和hexo搭建免费博客">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/05/20/blog-by-jekyll-hexo/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="笔者原来使用的WordPress搭建的blog，但是感觉已经被我折腾的不像博客了，不如一起来搭建一个静态博客。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463733643686.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463735892433.png">
+<meta property="og:updated_time" content="2016-05-20T11:16:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用jekyll和hexo搭建免费博客">
+<meta name="twitter:description" content="笔者原来使用的WordPress搭建的blog，但是感觉已经被我折腾的不像博客了，不如一起来搭建一个静态博客。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463733643686.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 使用jekyll和hexo搭建免费博客 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用jekyll和hexo搭建免费博客
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-20T00:00:00+08:00" content="2016-05-20">
+              2016-05-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/20/blog-by-jekyll-hexo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/20/blog-by-jekyll-hexo/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="why静态博客？"><a href="#why静态博客？" class="headerlink" title="why静态博客？"></a>why静态博客？</h2><p>一方面是我觉得我原来这个<a href="http://www.blogfshare.com" target="_blank" rel="external">使用WordPress搭建的blog</a>,已经被我折腾的不像博客了，里面的文章都是通过html保存在数据库的，一个影响查询速度，另一个每次备份还得从数据库去拉出一堆可读性很差的html。再者还是觉得WordPress有点笨重，而且做二次开发也比较蛋疼。加上我现在喜欢使用makedown来写东西，而WordPress支持makedown又要装一堆插件，实在是受不了了，所以自己折腾了几个静态博客搭建的框架，一个是Ruby写的jekyll，一个是node-js写的hexo。至于区别的话，hexo生成静态页面的速度要比较快，jekyll是把原文上传github，可以直接生成博客，也可以用在线编辑器处理，hexo是本地生成html再上传。至于用哪个可以自己两个都尝试一下，哪个用的爽用哪个咯。如果你在想没有空间怎么办，那么<code>github Pages</code>完全能满足你。</p>
+<h2 id="Github-Pages是什么"><a href="#Github-Pages是什么" class="headerlink" title="Github Pages是什么?"></a>Github Pages是什么?</h2><p>首先Github是什么就不用我说了，世界第一<code>基佬</code>交流会所(滑稽)。Github Pages有300M的空间可以用来搭建自己的个人站点，<a href="https://pages.github.com/" target="_blank" rel="external">主页在这里</a>。你可以按照上面的步骤建一个<code>repository</code>，然后传一个<code>index.html</code>直接访问就能看到效果，所以空间问题我们就解决了，for free！</p>
+<h2 id="jekyll搭建静态博客"><a href="#jekyll搭建静态博客" class="headerlink" title="jekyll搭建静态博客"></a>jekyll搭建静态博客</h2><p>下面先来介绍一个怎么使用jekyll来搭建属于自己的blog。<a href="http://jekyll.bootcss.com/" target="_blank" rel="external">官网地址</a></p>
+<h3 id="安装jekyll"><a href="#安装jekyll" class="headerlink" title="安装jekyll"></a>安装jekyll</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gem install jekyll</span><br><span class="line">jekyll new my-awesome-site</span><br><span class="line">cd my-awesome-site</span><br><span class="line">jekyll serve</span><br></pre></td></tr></table></figure>
+<p>这样就能在本地搭建一个简单的服务器，然后访问localhost:4000就能看到blog的页面了。</p>
+<p>一个基本的 Jekyll 网站的目录结构一般是像这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">├── _config.yml</span><br><span class="line">├── _drafts</span><br><span class="line">|   ├── begin-with-the-crazy-ideas.textile</span><br><span class="line">|   └── on-simplicity-in-technology.markdown</span><br><span class="line">├── _includes</span><br><span class="line">|   ├── footer.html</span><br><span class="line">|   └── header.html</span><br><span class="line">├── _layouts</span><br><span class="line">|   ├── default.html</span><br><span class="line">|   └── post.html</span><br><span class="line">├── _posts</span><br><span class="line">|   ├── 2007-10-29-why-every-programmer-should-play-nethack.textile</span><br><span class="line">|   └── 2009-04-26-barcamp-boston-4-roundup.textile</span><br><span class="line">├── _data</span><br><span class="line">|   └── members.yml</span><br><span class="line">├── _site</span><br><span class="line">└── index.html</span><br></pre></td></tr></table></figure>
+<p>对应的用途如下：</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_config.yml</td>
+<td>保存配置数据。很多配置选项都会直接从命令行中进行设置，但是如果你把那些配置写在这儿，你就不用非要去记住那些命令了。</td>
+</tr>
+<tr>
+<td>_drafts</td>
+<td>drafts 是未发布的文章。这些文件的格式中都没有 title.MARKUP 数据。</td>
+</tr>
+<tr>
+<td>_includes</td>
+<td>你可以加载这些包含部分到你的布局或者文章中以方便重用。可以用这个标签  {\% include file.ext \%} 来把文件 _includes/file.ext 包含进来。</td>
+</tr>
+<tr>
+<td>_layouts</td>
+<td>layouts 是包裹在文章外部的模板。布局可以在 YAML 头信息中根据不同文章进行选择。</td>
+</tr>
+<tr>
+<td>_posts</td>
+<td>这里放的就是你的文章了。文件格式很重要，必须要符合: YEAR-MONTH-DAY-title.MARKUP。 The permalinks 可以在文章中自己定制，但是数据和标记语言都是根据文件名来确定的。</td>
+</tr>
+<tr>
+<td>_site</td>
+<td>一旦 Jekyll 完成转换，就会将生成的页面放在这里（默认）。最好将这个目录放进你的 .gitignore 文件中。</td>
+</tr>
+<tr>
+<td>index.html</td>
+<td>如果这些文件中包含 YAML 头信息 部分，Jekyll 就会自动将它们进行转换。当然，其他的如 .html， .markdown，  .md，或者 .textile 等在你的站点根目录下或者不是以上提到的目录中的文件也会被转换。</td>
+</tr>
+<tr>
+<td>Other Files/Folders</td>
+<td>其他一些未被提及的目录和文件如  css 还有 images 文件夹， favicon.ico 等文件都将被完全拷贝到生成的 site 中。</td>
+</tr>
+</tbody>
+</table>
+<p>安装完成后，如果你要配置你自己的站点信息，那么你就要修改<code>_config.yml</code>这个文件。里面可以配置站点名称，描述，多说，统计，友链等等。</p>
+<h3 id="使用Hux主题"><a href="#使用Hux主题" class="headerlink" title="使用Hux主题"></a>使用Hux主题</h3><p>默认的主题不是很喜欢？客官可以找<a href="http://jekyllthemes.org/" target="_blank" rel="external">jekyllthemes</a>这个上面找找，个人觉得<a href="https://github.com/Huxpro/huxpro.github.io" target="_blank" rel="external">Hux</a>这个主题还是不错的，喜欢的直接下载，重新修改里面配置就能为自己所用了。</p>
+<p>关于配置文件里面多说的duoshuo_username是什么，在多说创建站点的时候，这个框框里面填的就是你的duoshuo_username：</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463733643686.png" alt="image"></p>
+<p>配置完在本地预览没有问题了，就可以直接把代码上传到github，然后访问yourusername.github.io就能看到你刚刚创建的blog了。</p>
+<h3 id="域名绑定"><a href="#域名绑定" class="headerlink" title="域名绑定"></a>域名绑定</h3><p>如果你不想使用yourusername.github.io，也可以绑定自己的域名，将域名的CNAME指向yourusername.github.io，然后在github下面新建一个CNAME文件，里面写上你的域名，然后就能通过域名直接访问到yourusername.github.io了。</p>
+<h2 id="hexo搭建静态博客"><a href="#hexo搭建静态博客" class="headerlink" title="hexo搭建静态博客"></a>hexo搭建静态博客</h2><p>上面说了，萝卜白菜各有所爱，下面也来介绍下如何使用<code>hexo</code>搭建静态博客。<a href="https://hexo.io/" target="_blank" rel="external">这是它的官网</a>，当然空间我们使用的还是Github Pages。</p>
+<h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p>通过上面简单的操作之后，就能找本地生成一个blog的目录，和jekyll一样也是通过<code>_config.yml</code>文件来配置站点信息的。</p>
+<p>默认的目录结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">├── .deploy</span><br><span class="line">├── public</span><br><span class="line">├── scaffolds</span><br><span class="line">├── scripts</span><br><span class="line">├── source</span><br><span class="line">|   ├── _drafts</span><br><span class="line">|   └── _posts</span><br><span class="line">├── themes</span><br><span class="line">├── _config.yml</span><br><span class="line">└── package.json</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.deploy</td>
+<td>执行hexo deploy命令部署到GitHub上的内容目录</td>
+</tr>
+<tr>
+<td>public</td>
+<td>执行hexo generate命令，输出的静态网页内容目录</td>
+</tr>
+<tr>
+<td>scaffolds</td>
+<td>layout模板文件目录，其中的md文件可以添加编辑</td>
+</tr>
+<tr>
+<td>scripts</td>
+<td>扩展脚本目录，这里可以自定义一些javascript脚本</td>
+</tr>
+<tr>
+<td>source</td>
+<td>文章源码目录，该目录下的markdown和html文件均会被hexo处理。该页面对应repo的根目录，404文件、favicon.ico文件，CNAME文件等都应该放这里，该目录下可新建页面目录。</td>
+</tr>
+<tr>
+<td>_drafts</td>
+<td>草稿文章</td>
+</tr>
+<tr>
+<td>_posts</td>
+<td>发布文章</td>
+</tr>
+<tr>
+<td>themes</td>
+<td>主题文件目录</td>
+</tr>
+<tr>
+<td>_config.yml</td>
+<td>全局配置文件，大多数的设置都在这里</td>
+</tr>
+<tr>
+<td>package.json</td>
+<td>应用程序数据，指明hexo的版本等信息，类似于一般软件中的关于按钮</td>
+</tr>
+</tbody>
+</table>
+<p>hexo常用的几个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;postName&quot; #新建文章</span><br><span class="line">hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">hexo generate #生成静态页面至public目录</span><br><span class="line">hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）</span><br><span class="line">hexo deploy #将.deploy目录部署到GitHub</span><br></pre></td></tr></table></figure>
+<p>如果你的文章是从jekyll转过来的，要修改<code>_config.yml</code>里面的<code>permalink: :year/:month/:day/:title/</code>。</p>
+<h3 id="Next主题"><a href="#Next主题" class="headerlink" title="Next主题"></a>Next主题</h3><p>hexo也有很多的主题，这里说一下<a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Next</a>这个主题：</p>
+<p>安装最新版：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd your-hexo-site</span><br><span class="line">$ git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+<p>修改站点配置文件_config.yml：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+<p><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Next</a>里面有关于这个主题的配置，大家自己试试。</p>
+<h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><p>hexo支持插件，可以直接通过命令行安装即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm install plugin-name --save</span><br><span class="line">//更新插件</span><br><span class="line">npm update</span><br><span class="line">//卸载插件</span><br><span class="line">npm uninstall plugin-name</span><br></pre></td></tr></table></figure>
+<p>下面推荐几个常用的插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//feed插件</span><br><span class="line">npm install hexo-generator-feed --save</span><br><span class="line">//站点地图</span><br><span class="line">npm install hexo-generator-sitemap --save</span><br><span class="line">//百度站点地图</span><br><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
+<h2 id="SEO优化"><a href="#SEO优化" class="headerlink" title="SEO优化"></a>SEO优化</h2><p>更改index.swig文件，文件路径是your-hexo-site\themes\next\layout，将下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% block title %&#125; &#123;&#123; config.title &#125;&#125; &#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% block title %&#125; &#123;&#123; config.title &#125;&#125; - &#123;&#123; theme.description &#125;&#125; &#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<p>按照<a href="http://theme-next.iissnan.com/advanced-settings.html" target="_blank" rel="external">Next进阶设定</a>使用cdn加速js和css，还有google font。</p>
+<p>在<a href="http://zhanzhang.baidu.com/" target="_blank" rel="external">百度站长</a>提交网站和网站地图。</p>
+<h2 id="同时使用coding和github"><a href="#同时使用coding和github" class="headerlink" title="同时使用coding和github"></a>同时使用coding和github</h2><p>国内的<a href="https://gitcafe.com/" target="_blank" rel="external">gitcafe</a>也提供了相应的服务，当然现在已经卖给了<a href="https://coding.net" target="_blank" rel="external">Coding</a>。</p>
+<p>所以我们可以同时使用Coding提供的Pages服务和Github提供的Pages服务。</p>
+<p>只需要在配置文件中配置一下<code>deploy</code>就可以了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: </span><br><span class="line">    github: https://github.com/xxxxxx</span><br><span class="line">    coding: https://git.coding.net/xxxxxx,coding-pages</span><br></pre></td></tr></table></figure>
+<p>先要安装deployer-git</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<h2 id="国内国外访问不同的Pages服务"><a href="#国内国外访问不同的Pages服务" class="headerlink" title="国内国外访问不同的Pages服务"></a>国内国外访问不同的Pages服务</h2><p>同时使用了coding和github之后，由于github访问速度可能有点慢，可以通过DnsPod让国内用户访问coding，让国外用户访问github。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1463735892433.png" alt="image"></p>
+<p>好了，基本介绍的也差不多了。大家自己摸索吧，有问题可以直接在下面留言~~~</p>
+<p><strong>Just enjoy it！</strong></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/blog/" rel="tag">#blog</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/15/fbretaincycledetector-analyse/" rel="next" title="FBRetainCycleDetector源码分析">
+                <i class="fa fa-chevron-left"></i> FBRetainCycleDetector源码分析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/20/blog-by-jekyll-hexo/"
+     data-title="使用jekyll和hexo搭建免费博客"
+     data-content=""
+     data-url="http://www.alonemonkey.com/2016/05/20/blog-by-jekyll-hexo/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/20/blog-by-jekyll-hexo/"
+           data-title="使用jekyll和hexo搭建免费博客" data-url="http://www.alonemonkey.com/2016/05/20/blog-by-jekyll-hexo/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#why静态博客？"><span class="nav-number">1.</span> <span class="nav-text">why静态博客？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github-Pages是什么"><span class="nav-number">2.</span> <span class="nav-text">Github Pages是什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jekyll搭建静态博客"><span class="nav-number">3.</span> <span class="nav-text">jekyll搭建静态博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装jekyll"><span class="nav-number">3.1.</span> <span class="nav-text">安装jekyll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Hux主题"><span class="nav-number">3.2.</span> <span class="nav-text">使用Hux主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#域名绑定"><span class="nav-number">3.3.</span> <span class="nav-text">域名绑定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo搭建静态博客"><span class="nav-number">4.</span> <span class="nav-text">hexo搭建静态博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装hexo"><span class="nav-number">4.1.</span> <span class="nav-text">安装hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Next主题"><span class="nav-number">4.2.</span> <span class="nav-text">Next主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装插件"><span class="nav-number">4.3.</span> <span class="nav-text">安装插件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SEO优化"><span class="nav-number">5.</span> <span class="nav-text">SEO优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同时使用coding和github"><span class="nav-number">6.</span> <span class="nav-text">同时使用coding和github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#国内国外访问不同的Pages服务"><span class="nav-number">7.</span> <span class="nav-text">国内国外访问不同的Pages服务</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alonemonkey"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
