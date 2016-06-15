@@ -1,0 +1,856 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.useso.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="chromium," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="chromium中用到的构建工具介绍以及对比。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GYP，GN和Ninja">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/06/15/gn-gyp-ninja/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="chromium中用到的构建工具介绍以及对比。">
+<meta property="og:updated_time" content="2016-06-15T13:56:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GYP，GN和Ninja">
+<meta name="twitter:description" content="chromium中用到的构建工具介绍以及对比。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> GYP，GN和Ninja | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                GYP，GN和Ninja
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-15T00:00:00+08:00" content="2016-06-15">
+              2016-06-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/chrome/" itemprop="url" rel="index">
+                    <span itemprop="name">chrome</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/15/gn-gyp-ninja/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/15/gn-gyp-ninja/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>chromium</code>的编译过程中用到了<a href="https://gyp.gsrc.io/" target="_blank" rel="external">GYP</a>，<a href="https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md" target="_blank" rel="external">GN</a>和<a href="https://ninja-build.org/" target="_blank" rel="external">Ninja</a>这三个构建工具，<code>GYP</code>是一个在不同平台构建项目的工具，<code>GN</code>是<code>GYP</code>的升级版，<code>Ninja</code>是一个小型追求速度的构建系统。</p>
+<h3 id="GYP"><a href="#GYP" class="headerlink" title="GYP"></a>GYP</h3><p><code>GYP</code>是<code>Generate Your Projects</code>的缩写，<code>GYP</code>的目的是为了支持更大的项目编译在不同的平台，比如<code>Mac</code>，<code>Windows</code>，<code>Linux</code>，它可以生成Xcode工程，Visual Studio工程，Ninja编译文件和Mackefiles。</p>
+<h4 id="GYP结构"><a href="#GYP结构" class="headerlink" title="GYP结构"></a>GYP结构</h4><p><code>GYP</code>的输入是<code>.gyp</code>和<code>.gypi</code>文件，<code>.gypi</code>文件是用于<code>.gyp</code>文件include使用的。<code>.gyp</code>文件就是符合特定格式的<code>json</code>文件。</p>
+<p>先来看一个<code>chromium</code>中缩减的<code>.gyp</code>文件：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   'variables': &#123;</span><br><span class="line">     .</span><br><span class="line">     .</span><br><span class="line">     .</span><br><span class="line">   &#125;,</span><br><span class="line">   'includes': [</span><br><span class="line">     '../build/common.gypi',</span><br><span class="line">   ],</span><br><span class="line">   'target_defaults': &#123;</span><br><span class="line">     .</span><br><span class="line">     .</span><br><span class="line">     .</span><br><span class="line">   &#125;,</span><br><span class="line">   'targets': [</span><br><span class="line">     &#123;</span><br><span class="line">       'target_name': 'target_1',</span><br><span class="line">         .</span><br><span class="line">         .</span><br><span class="line">         .</span><br><span class="line">     &#125;,</span><br><span class="line">     &#123;</span><br><span class="line">       'target_name': 'target_2',</span><br><span class="line">         .</span><br><span class="line">         .</span><br><span class="line">         .</span><br><span class="line">     &#125;,</span><br><span class="line">   ],</span><br><span class="line">   'conditions': [</span><br><span class="line">     ['OS=="linux"', &#123;</span><br><span class="line">       'targets': [</span><br><span class="line">         &#123;</span><br><span class="line">           'target_name': 'linux_target_3',</span><br><span class="line">             .</span><br><span class="line">             .</span><br><span class="line">             .</span><br><span class="line">         &#125;,</span><br><span class="line">       ],</span><br><span class="line">     &#125;],</span><br><span class="line">     ['OS=="win"', &#123;</span><br><span class="line">       'targets': [</span><br><span class="line">         &#123;</span><br><span class="line">           'target_name': 'windows_target_4',</span><br><span class="line">             .</span><br><span class="line">             .</span><br><span class="line">             .</span><br><span class="line">         &#125;,</span><br><span class="line">       ],</span><br><span class="line">     &#125;, &#123; # OS != "win"</span><br><span class="line">       'targets': [</span><br><span class="line">         &#123;</span><br><span class="line">           'target_name': 'non_windows_target_5',</span><br><span class="line">             .</span><br><span class="line">             .</span><br><span class="line">             .</span><br><span class="line">         &#125;,</span><br><span class="line">     &#125;],</span><br><span class="line">   ],</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>上面指定下面几个属性的值：</p>
+<p><code>variables</code>: 定义可能被修改或者用于文件其它地方的变量。</p>
+<p><code>includes</code>:  需要包含进来的有<code>.gypi</code>后缀的文件。<br><code>target_defaults</code>: 默认设置，应用于文件中的所有target。<br><code>targets</code>: 指定该文件生成的target列表。<br><code>conditions</code>: 指定不同的条件，修改文件中的变量。</p>
+<p>下面来看构建一个简单的可执行文件的target：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   'targets': [</span><br><span class="line">     &#123;</span><br><span class="line">       'target_name': 'foo',</span><br><span class="line">       'type': 'executable',</span><br><span class="line">       'msvs_guid': '5ECEC9E5-8F23-47B6-93E0-C3B328B3BE65',</span><br><span class="line">       'dependencies': [</span><br><span class="line">         'xyzzy',</span><br><span class="line">         '../bar/bar.gyp:bar',</span><br><span class="line">       ],</span><br><span class="line">       'defines': [</span><br><span class="line">         'DEFINE_FOO',</span><br><span class="line">         'DEFINE_A_VALUE=value',</span><br><span class="line">       ],</span><br><span class="line">       'include_dirs': [</span><br><span class="line">         '..',</span><br><span class="line">       ],</span><br><span class="line">       'sources': [</span><br><span class="line">         'file1.cc',</span><br><span class="line">         'file2.cc',</span><br><span class="line">       ],</span><br><span class="line">       'conditions': [</span><br><span class="line">         ['OS=="linux"', &#123;</span><br><span class="line">           'defines': [</span><br><span class="line">             'LINUX_DEFINE',</span><br><span class="line">           ],</span><br><span class="line">           'include_dirs': [</span><br><span class="line">             'include/linux',</span><br><span class="line">           ],</span><br><span class="line">         &#125;],</span><br><span class="line">         ['OS=="win"', &#123;</span><br><span class="line">           'defines': [</span><br><span class="line">             'WINDOWS_SPECIFIC_DEFINE',</span><br><span class="line">           ],</span><br><span class="line">         &#125;, &#123; # OS != "win",</span><br><span class="line">           'defines': [</span><br><span class="line">             'NON_WINDOWS_DEFINE',</span><br><span class="line">           ],</span><br><span class="line">         &#125;]</span><br><span class="line">       ],</span><br><span class="line">     &#125;,</span><br><span class="line">   ],</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><code>target_name</code>:  唯一的来表示工程名称。<br><code>type</code>: 文件类型，这里是<code>executable</code>。<br><code>msvs_guid</code>:  用于生成<code>Visual Studio solution</code>文件的<code>GUID</code>值。<br><code>dependencies</code>: 该target所依赖的其它target。<br><code>defines</code>:  宏定义，用于<code>-D</code>or<code>/D</code>。<br><code>include_dirs</code>: 包含头文件的文件夹，用于<code>-I</code>or<code>/I</code>。<br><code>sources</code>: 该target的源文件列表。<br><code>conditions</code>: 一些条件设置。</p>
+<p>再来看一个简单的库的target：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    'targets': [</span><br><span class="line">      &#123;</span><br><span class="line">        'target_name': 'foo',</span><br><span class="line">        'type': '&lt;(library)'</span><br><span class="line">        'msvs_guid': '5ECEC9E5-8F23-47B6-93E0-C3B328B3BE65',</span><br><span class="line">        'dependencies': [</span><br><span class="line">          'xyzzy',</span><br><span class="line">          '../bar/bar.gyp:bar',</span><br><span class="line">        ],</span><br><span class="line">        'defines': [</span><br><span class="line">          'DEFINE_FOO',</span><br><span class="line">          'DEFINE_A_VALUE=value',</span><br><span class="line">        ],</span><br><span class="line">        'include_dirs': [</span><br><span class="line">          '..',</span><br><span class="line">        ],</span><br><span class="line">        'direct_dependent_settings': &#123;</span><br><span class="line">          'defines': [</span><br><span class="line">            'DEFINE_FOO',</span><br><span class="line">            'DEFINE_ADDITIONAL',</span><br><span class="line">          ],</span><br><span class="line">          'linkflags': [</span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">        'export_dependent_settings': [</span><br><span class="line">          '../bar/bar.gyp:bar',</span><br><span class="line">        ],</span><br><span class="line">        'sources': [</span><br><span class="line">          'file1.cc',</span><br><span class="line">          'file2.cc',</span><br><span class="line">        ],</span><br><span class="line">        'conditions': [</span><br><span class="line">          ['OS=="linux"', &#123;</span><br><span class="line">            'defines': [</span><br><span class="line">              'LINUX_DEFINE',</span><br><span class="line">            ],</span><br><span class="line">            'include_dirs': [</span><br><span class="line">              'include/linux',</span><br><span class="line">            ],</span><br><span class="line">          ],</span><br><span class="line">          ['OS=="win"', &#123;</span><br><span class="line">            'defines': [</span><br><span class="line">              'WINDOWS_SPECIFIC_DEFINE',</span><br><span class="line">            ],</span><br><span class="line">          &#125;, &#123; # OS != "win",</span><br><span class="line">            'defines': [</span><br><span class="line">              'NON_WINDOWS_DEFINE',</span><br><span class="line">            ],</span><br><span class="line">          &#125;]</span><br><span class="line">        ],</span><br><span class="line">    ],</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>大部分和可执行文件的target是一样的，有些不一样的：</p>
+<p><code>type</code>:  类型要设置为<code>&lt;(library)</code></p>
+<p><code>direct_dependent_settings</code>:  这些设置会应用到直接依赖于这个target的target，也就是在<code>dependencies</code>中指定了该target的。</p>
+<p><code>export_dependent_settings</code>: 导出列target的<code>direct_dependent_settings</code>设置到目标target。</p>
+<h3 id="GYP-实例"><a href="#GYP-实例" class="headerlink" title="GYP 实例"></a>GYP 实例</h3><p>下面来看几个简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &apos;targets&apos;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &apos;target_name&apos;: &apos;foo&apos;,</span><br><span class="line">        &apos;type&apos;: &apos;executable&apos;,</span><br><span class="line">        &apos;sources&apos;: [</span><br><span class="line">          &apos;independent.cc&apos;,</span><br><span class="line">          &apos;specific_win.cc&apos;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<p>生成一个可执行文件<code>foo</code>，参与编译的源文件有<code>independent.cc</code>，<code>specific_win.cc</code>，可以通过指定后缀<code>_linux</code>，<code>_mac</code>，<code>_posix</code>，<code>_win</code>来指定某个文件在指定的平台才参与编译，比如上面<code>specific_win.cc</code>只在Windows平台参与编译。</p>
+<p>也可以指定<code>conditions</code>，在不同的平台，加上不同的条件：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  'targets': [</span><br><span class="line">    &#123;</span><br><span class="line">      'target_name': 'foo',</span><br><span class="line">      'type': 'executable',</span><br><span class="line">      'sources': [</span><br><span class="line">        'linux_specific.cc',</span><br><span class="line">      ],</span><br><span class="line">      'conditions': [</span><br><span class="line">        ['OS != "linux"', &#123;</span><br><span class="line">          'sources!': [</span><br><span class="line">            # Linux-only; exclude on other platforms.</span><br><span class="line">            'linux_specific.cc',</span><br><span class="line">          ]</span><br><span class="line">        &#125;[,</span><br><span class="line">      ],</span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>上面表示：如果不是linux平台，就不包含源文件<code>linux_specific.cc</code>。</p>
+<p>再来看下依赖的使用：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  'targets': [</span><br><span class="line">    &#123;</span><br><span class="line">      'target_name': 'new_unit_tests',</span><br><span class="line">      'type': 'executable',</span><br><span class="line">      'defines': [</span><br><span class="line">        'FOO',</span><br><span class="line">      ],</span><br><span class="line">      'include_dirs': [</span><br><span class="line">        '..',</span><br><span class="line">        'include',</span><br><span class="line">      ],</span><br><span class="line">      'dependencies': [</span><br><span class="line">        'other_target_in_this_file',</span><br><span class="line">        'other_gyp2:target_in_other_gyp2',</span><br><span class="line">      ],</span><br><span class="line">      'sources': [</span><br><span class="line">        'new_additional_source.cc',</span><br><span class="line">        'new_unit_tests.cc',</span><br><span class="line">      ],</span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>dependencies</code>可以指定依赖，该文件的其它target，或者其它文件的某个target。</p>
+<p>或者指定编译参数：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  'targets': [</span><br><span class="line">    &#123;</span><br><span class="line">      'target_name': 'existing_target',</span><br><span class="line">      'conditions': [</span><br><span class="line">        ['OS=="win"', &#123;</span><br><span class="line">          'cflags': [</span><br><span class="line">            '/WX',</span><br><span class="line">          ],</span><br><span class="line">        &#125;, &#123; # OS != "win"</span><br><span class="line">          'cflags': [</span><br><span class="line">            '-Werror',</span><br><span class="line">          ],</span><br><span class="line">        &#125;],</span><br><span class="line">      ],</span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>target之间的相互依赖：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  'targets': [</span><br><span class="line">    &#123;</span><br><span class="line">      'target_name': 'foo',</span><br><span class="line">      'type': 'executable',</span><br><span class="line">      'dependencies': [</span><br><span class="line">        'libbar',</span><br><span class="line">      ],</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      'target_name': 'libbar',</span><br><span class="line">      'type': '&lt;(library)',</span><br><span class="line">      'defines': [</span><br><span class="line">        'LOCAL_DEFINE_FOR_LIBBAR',</span><br><span class="line">        'DEFINE_TO_USE_LIBBAR',</span><br><span class="line">      ],</span><br><span class="line">      'include_dirs': [</span><br><span class="line">        '..',</span><br><span class="line">        'include/libbar',</span><br><span class="line">      ],</span><br><span class="line">      'direct_dependent_settings': &#123;</span><br><span class="line">        'defines': [</span><br><span class="line">          'DEFINE_TO_USE_LIBBAR',</span><br><span class="line">        ],</span><br><span class="line">        'include_dirs': [</span><br><span class="line">          'include/libbar',</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>foo</code>依赖<code>libbar</code>。也可以是其它文件的<code>libbar</code>，那就要写成<code>&#39;../bar/bar.gyp:libbar&#39;,</code>。</p>
+<p>而且<code>foo</code>会加上编译选项<code>-DDEFINE_TO_USE_LIBBAR -Iinclude/libbar</code>。</p>
+<p>还支持Mac OS X bundles</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  'target_name': 'test_app',</span><br><span class="line">  'product_name': 'Test App Gyp',</span><br><span class="line">  'type': 'executable',</span><br><span class="line">  'mac_bundle': 1,</span><br><span class="line">  'sources': [</span><br><span class="line">    'main.m',</span><br><span class="line">    'TestAppAppDelegate.h',</span><br><span class="line">    'TestAppAppDelegate.m',</span><br><span class="line">  ],</span><br><span class="line">  'mac_bundle_resources': [</span><br><span class="line">    'TestApp/English.lproj/InfoPlist.strings',</span><br><span class="line">    'TestApp/English.lproj/MainMenu.xib',</span><br><span class="line">  ],</span><br><span class="line">  'link_settings': &#123;</span><br><span class="line">    'libraries': [</span><br><span class="line">      '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">  'xcode_settings': &#123;</span><br><span class="line">    'INFOPLIST_FILE': 'TestApp/TestApp-Info.plist',</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h3 id="GN"><a href="#GN" class="headerlink" title="GN"></a>GN</h3><p>GN(Generate Ninja)是chromium project用来取代GYP的新工具，由于GN是用<code>C++</code>编写，比起用    <code>python</code>写的GYP快了很多，GN新的DSL的语法也被认为是比较好写以及维护的。</p>
+<h3 id="GN的使用"><a href="#GN的使用" class="headerlink" title="GN的使用"></a>GN的使用</h3><p>在source project的根目录新增一个<code>.gn</code>，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buildconfig = &quot;//build/BUILDCONFIG.gn&quot;</span><br></pre></td></tr></table></figure>
+<p><code>.gn</code>所在的目录会被GN工具认定是project的source root，<code>.gn</code>的内容醉基本就是用<code>buildconfig</code>来指定<code>build config</code>的位置，其中<code>//build/BUILDCONFIG.gn</code>用来指定相对于source root的路径。</p>
+<h4 id="建立build-NUILDCONFIG-gn"><a href="#建立build-NUILDCONFIG-gn" class="headerlink" title="建立build/NUILDCONFIG.gn"></a>建立build/NUILDCONFIG.gn</h4><p>根据前面的设定，需要在<code>build/</code>下再新增一个<code>BUILDCONFIG.gn</code>，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set_default_toolchain(&quot;//build/toolchains:gcc&quot;)</span><br><span class="line">cflags_cc = [ &quot;-std=c++11&quot; ]</span><br></pre></td></tr></table></figure>
+<p>第一行指定要使用的<code>toolchain</code>，参数给的是一个label，<code>//build/toolchains:gcc</code>指的是<code>build/toolchains/BUILD.gn</code>里面定义的<code>gcc</code>toolchain。第三行则是设定编译C++时会用到的命令行参数。</p>
+<h4 id="建立build-toolchains-BUILD-gn"><a href="#建立build-toolchains-BUILD-gn" class="headerlink" title="建立build/toolchains/BUILD.gn"></a>建立build/toolchains/BUILD.gn</h4><p>因为GN没有内建的<code>toolchain</code>规则，toolchain里的各种tool例如 <code>cc</code>,<code>cxx</code>,<code>link</code>等必须自己指定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">toolchain(&quot;gcc&quot;) &#123;</span><br><span class="line">  tool(&quot;cc&quot;) &#123;</span><br><span class="line">    depfile = &quot;&#123;&#123;output&#125;&#125;.d&quot;</span><br><span class="line">    command = &quot;gcc -MMD -MF $depfile &#123;&#123;defines&#125;&#125; &#123;&#123;include_dirs&#125;&#125; &#123;&#123;cflags&#125;&#125; &#123;&#123;cflags_c&#125;&#125; -c &#123;&#123;source&#125;&#125; -o &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">    depsformat = &quot;gcc&quot;</span><br><span class="line">    description = &quot;CC &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">    outputs = [</span><br><span class="line">      &quot;&#123;&#123;source_out_dir&#125;&#125;/&#123;&#123;target_output_name&#125;&#125;.&#123;&#123;source_name_part&#125;&#125;.o&quot;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  tool(&quot;cxx&quot;) &#123;</span><br><span class="line">    depfile = &quot;&#123;&#123;output&#125;&#125;.d&quot;</span><br><span class="line">    command = &quot;g++ -MMD -MF $depfile &#123;&#123;defines&#125;&#125; &#123;&#123;include_dirs&#125;&#125; &#123;&#123;cflags&#125;&#125; &#123;&#123;cflags_cc&#125;&#125; -c &#123;&#123;source&#125;&#125; -o &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">    depsformat = &quot;gcc&quot;</span><br><span class="line">    description = &quot;CXX &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">    outputs = [</span><br><span class="line">      &quot;&#123;&#123;source_out_dir&#125;&#125;/&#123;&#123;target_output_name&#125;&#125;.&#123;&#123;source_name_part&#125;&#125;.o&quot;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  tool(&quot;alink&quot;) &#123;</span><br><span class="line">    rspfile = &quot;&#123;&#123;output&#125;&#125;.rsp&quot;</span><br><span class="line">    command = &quot;rm -f &#123;&#123;output&#125;&#125; &amp;&amp; ar rcs &#123;&#123;output&#125;&#125; @$rspfile&quot;</span><br><span class="line">    description = &quot;AR &#123;&#123;target_output_name&#125;&#125;&#123;&#123;output_extension&#125;&#125;&quot;</span><br><span class="line">    rspfile_content = &quot;&#123;&#123;inputs&#125;&#125;&quot;</span><br><span class="line">    outputs = [</span><br><span class="line">      &quot;&#123;&#123;target_out_dir&#125;&#125;/&#123;&#123;target_output_name&#125;&#125;&#123;&#123;output_extension&#125;&#125;&quot;,</span><br><span class="line">    ]</span><br><span class="line">    default_output_extension = &quot;.a&quot;</span><br><span class="line">    output_prefix = &quot;lib&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  tool(&quot;solink&quot;) &#123;</span><br><span class="line">    soname = &quot;&#123;&#123;target_output_name&#125;&#125;&#123;&#123;output_extension&#125;&#125;&quot;  # e.g. &quot;libfoo.so&quot;.</span><br><span class="line">    rspfile = soname + &quot;.rsp&quot;</span><br><span class="line">    command = &quot;g++ -shared &#123;&#123;ldflags&#125;&#125; -o $soname -Wl,-soname=$soname @$rspfile&quot;</span><br><span class="line">    rspfile_content = &quot;-Wl,--whole-archive &#123;&#123;inputs&#125;&#125; &#123;&#123;solibs&#125;&#125; -Wl,--no-whole-archive &#123;&#123;libs&#125;&#125;&quot;</span><br><span class="line">    description = &quot;SOLINK $soname&quot;</span><br><span class="line">    # Use this for &#123;&#123;output_extension&#125;&#125; expansions unless a target manually</span><br><span class="line">    # overrides it (in which case &#123;&#123;output_extension&#125;&#125; will be what the target</span><br><span class="line">    # specifies).</span><br><span class="line">    default_output_extension = &quot;.so&quot;</span><br><span class="line">    outputs = [</span><br><span class="line">      soname,</span><br><span class="line">    ]</span><br><span class="line">    link_output = soname</span><br><span class="line">    depend_output = soname</span><br><span class="line">    output_prefix = &quot;lib&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  tool(&quot;link&quot;) &#123;</span><br><span class="line">    outfile = &quot;&#123;&#123;target_output_name&#125;&#125;&#123;&#123;output_extension&#125;&#125;&quot;</span><br><span class="line">    rspfile = &quot;$outfile.rsp&quot;</span><br><span class="line">    command = &quot;g++ &#123;&#123;ldflags&#125;&#125; -o $outfile -Wl,--start-group @$rspfile &#123;&#123;solibs&#125;&#125; -Wl,--end-group &#123;&#123;libs&#125;&#125;&quot;</span><br><span class="line">    description = &quot;LINK $outfile&quot;</span><br><span class="line">    rspfile_content = &quot;&#123;&#123;inputs&#125;&#125;&quot;</span><br><span class="line">    outputs = [</span><br><span class="line">      outfile,</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">  tool(&quot;stamp&quot;) &#123;</span><br><span class="line">    command = &quot;touch &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">    description = &quot;STAMP &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  tool(&quot;copy&quot;) &#123;</span><br><span class="line">    command = &quot;cp -af &#123;&#123;source&#125;&#125; &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">    description = &quot;COPY &#123;&#123;source&#125;&#125; &#123;&#123;output&#125;&#125;&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意下之前提到的<code>cflags_cc</code>是怎么被tool cxx使用的。</p>
+<h4 id="建立BUILD-gn"><a href="#建立BUILD-gn" class="headerlink" title="建立BUILD.gn"></a>建立BUILD.gn</h4><p>最后在source root新增一个<code>BUILD.gn</code>，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">executable(&quot;hello&quot;) &#123;</span><br><span class="line">  sources = [</span><br><span class="line">    &quot;main.cpp&quot;,</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>指定hello执行程序由main.cpp编译。</p>
+<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><p>先用<code>gn gen</code>指定在<code>out/</code>目录里面生成ninja。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gn gen out</span><br></pre></td></tr></table></figure>
+<p>再执行ninja来build code</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C out</span><br></pre></td></tr></table></figure>
+<p>以后所有修改gn设定的话，也不用重新执行gn，ninja会自动更新设置：</p>
+<h3 id="Ninja"><a href="#Ninja" class="headerlink" title="Ninja"></a>Ninja</h3><p>Ninja是一个追求速度的构建系统，相比别的构建系统，Ninja的特点是快和简洁，仅保留最少的特性来提高编译速度。Ninja使用build.ninja文件来定义构建规则，和Makefile里的元编程不同，build.ninja几乎是完全静态的，动态生成依赖其他工具，如gyp或者CMake。</p>
+<h4 id="build-niinja"><a href="#build-niinja" class="headerlink" title="build.niinja"></a>build.niinja</h4><p>build.niinja相当于ninja的makefile，一个简单的<code>build.ninja</code>文件如下，分为<code>rule</code>和<code>dependency</code>两部分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># part rull</span><br><span class="line">cc=gcc</span><br><span class="line">cflags= -g -c</span><br><span class="line"></span><br><span class="line">rule cc</span><br><span class="line">     command = $cc $cflags $in -o $out</span><br><span class="line"></span><br><span class="line">rule link</span><br><span class="line">     command = $cc $in -o $out</span><br><span class="line"></span><br><span class="line">rule cleanup</span><br><span class="line">     command = rm -rf *.exe *.o</span><br><span class="line"></span><br><span class="line">#part dependency</span><br><span class="line">build func.o           : cc func.c</span><br><span class="line">build main.o           : cc main.c</span><br><span class="line"></span><br><span class="line">build app.exe            : link main.o func.o</span><br><span class="line"></span><br><span class="line">build all:  phony || app.exe</span><br><span class="line">build clean: cleanup</span><br></pre></td></tr></table></figure>
+<p>ninja命令的使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># compile</span><br><span class="line">ninja</span><br><span class="line"># help</span><br><span class="line">ninja -h</span><br></pre></td></tr></table></figure>
+<h4 id="其它细节"><a href="#其它细节" class="headerlink" title="其它细节"></a>其它细节</h4><p><code>phony</code>: 可以创建其他target的别名。如上面的<code>build all:  phony || app.exe</code>。</p>
+<p><code>default</code>: 如果没有在命令行中指定target，可以使用default来指定默认的target。</p>
+<p><code>pools</code>: 为了支持并发作业，Ninja还支持pool的机制，和用<code>-j</code>并行模式一样。</p>
+<p>Ninja构建日志保存在构建过程的根目录或.ninja文件中    <code>builddir</code>变量对应的目录的.ninja_log文件中。</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="http://bluereader.org/article/348163" target="_blank" rel="external">Ninja - chromium核心构建工具</a><br><a href="http://blog.simplypatrick.com/2016/01/23/gn/" target="_blank" rel="external">GN (Generate Ninja) 使用入門</a><br><a href="http://blog.simplypatrick.com/2012/08/18/ninja-a-small-build-system/" target="_blank" rel="external">Ninja - a small build system</a><br><a href="https://gyp.gsrc.io/docs/UserDocumentation.md" target="_blank" rel="external">GYP User Documentation</a><br><a href="https://ninja-build.org/manual.html" target="_blank" rel="external">The Ninja build system</a><br><a href="http://www.suninf.net/2016/01/gyp-usage.html" target="_blank" rel="external">GYP使用笔记</a><br><a href="https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md" target="_blank" rel="external">GN Quick Start guide</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/chromium/" rel="tag">#chromium</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/15/chromium-source-compile/" rel="next" title="Mac下载编译chromium源码">
+                <i class="fa fa-chevron-left"></i> Mac下载编译chromium源码
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/06/15/gn-gyp-ninja/"
+     data-title="GYP，GN和Ninja"
+     data-content=""
+     data-url="http://www.alonemonkey.com/2016/06/15/gn-gyp-ninja/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/15/gn-gyp-ninja/"
+           data-title="GYP，GN和Ninja" data-url="http://www.alonemonkey.com/2016/06/15/gn-gyp-ninja/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GYP"><span class="nav-number">1.</span> <span class="nav-text">GYP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GYP结构"><span class="nav-number">1.1.</span> <span class="nav-text">GYP结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GYP-实例"><span class="nav-number">2.</span> <span class="nav-text">GYP 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GN"><span class="nav-number">3.</span> <span class="nav-text">GN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GN的使用"><span class="nav-number">4.</span> <span class="nav-text">GN的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立build-NUILDCONFIG-gn"><span class="nav-number">4.1.</span> <span class="nav-text">建立build/NUILDCONFIG.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立build-toolchains-BUILD-gn"><span class="nav-number">4.2.</span> <span class="nav-text">建立build/toolchains/BUILD.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立BUILD-gn"><span class="nav-number">4.3.</span> <span class="nav-text">建立BUILD.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译"><span class="nav-number">4.4.</span> <span class="nav-text">编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ninja"><span class="nav-number">5.</span> <span class="nav-text">Ninja</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#build-niinja"><span class="nav-number">5.1.</span> <span class="nav-text">build.niinja</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其它细节"><span class="nav-number">5.2.</span> <span class="nav-text">其它细节</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alonemonkey"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

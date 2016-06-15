@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="在Mac下下载编译并运行chromium的过程。">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
-<meta property="og:updated_time" content="2016-06-15T09:28:46.000Z">
+<meta property="og:updated_time" content="2016-06-15T13:48:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac下载编译chromium源码">
 <meta name="twitter:description" content="在Mac下下载编译并运行chromium的过程。">
@@ -365,6 +365,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gclient sync</span><br></pre></td></tr></table></figure>
 <p>编译：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C out/Debug-iphonesimulator All</span><br></pre></td></tr></table></figure>
+<p>运行测试app:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./iossim -d &quot;iPhone 6&quot; -s 9.3 ./base_unittests.app</span><br></pre></td></tr></table></figure>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.chromium.org/developers/how-tos/get-the-code" target="_blank" rel="external">Get the Code: Checkout, Build, &amp; Run Chromium</a></p>
 
       
@@ -476,13 +478,17 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/25/encrypt-jar-class/" rel="next" title="jar包加密保护解决方案">
-                <i class="fa fa-chevron-left"></i> jar包加密保护解决方案
+              <a href="/2016/05/25/aes-and-des/" rel="next" title="DES和AES算法详解">
+                <i class="fa fa-chevron-left"></i> DES和AES算法详解
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/15/gn-gyp-ninja/" rel="prev" title="GYP，GN和Ninja">
+                GYP，GN和Ninja <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -573,7 +579,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

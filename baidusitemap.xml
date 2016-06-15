@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://www.alonemonkey.com/2016/06/15/gn-gyp-ninja/</loc>
+    <lastmod>2016-06-15T13:56:37.000Z</lastmod>
+    <data>
+        <display>
+        <title>GYP，GN和Ninja</title>
+        <pubTime>2016-06-14T16:00:00.000Z</pubTime>
+        
+        <tag>chromium</tag>
+         
+         
+           
+             
+              <breadCrumb title="chrome" url="http://www.alonemonkey.com/categories/chrome/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.alonemonkey.com/2016/06/15/chromium-source-compile/</loc>
-    <lastmod>2016-06-15T09:28:46.000Z</lastmod>
+    <lastmod>2016-06-15T13:48:34.000Z</lastmod>
     <data>
         <display>
         <title>Mac下载编译chromium源码</title>
