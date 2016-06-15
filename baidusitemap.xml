@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://www.alonemonkey.com/2016/06/15/chromium-source-compile/</loc>
+    <lastmod>2016-06-15T02:28:53.000Z</lastmod>
+    <data>
+        <display>
+        <title>Mac下载编译chromium源码</title>
+        <pubTime>2016-06-14T16:00:00.000Z</pubTime>
+        
+        <tag>chromium</tag>
+         
+         
+           
+             
+              <breadCrumb title="chrome" url="http://www.alonemonkey.com/categories/chrome/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.alonemonkey.com/2016/05/25/encrypt-jar-class/</loc>
-    <lastmod>2016-05-25T12:51:14.000Z</lastmod>
+    <lastmod>2016-06-03T11:30:34.000Z</lastmod>
     <data>
         <display>
         <title>jar包加密保护解决方案</title>
