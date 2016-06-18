@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="在Mac下下载编译并运行chromium的过程。">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
-<meta property="og:updated_time" content="2016-06-15T13:48:34.000Z">
+<meta property="og:updated_time" content="2016-06-18T03:08:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac下载编译chromium源码">
 <meta name="twitter:description" content="在Mac下下载编译并运行chromium的过程。">
@@ -367,6 +367,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C out/Debug-iphonesimulator All</span><br></pre></td></tr></table></figure>
 <p>运行测试app:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./iossim -d &quot;iPhone 6&quot; -s 9.3 ./base_unittests.app</span><br></pre></td></tr></table></figure>
+<h3 id="单个模块"><a href="#单个模块" class="headerlink" title="单个模块"></a>单个模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C out/Debug-iphonesimulator net</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export GYP_GENERATORS=xcode-ninja </span><br><span class="line">export CHROMIUM_GYP_FILE=&apos;net/net.gyp&apos;</span><br><span class="line">./build/gyp_chromium</span><br></pre></td></tr></table></figure>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.chromium.org/developers/how-tos/get-the-code" target="_blank" rel="external">Get the Code: Checkout, Build, &amp; Run Chromium</a></p>
 
       
@@ -478,17 +480,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/25/aes-and-des/" rel="next" title="DES和AES算法详解">
-                <i class="fa fa-chevron-left"></i> DES和AES算法详解
+              <a href="/2016/06/15/gn-gyp-ninja/" rel="next" title="GYP，GN和Ninja">
+                <i class="fa fa-chevron-left"></i> GYP，GN和Ninja
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/06/15/gn-gyp-ninja/" rel="prev" title="GYP，GN和Ninja">
-                GYP，GN和Ninja <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -675,7 +673,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装depot-tools工具"><span class="nav-number">1.</span> <span class="nav-text">安装depot_tools工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取depot-tools工具"><span class="nav-number">1.1.</span> <span class="nav-text">获取depot_tools工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加环境变量"><span class="nav-number">1.2.</span> <span class="nav-text">添加环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取chromium源码"><span class="nav-number">2.</span> <span class="nav-text">获取chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译chromium源码"><span class="nav-number">3.</span> <span class="nav-text">编译chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行chromiun"><span class="nav-number">4.</span> <span class="nav-text">运行chromiun</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译iOS平台"><span class="nav-number">5.</span> <span class="nav-text">编译iOS平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装depot-tools工具"><span class="nav-number">1.</span> <span class="nav-text">安装depot_tools工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取depot-tools工具"><span class="nav-number">1.1.</span> <span class="nav-text">获取depot_tools工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加环境变量"><span class="nav-number">1.2.</span> <span class="nav-text">添加环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取chromium源码"><span class="nav-number">2.</span> <span class="nav-text">获取chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译chromium源码"><span class="nav-number">3.</span> <span class="nav-text">编译chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行chromiun"><span class="nav-number">4.</span> <span class="nav-text">运行chromiun</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译iOS平台"><span class="nav-number">5.</span> <span class="nav-text">编译iOS平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单个模块"><span class="nav-number">6.</span> <span class="nav-text">单个模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
           </div>
         </section>

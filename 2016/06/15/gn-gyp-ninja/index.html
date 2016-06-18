@@ -100,7 +100,7 @@
 <meta property="og:url" content="http://www.alonemonkey.com/2016/06/15/gn-gyp-ninja/index.html">
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="chromium中用到的构建工具介绍以及对比。">
-<meta property="og:updated_time" content="2016-06-15T13:56:37.000Z">
+<meta property="og:updated_time" content="2016-06-18T03:09:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GYP，GN和Ninja">
 <meta name="twitter:description" content="chromium中用到的构建工具介绍以及对比。">
@@ -398,7 +398,41 @@
 <p><code>default</code>: 如果没有在命令行中指定target，可以使用default来指定默认的target。</p>
 <p><code>pools</code>: 为了支持并发作业，Ninja还支持pool的机制，和用<code>-j</code>并行模式一样。</p>
 <p>Ninja构建日志保存在构建过程的根目录或.ninja文件中    <code>builddir</code>变量对应的目录的.ninja_log文件中。</p>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="http://bluereader.org/article/348163" target="_blank" rel="external">Ninja - chromium核心构建工具</a><br><a href="http://blog.simplypatrick.com/2016/01/23/gn/" target="_blank" rel="external">GN (Generate Ninja) 使用入門</a><br><a href="http://blog.simplypatrick.com/2012/08/18/ninja-a-small-build-system/" target="_blank" rel="external">Ninja - a small build system</a><br><a href="https://gyp.gsrc.io/docs/UserDocumentation.md" target="_blank" rel="external">GYP User Documentation</a><br><a href="https://ninja-build.org/manual.html" target="_blank" rel="external">The Ninja build system</a><br><a href="http://www.suninf.net/2016/01/gyp-usage.html" target="_blank" rel="external">GYP使用笔记</a><br><a href="https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md" target="_blank" rel="external">GN Quick Start guide</a></p>
+<h3 id="Make与Ninja对比"><a href="#Make与Ninja对比" class="headerlink" title="Make与Ninja对比"></a>Make与Ninja对比</h3><p>Ninja的定位非常清晰，就是达到更快的构建速度。</p>
+<p>ninja的设计是对于make的缺陷的考虑，认为make有下面几点造成编译速度过慢：</p>
+<ul>
+<li>隐式规则，make包含很多默认</li>
+<li>变量计算，比如编译参与应该如何计算出来</li>
+<li>依赖对象计算</li>
+</ul>
+<p>ninja认为描述文件应该是这样的:</p>
+<ul>
+<li>依赖必须显式写明(为了方便可以产生依赖描述文件)</li>
+<li>没有任何变量计算</li>
+<li>没有默认规则，没有任何默认值</li>
+</ul>
+<p>针对这点所以基本上可以认为ninja就是make的最最精简版。</p>
+<p>ninja相对于make增加了下面这些功能：</p>
+<ul>
+<li>如果构建命令发生变化，那么这个构建也会重新执行。</li>
+<li>所依赖的目录在构建之前都已经创建了，如果不是这样的话，我们执行命令之前都要去生成目录。</li>
+<li>每条构建规则，除了执行命令之外，还允许有一个描述，真正执行打印这个描述而不是实际执行命令。</li>
+<li>每条规则的输出都是buffered的，也就是说并行编译，输入内容不会被搅和在一起。</li>
+</ul>
+<p>构建工具太多了，我个人觉得make主要偏大众化一点，可以进行各种隐式推导，比较灵活，每一条命令执行都有输出。</p>
+<p>而Ninja主要的设计目的是为了像<code>chromium</code>这种大型项目，能够显著的提高编译速度，一方面它去掉了各种计算和推导，把一些耗时的需要计算的东西去掉了，只留下简单重要的部分，所以如果自己去写<code>build.ninja</code>文件的话比较繁琐，所以都是依赖于其它构建工具生成的，另一方面它每次输出只输出一个描述，而不是真正的命令执行输出，真正的命令执行再后台运行，只有警告和报错信息才会显示出来，这也提高了它的速度。</p>
+<p><a href="http://hamelot.io/programming/make-vs-ninja-performance-comparison/" target="_blank" rel="external">Make vs Ninja Performance Comparison</a>这篇文章对Make接Ninja进行测试对比。</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="http://bluereader.org/article/348163" target="_blank" rel="external">Ninja - chromium核心构建工具</a></p>
+<p><a href="http://blog.simplypatrick.com/2016/01/23/gn/" target="_blank" rel="external">GN (Generate Ninja) 使用入門</a></p>
+<p><a href="http://blog.simplypatrick.com/2012/08/18/ninja-a-small-build-system/" target="_blank" rel="external">Ninja - a small build system</a></p>
+<p><a href="https://gyp.gsrc.io/docs/UserDocumentation.md" target="_blank" rel="external">GYP User Documentation</a></p>
+<p><a href="https://ninja-build.org/manual.html" target="_blank" rel="external">The Ninja build system</a></p>
+<p><a href="http://www.suninf.net/2016/01/gyp-usage.html" target="_blank" rel="external">GYP使用笔记</a></p>
+<p><a href="https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md" target="_blank" rel="external">GN Quick Start guide</a></p>
+<p><a href="http://hahack.com/codes/cmake/" target="_blank" rel="external">CMake 入门实战</a></p>
+<p><a href="http://blog.bfitz.us/?p=2099" target="_blank" rel="external">A LIST OF MAKE SYSTEMS</a></p>
+<p><a href="http://hamelot.io/programming/make-vs-ninja-performance-comparison/" target="_blank" rel="external">Make vs Ninja Performance Comparison</a></p>
+<p><a href="http://gittup.org/tup/" target="_blank" rel="external">tup</a></p>
 
       
     </div>
@@ -509,13 +543,17 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/15/chromium-source-compile/" rel="next" title="Mac下载编译chromium源码">
-                <i class="fa fa-chevron-left"></i> Mac下载编译chromium源码
+              <a href="/2016/05/25/encrypt-jar-class/" rel="next" title="jar包加密保护解决方案">
+                <i class="fa fa-chevron-left"></i> jar包加密保护解决方案
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/15/chromium-source-compile/" rel="prev" title="Mac下载编译chromium源码">
+                Mac下载编译chromium源码 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -702,7 +740,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GYP"><span class="nav-number">1.</span> <span class="nav-text">GYP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GYP结构"><span class="nav-number">1.1.</span> <span class="nav-text">GYP结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GYP-实例"><span class="nav-number">2.</span> <span class="nav-text">GYP 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GN"><span class="nav-number">3.</span> <span class="nav-text">GN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GN的使用"><span class="nav-number">4.</span> <span class="nav-text">GN的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立build-NUILDCONFIG-gn"><span class="nav-number">4.1.</span> <span class="nav-text">建立build/NUILDCONFIG.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立build-toolchains-BUILD-gn"><span class="nav-number">4.2.</span> <span class="nav-text">建立build/toolchains/BUILD.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立BUILD-gn"><span class="nav-number">4.3.</span> <span class="nav-text">建立BUILD.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译"><span class="nav-number">4.4.</span> <span class="nav-text">编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ninja"><span class="nav-number">5.</span> <span class="nav-text">Ninja</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#build-niinja"><span class="nav-number">5.1.</span> <span class="nav-text">build.niinja</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其它细节"><span class="nav-number">5.2.</span> <span class="nav-text">其它细节</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GYP"><span class="nav-number">1.</span> <span class="nav-text">GYP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GYP结构"><span class="nav-number">1.1.</span> <span class="nav-text">GYP结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GYP-实例"><span class="nav-number">2.</span> <span class="nav-text">GYP 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GN"><span class="nav-number">3.</span> <span class="nav-text">GN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GN的使用"><span class="nav-number">4.</span> <span class="nav-text">GN的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立build-NUILDCONFIG-gn"><span class="nav-number">4.1.</span> <span class="nav-text">建立build/NUILDCONFIG.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立build-toolchains-BUILD-gn"><span class="nav-number">4.2.</span> <span class="nav-text">建立build/toolchains/BUILD.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立BUILD-gn"><span class="nav-number">4.3.</span> <span class="nav-text">建立BUILD.gn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译"><span class="nav-number">4.4.</span> <span class="nav-text">编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ninja"><span class="nav-number">5.</span> <span class="nav-text">Ninja</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#build-niinja"><span class="nav-number">5.1.</span> <span class="nav-text">build.niinja</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其它细节"><span class="nav-number">5.2.</span> <span class="nav-text">其它细节</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Make与Ninja对比"><span class="nav-number">6.</span> <span class="nav-text">Make与Ninja对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
           </div>
         </section>
