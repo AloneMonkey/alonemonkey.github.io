@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="chromium," />
+  <meta name="keywords" content="网络模拟," />
 
 
 
@@ -94,18 +94,20 @@
 
 
 
-<meta name="description" content="在Mac下下载编译并运行chromium的过程。">
+<meta name="description" content="在台式机的虚拟机Ubuntu系统中搭建无线网络模拟环境遇到的一些坑~">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac下载编译chromium源码">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/06/15/chromium-source-compile/index.html">
+<meta property="og:title" content="augmented-traffic-control模拟网络环境">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/07/01/augmented-traffic-control/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="在Mac下下载编译并运行chromium的过程。">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
-<meta property="og:updated_time" content="2016-06-18T03:08:32.000Z">
+<meta property="og:description" content="在台式机的虚拟机Ubuntu系统中搭建无线网络模拟环境遇到的一些坑~">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098022480.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098042590.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098106145.png">
+<meta property="og:updated_time" content="2016-06-30T16:57:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac下载编译chromium源码">
-<meta name="twitter:description" content="在Mac下下载编译并运行chromium的过程。">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
+<meta name="twitter:title" content="augmented-traffic-control模拟网络环境">
+<meta name="twitter:description" content="在台式机的虚拟机Ubuntu系统中搭建无线网络模拟环境遇到的一些坑~">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098022480.png">
 
 
 
@@ -123,7 +125,7 @@
   };
 </script>
 
-  <title> Mac下载编译chromium源码 | AloneMonkey </title>
+  <title> augmented-traffic-control模拟网络环境 | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -273,7 +275,7 @@
             
             
               
-                Mac下载编译chromium源码
+                augmented-traffic-control模拟网络环境
               
             
           </h1>
@@ -285,8 +287,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-15T00:00:00+08:00" content="2016-06-15">
-              2016-06-15
+            <time itemprop="dateCreated" datetime="2016-07-01T00:00:00+08:00" content="2016-07-01">
+              2016-07-01
             </time>
           </span>
 
@@ -299,8 +301,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/chrome/" itemprop="url" rel="index">
-                    <span itemprop="name">chrome</span>
+                  <a href="/categories/tools/" itemprop="url" rel="index">
+                    <span itemprop="name">tools</span>
                   </a>
                 </span>
 
@@ -315,8 +317,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/15/chromium-source-compile/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/15/chromium-source-compile/" itemprop="commentsCount"></span>
+                <a href="/2016/07/01/augmented-traffic-control/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/augmented-traffic-control/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -339,37 +341,67 @@
       
 
       
-        <h3 id="安装depot-tools工具"><a href="#安装depot-tools工具" class="headerlink" title="安装depot_tools工具"></a>安装depot_tools工具</h3><h4 id="获取depot-tools工具"><a href="#获取depot-tools工具" class="headerlink" title="获取depot_tools工具"></a>获取depot_tools工具</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git</span><br></pre></td></tr></table></figure>
-<h4 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h4><p>把<code>depot_tools</code>工具路径添加到系统的环境变量，<code>~/.bashrc</code> or <code>~/.zshrc</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$PATH:/path/to/depot_tools</span><br></pre></td></tr></table></figure>
-<h3 id="获取chromium源码"><a href="#获取chromium源码" class="headerlink" title="获取chromium源码"></a>获取chromium源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir chromium</span><br><span class="line">cd chromium</span><br><span class="line">fetch --no-history chromium</span><br></pre></td></tr></table></figure>
-<p><code>--no-history</code>参数可以不下载以往的历史信息。<br>如果网络中断了，输入<code>gclient sync</code>继续下载。</p>
-<p>获取依赖：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gclient runhooks</span><br></pre></td></tr></table></figure>
-<p>更新代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git rebase-update</span><br><span class="line">gclient sync</span><br></pre></td></tr></table></figure>
-<h3 id="编译chromium源码"><a href="#编译chromium源码" class="headerlink" title="编译chromium源码"></a>编译chromium源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GYP_DEFINES=mac_sdk=10.11（可选）</span><br><span class="line">export GYP_GENERATORS=ninja,xcode-ninja</span><br><span class="line"></span><br><span class="line">./build/gyp_chromium</span><br><span class="line"></span><br><span class="line">ninja -C out/Release/ chrome</span><br></pre></td></tr></table></figure>
-<p>最新使用<code>gn</code>用于生成ninja文件，<code>gn gen out/Default</code>。</p>
-<p>问题：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;./gyp-mac-tool&quot;, line 712, in &lt;module&gt;</span><br><span class="line">    sys.exit(main(sys.argv[1:]))</span><br><span class="line">  File &quot;./gyp-mac-tool&quot;, line 29, in main</span><br><span class="line">    exit_code = executor.Dispatch(args)</span><br><span class="line">  File &quot;./gyp-mac-tool&quot;, line 44, in Dispatch</span><br><span class="line">    return getattr(self, method)(*args[1:])</span><br><span class="line">  File &quot;./gyp-mac-tool&quot;, line 67, in ExecCopyBundleResource</span><br><span class="line">    self._CopyStringsFile(source, dest)</span><br><span class="line">  File &quot;./gyp-mac-tool&quot;, line 133, in _CopyStringsFile</span><br><span class="line">    import CoreFoundation</span><br><span class="line">ImportError: No module named CoreFoundation</span><br><span class="line">[6208/20844] MACTOOL copy-bundle-resource ../../chrome/app/nibs/AppMenu.xib</span><br></pre></td></tr></table></figure>
-<p>解决：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyobjc</span><br></pre></td></tr></table></figure>
-<h3 id="运行chromiun"><a href="#运行chromiun" class="headerlink" title="运行chromiun"></a>运行chromiun</h3><p>编译完成后会在<code>out/Release</code>下生成<code>Chromium.app</code>，直接运行：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png" alt="image"></p>
-<h3 id="编译iOS平台"><a href="#编译iOS平台" class="headerlink" title="编译iOS平台"></a>编译iOS平台</h3><p>为了编译成iOS平台的版本，可以直接把本地存在的Mac checkout转成iOS checkout，只要在<code>chromium/.gclient</code>文件的最后加一行<code>target_os = [&quot;ios&quot;]</code></p>
-<p>这里使用<code>gn</code>生成ninja文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gn args out/Debug-iphonesimulator</span><br></pre></td></tr></table></figure>
-<p>写入内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Set to true if you have a valid code signing key.</span><br><span class="line">ios_enable_code_signing = false</span><br><span class="line">target_os = &quot;ios&quot;</span><br><span class="line"># Set to &quot;x86&quot;, &quot;x64&quot;, &quot;arm&quot;, &quot;armv7&quot;, &quot;arm64&quot;. &quot;x86&quot; and &quot;x64&quot; will create a</span><br><span class="line"># build to run on the iOS simulator (and set use_ios_simulator = true), all</span><br><span class="line"># others are for an iOS device.</span><br><span class="line">target_cpu = &quot;x64&quot;</span><br><span class="line"># Release vs debug build.</span><br><span class="line">is_debug = true</span><br></pre></td></tr></table></figure>
-<p>最后执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gclient sync</span><br></pre></td></tr></table></figure>
-<p>编译：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C out/Debug-iphonesimulator All</span><br></pre></td></tr></table></figure>
-<p>运行测试app:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./iossim -d &quot;iPhone 6&quot; -s 9.3 ./base_unittests.app</span><br></pre></td></tr></table></figure>
-<h3 id="单个模块"><a href="#单个模块" class="headerlink" title="单个模块"></a>单个模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja -C out/Debug-iphonesimulator net</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export GYP_GENERATORS=xcode-ninja </span><br><span class="line">export CHROMIUM_GYP_FILE=&apos;net/net.gyp&apos;</span><br><span class="line">./build/gyp_chromium</span><br></pre></td></tr></table></figure>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.chromium.org/developers/how-tos/get-the-code" target="_blank" rel="external">Get the Code: Checkout, Build, &amp; Run Chromium</a></p>
+        <p>本文的目的是模拟一个不同的网络环境用于测试应用在不不同网络环境的表现，经过简单的调研发现了几个不同的工具可以做这件事情。</p>
+<h3 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h3><ol>
+<li><p>Network Link Conditioner<br>苹果提供的模拟网络状态的工具，Mac上和iphone上面都可以使用，可以模拟预定的一些网络状态或者增加自定义的网络状态。</p>
+</li>
+<li><p>Charles<br><code>Charles</code>是一个抓包工具，本身也可以模拟不同的网络状态，点击<code>Proxy-Throttle Settings</code>，开启<code>Enable Throttling</code>就能模拟不同的网络环境。</p>
+</li>
+<li><p>Augmented Traffic Control（ATC）<br>这是facebook开源的网络模拟工具，ATC有两个最吸引人的特点：</p>
+</li>
+</ol>
+<ul>
+<li>在手机上通过Web界面就可以随时切换不同的网络环境。</li>
+<li>多个手机可以连接到同一个WIFI下，相互之间模拟的网络环境各不影响。</li>
+</ul>
+<p>最后决定使用<code>ATC</code>在台式机器装个ubuntu系统搭建无线wifi。</p>
+<h3 id="Ubuntu共享wifi热点"><a href="#Ubuntu共享wifi热点" class="headerlink" title="Ubuntu共享wifi热点"></a>Ubuntu共享wifi热点</h3><p>手上有的是一个TP-Link 725的小型USB无线网卡，官网本身没有提供Linux的驱动，使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ethtool -i wlan0</span><br></pre></td></tr></table></figure>
+<p>查看了下网卡的芯片型号，并在github上面找了一个驱动程序<a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">RTL8188EU</a>，安装重启后按照步骤：</p>
+<p>1 . 新建一个wifi。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098022480.png" alt="image"></p>
+<p>2 . 设置wifi的名字、模式、密码、ipv4选择共享给其它计算机、最后保存。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098042590.png" alt="image"></p>
+<p>3 . 一般这个步骤后，电脑会自动连接这个wifi，同时也把这个wifi作为热点共享出去了，如果没有的话，选择连接到隐藏的wifi选择刚刚创建的wifi连接就好了。</p>
+<p>但是我使用的<code>TP-Link 725</code>多次没有连接成功，或者开启wifi热点了也上不去网，同时了解到<code>ad-hoc</code>模式的热点Android手机是搜索不到的，只有<code>AP</code>模式的热点才能搜到，这需要网卡本身和驱动同时支持。</p>
+<p>所以我换了一个tenda U1 的无线网卡，网上说明是支持软AP的，然后去官网找驱动，官网上的linux驱动最高只支持到4.0的内核，我是ubuntu 14.04，内核版本是4.2.0-38，所以在github上面找到一个驱动<a href="https://github.com/Mange/rtl8192eu-linux-driver" target="_blank" rel="external">rtl8192eu-linux-driver</a>，安装重启，能够开启wifi热点，不过是ad-hoc模式的。所以需要切换到AP模式才能让Android手机搜到连接。</p>
+<p>1 .  安装Ap-hotspot</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:nilarimogard/webupd8</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install ap-hotspot</span><br></pre></td></tr></table></figure>
+<p>2 . 配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ap-hotspot configure</span><br></pre></td></tr></table></figure>
+<p>然后显示：</p>
+<p><code>Your wireless card or driver does not support Access Point mode</code></p>
+<p>明明买的时候写的是支持软AP的啊，怎么就不行了呢？</p>
+<p>继续尝试，下载<code>kde-nm-connection-editor</code>，新建一个wifi热点，选择AP模式，保存。连接的时候弹出一个框框：</p>
+<p><code>(32) Access Point (AP) mode is not supported by this device.</code></p>
+<p>阿西吧，看来是真不支持了。后来看到有人也遇到同样的问题，最后买的<code>水晶 MW150U</code>。</p>
+<p>再去买了一个水晶的USB网卡，插上后，驱动都不用装，开启AP模式，连接，完全没有问题。</p>
+<h3 id="配置augmented-traffic-control"><a href="#配置augmented-traffic-control" class="headerlink" title="配置augmented-traffic-control"></a>配置augmented-traffic-control</h3><p>1 . 安装pip</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python-pip</span><br></pre></td></tr></table></figure>
+<p>2 . 安装ATC</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install atc_thrift atcd django-atc-api django-atc-demo-ui django-atc-profile-storage</span><br></pre></td></tr></table></figure>
+<p>3 . 创建app</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject atcui</span><br><span class="line">cd atcui</span><br></pre></td></tr></table></figure>
+<p>4 . 打开<code>atcui/settings.py</code>增加以下内容到<code>INSTALLED_APPS</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    ...</span><br><span class="line">    # Django ATC API</span><br><span class="line">    &apos;rest_framework&apos;,</span><br><span class="line">    &apos;atc_api&apos;,</span><br><span class="line">    # Django ATC Demo UI</span><br><span class="line">    &apos;bootstrap_themes&apos;,</span><br><span class="line">    &apos;django_static_jquery&apos;,</span><br><span class="line">    &apos;atc_demo_ui&apos;,</span><br><span class="line">    # Django ATC Profile Storage</span><br><span class="line">    &apos;atc_profile_storage&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>5 . 打开<code>atcui/urls.py</code>,增加以下内容到<code>urlpatterns</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.base import RedirectView</span><br><span class="line">from django.conf.urls import include   #官网少加了这一句</span><br><span class="line"></span><br><span class="line">urlpatterns = patterns(&apos;&apos;,</span><br><span class="line">    ...</span><br><span class="line">    # Django ATC API</span><br><span class="line">    url(r&apos;^api/v1/&apos;, include(&apos;atc_api.urls&apos;)),</span><br><span class="line">    # Django ATC Demo UI</span><br><span class="line">    url(r&apos;^atc_demo_ui/&apos;, include(&apos;atc_demo_ui.urls&apos;)),</span><br><span class="line">    # Django ATC profile storage</span><br><span class="line">    url(r&apos;^api/v1/profiles/&apos;, include(&apos;atc_profile_storage.urls&apos;)),</span><br><span class="line">    url(r&apos;^$&apos;, RedirectView.as_view(url=&apos;/atc_demo_ui/&apos;, permanent=False)),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>6 . 更新配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
+<p>7 . 运行ATC</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo atcd</span><br></pre></td></tr></table></figure>
+<p>可以通过<code>-atcd-wan</code>和<code>--atcd-lan</code>来指定网卡。</p>
+<p>8 . 运行网站</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver 0.0.0.0:8000</span><br></pre></td></tr></table></figure>
+<p>9 . 访问<a href="http://localhost:8000" target="_blank" rel="external">http://localhost:8000</a></p>
+<p>发现页面是乱的，，，阿西吧，查看源代码发现导入css和js的代码乱了。</p>
+<p>手动找到<code>/usr/local/lib/python2.7/dist-packages/atc_demo_ui/templates/atc_demo_ui/base.html</code>, 进行修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> &lt;!-- Bootstrap CSS --&gt;</span><br><span class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/bootstrap/themes/default/css/bootstrap.min.css&quot; type=&quot;text/css&quot;/&gt;</span><br><span class="line">   &lt;!--&#123;% bootstrap_styles theme=&apos;default&apos; type=&apos;min.css&apos; %&#125;--&gt;</span><br><span class="line">   &lt;!-- Bootstrap JS --&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/static/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">   &lt;!--&#123;% bootstrap_script use_min=True %&#125;--&gt;</span><br></pre></td></tr></table></figure>
+<p>重新访问后，页面正常了。</p>
+<p>10 . 导入官方常用网络状态的设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/facebook/augmented-traffic-control.git</span><br><span class="line">utils/restore-profiles.sh localhost:8000</span><br></pre></td></tr></table></figure>
+<p>选好    指定的模式，然后<code>Update Shaping</code>就可以了。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098106145.png" alt="image"></p>
 
       
     </div>
@@ -471,7 +503,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/chromium/" rel="tag">#chromium</a>
+            <a href="/tags/网络模拟/" rel="tag">#网络模拟</a>
           
         </div>
       
@@ -480,17 +512,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/15/gn-gyp-ninja/" rel="next" title="GYP，GN和Ninja">
-                <i class="fa fa-chevron-left"></i> GYP，GN和Ninja
+              <a href="/2016/06/15/chromium-source-compile/" rel="next" title="Mac下载编译chromium源码">
+                <i class="fa fa-chevron-left"></i> Mac下载编译chromium源码
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/01/augmented-traffic-control/" rel="prev" title="augmented-traffic-control模拟网络环境">
-                augmented-traffic-control模拟网络环境 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -505,10 +533,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/06/15/chromium-source-compile/"
-     data-title="Mac下载编译chromium源码"
+        <div class="ds-share flat" data-thread-key="2016/07/01/augmented-traffic-control/"
+     data-title="augmented-traffic-control模拟网络环境"
      data-content=""
-     data-url="http://www.alonemonkey.com/2016/06/15/chromium-source-compile/">
+     data-url="http://www.alonemonkey.com/2016/07/01/augmented-traffic-control/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -535,8 +563,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/06/15/chromium-source-compile/"
-           data-title="Mac下载编译chromium源码" data-url="http://www.alonemonkey.com/2016/06/15/chromium-source-compile/">
+      <div class="ds-thread" data-thread-key="2016/07/01/augmented-traffic-control/"
+           data-title="augmented-traffic-control模拟网络环境" data-url="http://www.alonemonkey.com/2016/07/01/augmented-traffic-control/">
       </div>
     
   </div>
@@ -677,7 +705,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装depot-tools工具"><span class="nav-number">1.</span> <span class="nav-text">安装depot_tools工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取depot-tools工具"><span class="nav-number">1.1.</span> <span class="nav-text">获取depot_tools工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加环境变量"><span class="nav-number">1.2.</span> <span class="nav-text">添加环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取chromium源码"><span class="nav-number">2.</span> <span class="nav-text">获取chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译chromium源码"><span class="nav-number">3.</span> <span class="nav-text">编译chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行chromiun"><span class="nav-number">4.</span> <span class="nav-text">运行chromiun</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译iOS平台"><span class="nav-number">5.</span> <span class="nav-text">编译iOS平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单个模块"><span class="nav-number">6.</span> <span class="nav-text">单个模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现方案"><span class="nav-number">1.</span> <span class="nav-text">实现方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu共享wifi热点"><span class="nav-number">2.</span> <span class="nav-text">Ubuntu共享wifi热点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置augmented-traffic-control"><span class="nav-number">3.</span> <span class="nav-text">配置augmented-traffic-control</span></a></li></ol></div>
             
           </div>
         </section>
