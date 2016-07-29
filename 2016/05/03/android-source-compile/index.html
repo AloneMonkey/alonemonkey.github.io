@@ -217,6 +217,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-classify">
           <a href="/classify" rel="section">
             
@@ -355,28 +365,28 @@
 <h2 id="Android-源码下载和编译"><a href="#Android-源码下载和编译" class="headerlink" title="Android 源码下载和编译"></a>Android 源码下载和编译</h2><p>Android Jelly Bean(Android 4.1)的编译依赖Sun JDK 1.6，由于Ubuntu默认使用Open JDK，所以需要首先安装JDK1.6。</p>
 <h3 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h3><p>首先从<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk6-jsp-136632.html" target="_blank" rel="external">oracle</a>下载JDK1.6，得到文件jdk-6u45-linux-x64.bin 运行直接运行解包，得到文件夹jdk1.6.0_45。</p>
 <p>设置环境变量，编辑文件gedit /etc/profile</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/home/monkey/Documents/jdk1.6.0_45</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</span><br><span class="line">export PATH=$PATH:$&#123;JAVA_HOME&#125;/bin:$&#123;JRE_HOME&#125;/bin</span><br></pre></td></tr></table></figure>
-<h3 id="安装依赖软件包"><a href="#安装依赖软件包" class="headerlink" title="安装依赖软件包"></a>安装依赖软件包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip bison flex xsltproc gperf</span><br></pre></td></tr></table></figure>
-<h3 id="下载Android代码"><a href="#下载Android代码" class="headerlink" title="下载Android代码"></a>下载Android代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//建立repo工作目录</span><br><span class="line">mkdir ~/bin </span><br><span class="line">PATH=~/bin:<span class="variable">$PATH</span></span><br><span class="line">//下载repo脚本</span><br><span class="line">$ curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</span><br><span class="line">$ chmod a+x ~/bin/repo</span><br><span class="line">//建立Android源码目录</span><br><span class="line">mkdir -p ~/android/jellybean</span><br><span class="line"><span class="built_in">cd</span> ~/android/jellybean</span><br><span class="line">//初始化repo</span><br><span class="line">repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r3</span><br><span class="line">//查看分支情况</span><br><span class="line">git ls-remote --tags https://android.googlesource.com/platform/manifest</span><br><span class="line">//下载Android源代码</span><br><span class="line">repo sync</span><br></pre></td></tr></table></figure>
-<h3 id="下载指定模块源码"><a href="#下载指定模块源码" class="headerlink" title="下载指定模块源码"></a>下载指定模块源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo manifest -o -</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/home/monkey/Documents/jdk1.6.0_45</div><div class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</div><div class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</div><div class="line">export PATH=$PATH:$&#123;JAVA_HOME&#125;/bin:$&#123;JRE_HOME&#125;/bin</div></pre></td></tr></table></figure>
+<h3 id="安装依赖软件包"><a href="#安装依赖软件包" class="headerlink" title="安装依赖软件包"></a>安装依赖软件包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip bison flex xsltproc gperf</div></pre></td></tr></table></figure>
+<h3 id="下载Android代码"><a href="#下载Android代码" class="headerlink" title="下载Android代码"></a>下载Android代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//建立repo工作目录</div><div class="line">mkdir ~/bin </div><div class="line">PATH=~/bin:<span class="variable">$PATH</span></div><div class="line">//下载repo脚本</div><div class="line">$ curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</div><div class="line">$ chmod a+x ~/bin/repo</div><div class="line">//建立Android源码目录</div><div class="line">mkdir -p ~/android/jellybean</div><div class="line"><span class="built_in">cd</span> ~/android/jellybean</div><div class="line">//初始化repo</div><div class="line">repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r3</div><div class="line">//查看分支情况</div><div class="line">git ls-remote --tags https://android.googlesource.com/platform/manifest</div><div class="line">//下载Android源代码</div><div class="line">repo sync</div></pre></td></tr></table></figure>
+<h3 id="下载指定模块源码"><a href="#下载指定模块源码" class="headerlink" title="下载指定模块源码"></a>下载指定模块源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo manifest -o -</div></pre></td></tr></table></figure>
 <p>其中，name表示项目模块名称以及在源码服务器上的相对路径，path表示项目的本地路径。</p>
 <p>repo manifest -o - 命令读取的是本地源码目录(~/android/jellybean)下的.repo/manifest/default/xml文件。</p>
 <p>知道了有哪些项目可以单独下载，只要将项目模块名指定给repo sync即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">repo sync platfoem/system/core</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">repo sync platfoem/system/core</div></pre></td></tr></table></figure>
 <h3 id="下载Android-Linux-Kernel源码"><a href="#下载Android-Linux-Kernel源码" class="headerlink" title="下载Android Linux Kernel源码"></a>下载Android Linux Kernel源码</h3><p>Kernel部分的源码没有采用repo工具管理，可以直接通过git下载。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/android/jellybean</span><br><span class="line">mkdir kernel</span><br><span class="line">cd kernel</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd ~/android/jellybean</div><div class="line">mkdir kernel</div><div class="line">cd kernel</div></pre></td></tr></table></figure>
 <p>下载通用版，其余是针对特定处理器的版本，执行第一条指令即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone https://android.googlesource.com/kernel/common.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/goldfish.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/msm.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/omap.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/samsung.git</span><br><span class="line">git clone https://android.googlesource.com/kernel/tegra.git</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git clone https://android.googlesource.com/kernel/common.git</div><div class="line">git clone https://android.googlesource.com/kernel/goldfish.git</div><div class="line">git clone https://android.googlesource.com/kernel/msm.git</div><div class="line">git clone https://android.googlesource.com/kernel/omap.git</div><div class="line">git clone https://android.googlesource.com/kernel/samsung.git</div><div class="line">git clone https://android.googlesource.com/kernel/tegra.git</div></pre></td></tr></table></figure>
 <p>由于Android JellyBean使用的是Linux 3.0内核，还需要切换到Kernel 3.0分支。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd common</span><br><span class="line">git branch -a</span><br><span class="line">git checkout remotes/origin/Android-3.0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd common</div><div class="line">git branch -a</div><div class="line">git checkout remotes/origin/Android-3.0</div></pre></td></tr></table></figure>
 <h3 id="编译Android上层系统源码"><a href="#编译Android上层系统源码" class="headerlink" title="编译Android上层系统源码"></a>编译Android上层系统源码</h3><p>导入预设脚本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. build/envsetup.sh </span><br><span class="line">或者</span><br><span class="line">source build/envsetup.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">. build/envsetup.sh </div><div class="line">或者</div><div class="line">source build/envsetup.sh</div></pre></td></tr></table></figure>
 <p>指定产品名和编译变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lunch</span><br><span class="line">//选择full-eng 模拟器设备</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">lunch</div><div class="line">//选择full-eng 模拟器设备</div></pre></td></tr></table></figure>
 <p>编译源码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make -j8</div></pre></td></tr></table></figure>
 <p>Mac环境配置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hdiutil create -type SPARSE -fs &apos;Case-sensitive Journaled HFS+&apos; -size 40g ~/android.dmg</span><br><span class="line"></span><br><span class="line">hdiutil resize -size &lt;new-size-you-want&gt;g ~/android.dmg.sparseimage</span><br><span class="line"></span><br><span class="line">hdiutil attach ~/android.dmg -mountpoint /Volumes/android</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">hdiutil create -type SPARSE -fs &apos;Case-sensitive Journaled HFS+&apos; -size 40g ~/android.dmg</div><div class="line"></div><div class="line">hdiutil resize -size &lt;new-size-you-want&gt;g ~/android.dmg.sparseimage</div><div class="line"></div><div class="line">hdiutil attach ~/android.dmg -mountpoint /Volumes/android</div></pre></td></tr></table></figure>
 <h3 id="编译指定模块源码"><a href="#编译指定模块源码" class="headerlink" title="编译指定模块源码"></a>编译指定模块源码</h3><ul>
 <li>make 模块名</li>
 <li>mm 来自于envsetup.sh脚本中注册的函数</li>
@@ -384,15 +394,15 @@
 </ul>
 <p><strong>make 模块名</strong></p>
 <p>适合第一次编译，会把依赖块一并编译。<br>编译应用层源码，查看Android.mk文件的LOCAL_PACKAGE_NAME。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat packages/apps/Phone/Android.mk</span><br><span class="line">...</span><br><span class="line">LOCAL_PACKAGE_NAME := Phone</span><br><span class="line">...</span><br><span class="line">make Phone</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cat packages/apps/Phone/Android.mk</div><div class="line">...</div><div class="line">LOCAL_PACKAGE_NAME := Phone</div><div class="line">...</div><div class="line">make Phone</div></pre></td></tr></table></figure>
 <p>编译框架层和系统运行库源码，查看LOCAL_MODULE变量：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">find frameworks -name Android.mk</span><br><span class="line">cat frameworks/base/cmds/app_process/Android.mk</span><br><span class="line">...</span><br><span class="line">LOCAL_MODULE := app_process</span><br><span class="line">...</span><br><span class="line">make app_process</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">find frameworks -name Android.mk</div><div class="line">cat frameworks/base/cmds/app_process/Android.mk</div><div class="line">...</div><div class="line">LOCAL_MODULE := app_process</div><div class="line">...</div><div class="line">make app_process</div></pre></td></tr></table></figure>
 <p><strong>mmm命令</strong></p>
 <p>用于在源码根目录编译指定模块，参数为模块的相对路径。只能在第一编译后使用，比如要编译Phone部分源码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmm packages/apps/phone</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mmm packages/apps/phone</div></pre></td></tr></table></figure>
 <p><strong>mm命令</strong></p>
 <p>用于在模块根目录编译这个模块，只能在第一次编译后使用。比如要编译Phone部分源码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd packages/apps/phone</span><br><span class="line">mm</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd packages/apps/phone</div><div class="line">mm</div></pre></td></tr></table></figure>
 <p>mmm和mm命令必须在执行. build/envsetup.sh之后才能使用，并且只编译发生变化的文件，如果需要编译模块的所有文件，需要加-B。如：mm -B</p>
 <h2 id="Android-源码结构"><a href="#Android-源码结构" class="headerlink" title="Android 源码结构"></a>Android 源码结构</h2><table>
 <thead>
@@ -493,29 +503,29 @@
 </tbody>
 </table>
 <h2 id="编译遇到的问题"><a href="#编译遇到的问题" class="headerlink" title="编译遇到的问题"></a>编译遇到的问题</h2><p>出现错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">make: *** Waiting for unfinished jobs....</span><br><span class="line">make: *** [out/host/linux-x86/obj/STATIC_LIBRARIES/libhost_intermediates/CopyFile.o] Error 127</span><br><span class="line">host C++: libandroidfw &lt;= frameworks/base/libs/androidfw/Asset.cpp</span><br><span class="line">prebuilts/tools/gcc-sdk/g++: line 40: prebuilts/tools/gcc-sdk/../../gcc/linux-x86/host/i686-linux-glibc2.7-4.6/bin/i686-linux-g++: No such file or directory</span><br><span class="line">make: *** [out/host/linux-x86/obj/STATIC_LIBRARIES/libandroidfw_intermediates/Asset.o] Error 127</span><br><span class="line">Note: Some input files use or override a deprecated API.</span><br><span class="line">Note: Recompile with -Xlint:deprecation for details.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">make: *** Waiting for unfinished jobs....</div><div class="line">make: *** [out/host/linux-x86/obj/STATIC_LIBRARIES/libhost_intermediates/CopyFile.o] Error 127</div><div class="line">host C++: libandroidfw &lt;= frameworks/base/libs/androidfw/Asset.cpp</div><div class="line">prebuilts/tools/gcc-sdk/g++: line 40: prebuilts/tools/gcc-sdk/../../gcc/linux-x86/host/i686-linux-glibc2.7-4.6/bin/i686-linux-g++: No such file or directory</div><div class="line">make: *** [out/host/linux-x86/obj/STATIC_LIBRARIES/libandroidfw_intermediates/Asset.o] Error 127</div><div class="line">Note: Some input files use or override a deprecated API.</div><div class="line">Note: Recompile with -Xlint:deprecation for details.</div></pre></td></tr></table></figure>
 <p>解决方案：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gcc-multilib</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install gcc-multilib</div></pre></td></tr></table></figure>
 <p>出现错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/monkey/android/4.1.1/prebuilts/gcc/linux-x86/host/i686-linux-glibc2.7-4.6/bin/../lib/gcc/i686-linux/4.6.x-google/../../../../i686-linux/bin/as: error while loading shared libraries: libz.so.1: cannot open shared object file: No such file or directory</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/home/monkey/android/4.1.1/prebuilts/gcc/linux-x86/host/i686-linux-glibc2.7-4.6/bin/../lib/gcc/i686-linux/4.6.x-google/../../../../i686-linux/bin/as: error while loading shared libraries: libz.so.1: cannot open shared object file: No such file or directory</div></pre></td></tr></table></figure>
 <p>解决方案：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install zlib1g:i386</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install zlib1g:i386</div></pre></td></tr></table></figure>
 <p>出现错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc: error trying to exec &apos;cc1plus&apos;: execvp: No such file or directory</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc: error trying to exec &apos;cc1plus&apos;: execvp: No such file or directory</div></pre></td></tr></table></figure>
 <p>解决方案：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc和g++版本不匹配</span><br><span class="line">$ sudo apt-get install gcc-4.4 g++-4.4</span><br><span class="line">$ sudo rm -f /usr/bin/gcc /usr/bin/g++</span><br><span class="line">$ sudo ln -s /usr/bin/gcc-4.4 /usr/bin/gcc</span><br><span class="line">$ sudo ln -s /usr/bin/g++-4.4 /usr/bin/g++</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gcc和g++版本不匹配</div><div class="line">$ sudo apt-get install gcc-4.4 g++-4.4</div><div class="line">$ sudo rm -f /usr/bin/gcc /usr/bin/g++</div><div class="line">$ sudo ln -s /usr/bin/gcc-4.4 /usr/bin/gcc</div><div class="line">$ sudo ln -s /usr/bin/g++-4.4 /usr/bin/g++</div></pre></td></tr></table></figure>
 <p>出现错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libstdc++.so.6: cannot open shared object file: No such file or directory</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">libstdc++.so.6: cannot open shared object file: No such file or directory</div></pre></td></tr></table></figure>
 <p>解决方案：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install lib32stdc++6</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install lib32stdc++6</div></pre></td></tr></table></figure>
 <p>出现错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Can&apos;t locate Switch.pm in @INC (you may need to install the Switch module)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Can&apos;t locate Switch.pm in @INC (you may need to install the Switch module)</div></pre></td></tr></table></figure>
 <p>解决方案：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libswitch-perl</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libswitch-perl</div></pre></td></tr></table></figure>
 <p>出现错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash: xmllint: command not found</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/bin/bash: xmllint: command not found</div></pre></td></tr></table></figure>
 <p>解决方案：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libxml2-utils</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libxml2-utils</div></pre></td></tr></table></figure>
 <h2 id="编译成功"><a href="#编译成功" class="headerlink" title="编译成功"></a>编译成功</h2><p>编译完成后，运行emulator<br><img src="http://7xtdl4.com2.z0.glb.clouddn.com/monkey_2016-04-26_101319.png" alt="|center|"></p>
 
       
@@ -724,7 +734,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -732,7 +742,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
