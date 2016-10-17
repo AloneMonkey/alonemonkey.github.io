@@ -96,38 +96,26 @@
 
 <meta name="description" content="iOS
 
-iOS 10 的适配问题分享人：AloneMonkey
-介绍：随着iOS10发布的临近,大家的App都需要适配iOS10,下面是我总结的一些关于iOS10适配方面的问题,如果有错误,欢迎指出.
-Android
-
-Android中直播视频技术探究之—基础知识大纲介绍分享人：AloneMonkey
-介绍：最近各种视频直播app到处都是，各种霸屏，当然我们也是需要体验的.
-常见app加固厂商脱">
+React Native通信机制详解分享人：AloneMonkey
+介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。
+Masonry介绍">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第八期 Coder群周报">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/09/25/weekly/index.html">
+<meta property="og:title" content="第九期 Coder群周报">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/10/16/weekly/index.html">
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="iOS
 
-iOS 10 的适配问题分享人：AloneMonkey
-介绍：随着iOS10发布的临近,大家的App都需要适配iOS10,下面是我总结的一些关于iOS10适配方面的问题,如果有错误,欢迎指出.
-Android
-
-Android中直播视频技术探究之—基础知识大纲介绍分享人：AloneMonkey
-介绍：最近各种视频直播app到处都是，各种霸屏，当然我们也是需要体验的.
-常见app加固厂商脱">
-<meta property="og:updated_time" content="2016-09-26T01:53:41.000Z">
+React Native通信机制详解分享人：AloneMonkey
+介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。
+Masonry介绍">
+<meta property="og:updated_time" content="2016-10-17T01:47:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第八期 Coder群周报">
+<meta name="twitter:title" content="第九期 Coder群周报">
 <meta name="twitter:description" content="iOS
 
-iOS 10 的适配问题分享人：AloneMonkey
-介绍：随着iOS10发布的临近,大家的App都需要适配iOS10,下面是我总结的一些关于iOS10适配方面的问题,如果有错误,欢迎指出.
-Android
-
-Android中直播视频技术探究之—基础知识大纲介绍分享人：AloneMonkey
-介绍：最近各种视频直播app到处都是，各种霸屏，当然我们也是需要体验的.
-常见app加固厂商脱">
+React Native通信机制详解分享人：AloneMonkey
+介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。
+Masonry介绍">
 
 
 
@@ -145,7 +133,7 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
   };
 </script>
 
-  <title> 第八期 Coder群周报 | AloneMonkey </title>
+  <title> 第九期 Coder群周报 | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -305,7 +293,7 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
             
             
               
-                第八期 Coder群周报
+                第九期 Coder群周报
               
             
           </h1>
@@ -317,8 +305,8 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-25T00:00:00+08:00" content="2016-09-25">
-              2016-09-25
+            <time itemprop="dateCreated" datetime="2016-10-16T00:00:00+08:00" content="2016-10-16">
+              2016-10-16
             </time>
           </span>
 
@@ -347,8 +335,8 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/25/weekly/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/25/weekly/" itemprop="commentsCount"></span>
+                <a href="/2016/10/16/weekly/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/16/weekly/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -373,26 +361,28 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
       
         <blockquote class="blockquote-center"><p>iOS</p>
 </blockquote>
-<h3 id="iOS-10-的适配问题"><a href="#iOS-10-的适配问题" class="headerlink" title="iOS 10 的适配问题"></a><a href="http://mp.weixin.qq.com/s?__biz=MzA3NzM0NzkxMQ==&amp;mid=2655358043&amp;idx=1&amp;sn=a1433f4bed139ea18dccf625fde9fe3c&amp;chksm=84e24173b395c8657776918340eb76b694b770bde044b64e6fd5c10301936a118fb8c33aadca&amp;scene=1&amp;srcid=0923VYhPRIFeQbnkgTBo6Odl#rd" target="_blank" rel="external">iOS 10 的适配问题</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：随着iOS10发布的临近,大家的App都需要适配iOS10,下面是我总结的一些关于iOS10适配方面的问题,如果有错误,欢迎指出.</p>
+<h3 id="React-Native通信机制详解"><a href="#React-Native通信机制详解" class="headerlink" title="React Native通信机制详解"></a><a href="http://blog.cnbang.net/tech/2698/" target="_blank" rel="external">React Native通信机制详解</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。</p>
+<h3 id="Masonry介绍与使用实践：快速上手Autolayout"><a href="#Masonry介绍与使用实践：快速上手Autolayout" class="headerlink" title="Masonry介绍与使用实践：快速上手Autolayout"></a><a href="http://www.cocoachina.com/ios/20141219/10702.html" target="_blank" rel="external">Masonry介绍与使用实践：快速上手Autolayout</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：Masonry是一个轻量级的布局框架 拥有自己的描述语法 采用更优雅的链式语法封装自动布局 简洁明了 并具有高可读性 而且同时支持 iOS 和 Max OS X。</p>
+<h3 id="黑科技：把第三方-iOS-应用转成动态库"><a href="#黑科技：把第三方-iOS-应用转成动态库" class="headerlink" title="黑科技：把第三方 iOS 应用转成动态库"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5NTIyNTUyMQ==&amp;mid=2709545228&amp;idx=1&amp;sn=7a47a0de32e06f9c465319e8db8ca13f" target="_blank" rel="external">黑科技：把第三方 iOS 应用转成动态库</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：把第三方 iOS 应用转成动态库，并加载到自己的 App 中。</p>
+<h3 id="史上最详细的iOS之事件的传递和响应机制-原理篇"><a href="#史上最详细的iOS之事件的传递和响应机制-原理篇" class="headerlink" title="史上最详细的iOS之事件的传递和响应机制-原理篇"></a><a href="http://www.jianshu.com/p/2e074db792ba" target="_blank" rel="external">史上最详细的iOS之事件的传递和响应机制-原理篇</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：事件的产生和传递（事件如何从父控件传递到子控件并寻找到最合适的view、寻找最合适的view的底层实现、拦截事件的处理）-&gt;找到最合适的view后事件的处理（touches方法的重写，也就是事件的响应）.</p>
+<h3 id="iOS-App组件化开发实践"><a href="#iOS-App组件化开发实践" class="headerlink" title="iOS App组件化开发实践"></a><a href="http://www.yiqixiabigao.com/yin-ke-kong-gu-iosman-man-zu-jian-hua-kai-fa-zhi-lu/" target="_blank" rel="external">iOS App组件化开发实践</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：去尝试解决组件化开发当中的一些问题。</p>
 <p><br><br><blockquote class="blockquote-center"><p>Android</p>
 </blockquote></p>
-<h3 id="Android中直播视频技术探究之—基础知识大纲介绍"><a href="#Android中直播视频技术探究之—基础知识大纲介绍" class="headerlink" title="Android中直播视频技术探究之—基础知识大纲介绍"></a><a href="http://www.wjdiankong.cn/android%E4%B8%AD%E7%9B%B4%E6%92%AD%E8%A7%86%E9%A2%91%E6%8A%80%E6%9C%AF%E6%8E%A2%E7%A9%B6%E4%B9%8B-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%A4%A7%E7%BA%B2%E4%BB%8B%E7%BB%8D/" target="_blank" rel="external">Android中直播视频技术探究之—基础知识大纲介绍</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：最近各种视频直播app到处都是，各种霸屏，当然我们也是需要体验的.</p>
-<h3 id="常见app加固厂商脱壳方法研究"><a href="#常见app加固厂商脱壳方法研究" class="headerlink" title="常见app加固厂商脱壳方法研究"></a><a href="http://www.mottoin.com/89035.html" target="_blank" rel="external">常见app加固厂商脱壳方法研究</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：了解加固产品的加固技术以及脱壳方法。</p>
-<h3 id="Android应用方法隐藏及反调试技术浅析"><a href="#Android应用方法隐藏及反调试技术浅析" class="headerlink" title="Android应用方法隐藏及反调试技术浅析"></a><a href="http://www.freebuf.com/articles/terminal/80996.html" target="_blank" rel="external">Android应用方法隐藏及反调试技术浅析</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：Android应用的加固和对抗不断升级，单纯的静态加固效果已无法满足需求，所以出现了隐藏方法加固，运行时动态恢复和反调试等方法来对抗，本文通过实例来分析有哪些对抗和反调试手段。</p>
-<h3 id="Anti-Debugging-Skills-In-APK"><a href="#Anti-Debugging-Skills-In-APK" class="headerlink" title="Anti-Debugging Skills In APK"></a><a href="http://www.droidsec.cn/anti-debugging-skills-in-apk/" target="_blank" rel="external">Anti-Debugging Skills In APK</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：各种反调试手段。</p>
-<p><br><br><blockquote class="blockquote-center"><p>微信</p>
+<h3 id="谈谈App混合开发"><a href="#谈谈App混合开发" class="headerlink" title="谈谈App混合开发"></a><a href="http://bxbxbai.github.io/2015/08/16/talk-about-bybird-app/" target="_blank" rel="external">谈谈App混合开发</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：混合开发的App（Hybrid App）就是在一个App中内嵌一个轻量级的浏览器，一部分原生的功能改为Html 5来开发，这部分功能不仅能够在不升级App的情况下动态更新，而且可以在Android或iOS的App上同时运行，让用户的体验更好又可以节省开发的资源。</p>
+<h3 id="反调试方法一-读取进程status文件"><a href="#反调试方法一-读取进程status文件" class="headerlink" title="反调试方法一 - 读取进程status文件"></a><a href="http://kiya.space/2015/12/14/android-anti-debug-read-status/" target="_blank" rel="external">反调试方法一 - 读取进程status文件</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：用fopen打开<code>/proc/&lt;pid&gt;/status</code>文件读取其中的TracerPid值来检测自己的进程是否被attach，TracerPid如果为0说明没有别的进程在调试这个进程，如果不为0说明有程序在调试。</p>
+<h3 id="反调试方法二-抢占ptrace"><a href="#反调试方法二-抢占ptrace" class="headerlink" title="反调试方法二 - 抢占ptrace"></a><a href="http://kiya.space/2015/12/18/ptrace-basis/" target="_blank" rel="external">反调试方法二 - 抢占ptrace</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：ptrace可以让一个进程监视和控制另一个进程的执行,并且修改被监视进程的内存、寄存器等,主要应用于断点调试和系统调用跟踪.</p>
+<p><br><br><blockquote class="blockquote-center"><p>大会</p>
 </blockquote></p>
-<h3 id="别开发-app-了"><a href="#别开发-app-了" class="headerlink" title="别开发  app 了"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5ODQwMjA4MA==&amp;mid=2649293557&amp;idx=1&amp;sn=98f34bb53a54331887cb99972c89e1bc&amp;scene=21#wechat_redirect" target="_blank" rel="external">别开发  app 了</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：这是最近我和所有正在创业的朋友说的一句话，app 生态已经趋于饱和，低频产品已经没有开发 app 的必要，转而开发微信公众号（未来是应用号）将是最佳选择。</p>
-<h3 id="微信小程序"><a href="#微信小程序" class="headerlink" title="微信小程序"></a><a href="http://wxopen.notedown.cn/" target="_blank" rel="external">微信小程序</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：本文档将带你一步步创建完成一个微信小程序，并可以在手机上体验该小程序的实际效果。</p>
-<h3 id="微信小程序资源汇总整理"><a href="#微信小程序资源汇总整理" class="headerlink" title="微信小程序资源汇总整理"></a><a href="https://github.com/Aufree/awesome-wechat-weapp" target="_blank" rel="external">微信小程序资源汇总整理</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：Awesome WeChat WeApp，涵括微信 Web 开发者工具收集，WeApp 教程收集，站点收集和代码实例。</p>
+<h3 id="云栖大会"><a href="#云栖大会" class="headerlink" title="云栖大会"></a><a href="https://yunqi.aliyun.com/" target="_blank" rel="external">云栖大会</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+<p>介绍：云计算盛会。</p>
 
       
     </div>
@@ -497,17 +487,13 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/11/weekly/" rel="next" title="第七期 Coder群周报">
-                <i class="fa fa-chevron-left"></i> 第七期 Coder群周报
+              <a href="/2016/09/25/weekly/" rel="next" title="第八期 Coder群周报">
+                <i class="fa fa-chevron-left"></i> 第八期 Coder群周报
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/16/weekly/" rel="prev" title="第九期 Coder群周报">
-                第九期 Coder群周报 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -522,10 +508,10 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/09/25/weekly/"
-     data-title="第八期 Coder群周报"
+        <div class="ds-share flat" data-thread-key="2016/10/16/weekly/"
+     data-title="第九期 Coder群周报"
      data-content=""
-     data-url="http://www.alonemonkey.com/2016/09/25/weekly/">
+     data-url="http://www.alonemonkey.com/2016/10/16/weekly/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -552,8 +538,8 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/25/weekly/"
-           data-title="第八期 Coder群周报" data-url="http://www.alonemonkey.com/2016/09/25/weekly/">
+      <div class="ds-thread" data-thread-key="2016/10/16/weekly/"
+           data-title="第九期 Coder群周报" data-url="http://www.alonemonkey.com/2016/10/16/weekly/">
       </div>
     
   </div>
@@ -694,7 +680,7 @@ Android中直播视频技术探究之—基础知识大纲介绍分享人：Alon
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-10-的适配问题"><span class="nav-number">1.</span> <span class="nav-text">iOS 10 的适配问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android中直播视频技术探究之—基础知识大纲介绍"><span class="nav-number">2.</span> <span class="nav-text">Android中直播视频技术探究之—基础知识大纲介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见app加固厂商脱壳方法研究"><span class="nav-number">3.</span> <span class="nav-text">常见app加固厂商脱壳方法研究</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android应用方法隐藏及反调试技术浅析"><span class="nav-number">4.</span> <span class="nav-text">Android应用方法隐藏及反调试技术浅析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Anti-Debugging-Skills-In-APK"><span class="nav-number">5.</span> <span class="nav-text">Anti-Debugging Skills In APK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#别开发-app-了"><span class="nav-number">6.</span> <span class="nav-text">别开发  app 了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微信小程序"><span class="nav-number">7.</span> <span class="nav-text">微信小程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微信小程序资源汇总整理"><span class="nav-number">8.</span> <span class="nav-text">微信小程序资源汇总整理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#React-Native通信机制详解"><span class="nav-number">1.</span> <span class="nav-text">React Native通信机制详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Masonry介绍与使用实践：快速上手Autolayout"><span class="nav-number">2.</span> <span class="nav-text">Masonry介绍与使用实践：快速上手Autolayout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#黑科技：把第三方-iOS-应用转成动态库"><span class="nav-number">3.</span> <span class="nav-text">黑科技：把第三方 iOS 应用转成动态库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#史上最详细的iOS之事件的传递和响应机制-原理篇"><span class="nav-number">4.</span> <span class="nav-text">史上最详细的iOS之事件的传递和响应机制-原理篇</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-App组件化开发实践"><span class="nav-number">5.</span> <span class="nav-text">iOS App组件化开发实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谈谈App混合开发"><span class="nav-number">6.</span> <span class="nav-text">谈谈App混合开发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反调试方法一-读取进程status文件"><span class="nav-number">7.</span> <span class="nav-text">反调试方法一 - 读取进程status文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反调试方法二-抢占ptrace"><span class="nav-number">8.</span> <span class="nav-text">反调试方法二 - 抢占ptrace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#云栖大会"><span class="nav-number">9.</span> <span class="nav-text">云栖大会</span></a></li></ol></div>
             
           </div>
         </section>
