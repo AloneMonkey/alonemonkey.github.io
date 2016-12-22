@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="chromium," />
+  <meta name="keywords" content="Coder,安全,iOS,Android,逆向,越狱开发,正方,课表" />
 
 
 
@@ -94,18 +94,34 @@
 
 
 
-<meta name="description" content="在Mac下下载编译并运行chromium的过程。">
+<meta name="description" content="LLVM
+
+关于LLVM，这些东西你必须知道！介绍: 入门介绍性文章，值得一读！
+LLVM 官方文档介绍: LLVM的官方文档，你想知道的都可以在这里找到。
+LLVM PROJECT BLOG介绍: LLVM Project News and Details from the Trenches
+The Compiler介绍: 介绍了编译器的工作流程以及Clang工具。
+LLVM Tutorial介">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac下载编译chromium源码">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/06/15/chromium-source-compile/index.html">
+<meta property="og:title" content="第十一期 Coder群周报">
+<meta property="og:url" content="http://www.alonemonkey.com/2016/12/22/weekly/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="在Mac下下载编译并运行chromium的过程。">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
-<meta property="og:updated_time" content="2016-06-18T03:08:32.000Z">
+<meta property="og:description" content="LLVM
+
+关于LLVM，这些东西你必须知道！介绍: 入门介绍性文章，值得一读！
+LLVM 官方文档介绍: LLVM的官方文档，你想知道的都可以在这里找到。
+LLVM PROJECT BLOG介绍: LLVM Project News and Details from the Trenches
+The Compiler介绍: 介绍了编译器的工作流程以及Clang工具。
+LLVM Tutorial介">
+<meta property="og:updated_time" content="2016-12-22T03:14:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac下载编译chromium源码">
-<meta name="twitter:description" content="在Mac下下载编译并运行chromium的过程。">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
+<meta name="twitter:title" content="第十一期 Coder群周报">
+<meta name="twitter:description" content="LLVM
+
+关于LLVM，这些东西你必须知道！介绍: 入门介绍性文章，值得一读！
+LLVM 官方文档介绍: LLVM的官方文档，你想知道的都可以在这里找到。
+LLVM PROJECT BLOG介绍: LLVM Project News and Details from the Trenches
+The Compiler介绍: 介绍了编译器的工作流程以及Clang工具。
+LLVM Tutorial介">
 
 
 
@@ -123,7 +139,7 @@
   };
 </script>
 
-  <title> Mac下载编译chromium源码 | AloneMonkey </title>
+  <title> 第十一期 Coder群周报 | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -283,7 +299,7 @@
             
             
               
-                Mac下载编译chromium源码
+                第十一期 Coder群周报
               
             
           </h1>
@@ -295,8 +311,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-15T00:00:00+08:00" content="2016-06-15">
-              2016-06-15
+            <time itemprop="dateCreated" datetime="2016-12-22T00:00:00+08:00" content="2016-12-22">
+              2016-12-22
             </time>
           </span>
 
@@ -309,8 +325,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/chrome/" itemprop="url" rel="index">
-                    <span itemprop="name">chrome</span>
+                  <a href="/categories/weekly/" itemprop="url" rel="index">
+                    <span itemprop="name">weekly</span>
                   </a>
                 </span>
 
@@ -325,8 +341,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/15/chromium-source-compile/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/15/chromium-source-compile/" itemprop="commentsCount"></span>
+                <a href="/2016/12/22/weekly/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/22/weekly/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -349,38 +365,22 @@
       
 
       
-        <h3 id="安装depot-tools工具"><a href="#安装depot-tools工具" class="headerlink" title="安装depot_tools工具"></a>安装depot_tools工具</h3><h4 id="获取depot-tools工具"><a href="#获取depot-tools工具" class="headerlink" title="获取depot_tools工具"></a>获取depot_tools工具</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git</div></pre></td></tr></table></figure>
-<h4 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h4><p>把<code>depot_tools</code>工具路径添加到系统的环境变量，<code>~/.bashrc</code> or <code>~/.zshrc</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export PATH=$PATH:/path/to/depot_tools</div></pre></td></tr></table></figure>
-<h3 id="获取chromium源码"><a href="#获取chromium源码" class="headerlink" title="获取chromium源码"></a>获取chromium源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir chromium</div><div class="line">cd chromium</div><div class="line">fetch --no-history chromium</div></pre></td></tr></table></figure>
-<p><code>--no-history</code>参数可以不下载以往的历史信息。<br>如果网络中断了，输入<code>gclient sync</code>继续下载。</p>
-<p>获取依赖：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gclient runhooks</div></pre></td></tr></table></figure>
-<p>更新代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git rebase-update</div><div class="line">gclient sync</div></pre></td></tr></table></figure>
-<h3 id="编译chromium源码"><a href="#编译chromium源码" class="headerlink" title="编译chromium源码"></a>编译chromium源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GYP_DEFINES=mac_sdk=10.11（可选）</div><div class="line">export GYP_GENERATORS=ninja,xcode-ninja</div><div class="line"></div><div class="line">./build/gyp_chromium</div><div class="line"></div><div class="line">ninja -C out/Release/ chrome</div></pre></td></tr></table></figure>
-<p>最新使用<code>gn</code>用于生成ninja文件，<code>gn gen out/Default</code>。</p>
-<p>问题：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Traceback (most recent call last):</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 712, in &lt;module&gt;</div><div class="line">    sys.exit(main(sys.argv[1:]))</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 29, in main</div><div class="line">    exit_code = executor.Dispatch(args)</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 44, in Dispatch</div><div class="line">    return getattr(self, method)(*args[1:])</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 67, in ExecCopyBundleResource</div><div class="line">    self._CopyStringsFile(source, dest)</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 133, in _CopyStringsFile</div><div class="line">    import CoreFoundation</div><div class="line">ImportError: No module named CoreFoundation</div><div class="line">[6208/20844] MACTOOL copy-bundle-resource ../../chrome/app/nibs/AppMenu.xib</div></pre></td></tr></table></figure>
-<p>解决：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install pyobjc</div></pre></td></tr></table></figure>
-<h3 id="运行chromiun"><a href="#运行chromiun" class="headerlink" title="运行chromiun"></a>运行chromiun</h3><p>编译完成后会在<code>out/Release</code>下生成<code>Chromium.app</code>，直接运行：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png" alt="image"></p>
-<h3 id="编译iOS平台"><a href="#编译iOS平台" class="headerlink" title="编译iOS平台"></a>编译iOS平台</h3><p>为了编译成iOS平台的版本，可以直接把本地存在的Mac checkout转成iOS checkout，只要在<code>chromium/.gclient</code>文件的最后加一行<code>target_os = [&quot;ios&quot;]</code></p>
-<p>这里使用<code>gn</code>生成ninja文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gn args out/Debug-iphonesimulator</div></pre></td></tr></table></figure>
-<p>写入内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># Set to true if you have a valid code signing key.</div><div class="line">ios_enable_code_signing = false</div><div class="line">target_os = &quot;ios&quot;</div><div class="line"># Set to &quot;x86&quot;, &quot;x64&quot;, &quot;arm&quot;, &quot;armv7&quot;, &quot;arm64&quot;. &quot;x86&quot; and &quot;x64&quot; will create a</div><div class="line"># build to run on the iOS simulator (and set use_ios_simulator = true), all</div><div class="line"># others are for an iOS device.</div><div class="line">target_cpu = &quot;x64&quot;</div><div class="line"># Release vs debug build.</div><div class="line">is_debug = true</div></pre></td></tr></table></figure>
-<p>最后执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gclient sync</div></pre></td></tr></table></figure>
-<p>编译：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ninja -C out/Debug-iphonesimulator All</div></pre></td></tr></table></figure>
-<p>运行测试app:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./iossim -d &quot;iPhone 6&quot; -s 9.3 ./base_unittests.app</div></pre></td></tr></table></figure>
-<h3 id="单个模块"><a href="#单个模块" class="headerlink" title="单个模块"></a>单个模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ninja -C out/Debug-iphonesimulator net</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export GYP_GENERATORS=xcode-ninja </div><div class="line">export CHROMIUM_GYP_FILE=&apos;net/net.gyp&apos;</div><div class="line">./build/gyp_chromium</div></pre></td></tr></table></figure>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.chromium.org/developers/how-tos/get-the-code" target="_blank" rel="external">Get the Code: Checkout, Build, &amp; Run Chromium</a></p>
-
+        <blockquote class="blockquote-center"><p>LLVM</p>
+</blockquote>
+<h3 id="关于LLVM，这些东西你必须知道！"><a href="#关于LLVM，这些东西你必须知道！" class="headerlink" title="关于LLVM，这些东西你必须知道！"></a><a href="http://www.alonemonkey.com/2016/12/21/learning-llvm/">关于LLVM，这些东西你必须知道！</a></h3><p>介绍: 入门介绍性文章，值得一读！</p>
+<h3 id="LLVM-官方文档"><a href="#LLVM-官方文档" class="headerlink" title="LLVM 官方文档"></a><a href="http://clang.llvm.org/docs/index.html" target="_blank" rel="external">LLVM 官方文档</a></h3><p>介绍: LLVM的官方文档，你想知道的都可以在这里找到。</p>
+<h3 id="LLVM-PROJECT-BLOG"><a href="#LLVM-PROJECT-BLOG" class="headerlink" title="LLVM PROJECT BLOG"></a><a href="http://blog.llvm.org/" target="_blank" rel="external">LLVM PROJECT BLOG</a></h3><p>介绍: LLVM Project News and Details from the Trenches</p>
+<h3 id="The-Compiler"><a href="#The-Compiler" class="headerlink" title="The Compiler"></a><a href="https://www.objc.io/issues/6-build-tools/compiler/" target="_blank" rel="external">The Compiler</a></h3><p>介绍: 介绍了编译器的工作流程以及Clang工具。</p>
+<h3 id="LLVM-Tutorial"><a href="#LLVM-Tutorial" class="headerlink" title="LLVM Tutorial"></a><a href="http://llvm.org/docs/tutorial/index.html" target="_blank" rel="external">LLVM Tutorial</a></h3><p>介绍: 动手搞事情。</p>
+<h3 id="Clang-tutorial"><a href="#Clang-tutorial" class="headerlink" title="Clang-tutorial"></a><a href="https://github.com/loarabia/Clang-tutorial" target="_blank" rel="external">Clang-tutorial</a></h3><p>介绍: A collection of code samples showing usage of clang and llvm as a library</p>
+<h3 id="GETTING-STARTED-WITH-LLVM-CLANG-ON-OS-X"><a href="#GETTING-STARTED-WITH-LLVM-CLANG-ON-OS-X" class="headerlink" title="GETTING STARTED WITH LLVM/CLANG ON OS X"></a><a href="http://lowlevelbits.org/getting-started-with-llvm/clang-on-os-x/" target="_blank" rel="external">GETTING STARTED WITH LLVM/CLANG ON OS X</a></h3><p>介绍: This article is a guide how to set up development environment for Clang on OS X. The following topics are covered:1.getting sources 2.setting up IDE/compiling 3.debugging</p>
+<h3 id="Clang-Tutorial"><a href="#Clang-Tutorial" class="headerlink" title="Clang Tutorial"></a><a href="https://kevinaboos.wordpress.com/2013/07/23/clang-tutorial-part-i-introduction/" target="_blank" rel="external">Clang Tutorial</a></h3><p>介绍: 老司机带你上路。</p>
+<h3 id="Implementing-a-code-generator-with-libclang"><a href="#Implementing-a-code-generator-with-libclang" class="headerlink" title="Implementing a code generator with libclang"></a><a href="http://szelei.me/code-generator/" target="_blank" rel="external">Implementing a code generator with libclang</a></h3><p>介绍: RT</p>
+<h3 id="基于LLVM的代码混淆"><a href="#基于LLVM的代码混淆" class="headerlink" title="基于LLVM的代码混淆"></a><a href="http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/" target="_blank" rel="external">基于LLVM的代码混淆</a></h3><p>介绍: 从LLVM编译，Pass到集成NDK。</p>
+<h3 id="Implementing-a-JIT-Compiled-Language-with-Haskell-and-LLVM"><a href="#Implementing-a-JIT-Compiled-Language-with-Haskell-and-LLVM" class="headerlink" title="Implementing a JIT Compiled Language with Haskell and LLVM"></a><a href="http://www.stephendiehl.com/llvm/" target="_blank" rel="external">Implementing a JIT Compiled Language with Haskell and LLVM</a></h3><h3 id="Let’s-Write-an-LLVM-Specializer-for-Python"><a href="#Let’s-Write-an-LLVM-Specializer-for-Python" class="headerlink" title="Let’s Write an LLVM Specializer for Python!"></a><a href="http://dev.stephendiehl.com/numpile/" target="_blank" rel="external">Let’s Write an LLVM Specializer for Python!</a></h3><p>介绍: 直接搞语言了，高端。</p>
+<h3 id="Clang-Tutorial-翻译"><a href="#Clang-Tutorial-翻译" class="headerlink" title="Clang Tutorial 翻译"></a><a href="http://jszhujun2010.farbox.com/archive" target="_blank" rel="external">Clang Tutorial 翻译</a></h3><h3 id="CLANG技术分享系列"><a href="#CLANG技术分享系列" class="headerlink" title="CLANG技术分享系列"></a><a href="https://kangwang1988.github.io/tech/2016/10/31/write-your-first-clang-plugin.html" target="_blank" rel="external">CLANG技术分享系列</a></h3><h3 id="JSPatch-Convertor-实现原理详解"><a href="#JSPatch-Convertor-实现原理详解" class="headerlink" title="JSPatch Convertor 实现原理详解"></a><a href="http://blog.cnbang.net/tech/2915/#more-2915" target="_blank" rel="external">JSPatch Convertor 实现原理详解</a></h3><h3 id="基于clang插件的一种iOS包大小瘦身方案"><a href="#基于clang插件的一种iOS包大小瘦身方案" class="headerlink" title="基于clang插件的一种iOS包大小瘦身方案"></a><a href="https://www.zybuluo.com/pockry/note/566013" target="_blank" rel="external">基于clang插件的一种iOS包大小瘦身方案</a></h3><h3 id="obfuscator-llvm"><a href="#obfuscator-llvm" class="headerlink" title="obfuscator-llvm"></a><a href="https://github.com/obfuscator-llvm/obfuscator" target="_blank" rel="external">obfuscator-llvm</a></h3><h3 id="LLVM二三事"><a href="#LLVM二三事" class="headerlink" title="LLVM二三事"></a><a href="http://feimengspirit.com/llvm" target="_blank" rel="external">LLVM二三事</a></h3><p><br><br><blockquote class="blockquote-center"><p>LLVM 书籍</p>
+</blockquote></p>
+<h3 id="Getting-Started-with-LLVM-Core-Libraries"><a href="#Getting-Started-with-LLVM-Core-Libraries" class="headerlink" title="Getting Started with LLVM Core Libraries"></a>Getting Started with LLVM Core Libraries</h3><h3 id="LLVM-Cookbook"><a href="#LLVM-Cookbook" class="headerlink" title="LLVM Cookbook"></a>LLVM Cookbook</h3>
       
     </div>
 
@@ -479,28 +479,18 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/chromium/" rel="tag">#chromium</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/25/encrypt-jar-class/" rel="next" title="jar包加密保护解决方案">
-                <i class="fa fa-chevron-left"></i> jar包加密保护解决方案
+              <a href="/2016/12/21/learning-llvm/" rel="next" title="关于LLVM，这些东西你必须知道！">
+                <i class="fa fa-chevron-left"></i> 关于LLVM，这些东西你必须知道！
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/06/15/gn-gyp-ninja/" rel="prev" title="GYP，GN和Ninja">
-                GYP，GN和Ninja <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -515,10 +505,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/06/15/chromium-source-compile/"
-     data-title="Mac下载编译chromium源码"
+        <div class="ds-share flat" data-thread-key="2016/12/22/weekly/"
+     data-title="第十一期 Coder群周报"
      data-content=""
-     data-url="http://www.alonemonkey.com/2016/06/15/chromium-source-compile/">
+     data-url="http://www.alonemonkey.com/2016/12/22/weekly/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -545,8 +535,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/06/15/chromium-source-compile/"
-           data-title="Mac下载编译chromium源码" data-url="http://www.alonemonkey.com/2016/06/15/chromium-source-compile/">
+      <div class="ds-thread" data-thread-key="2016/12/22/weekly/"
+           data-title="第十一期 Coder群周报" data-url="http://www.alonemonkey.com/2016/12/22/weekly/">
       </div>
     
   </div>
@@ -687,7 +677,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装depot-tools工具"><span class="nav-number">1.</span> <span class="nav-text">安装depot_tools工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取depot-tools工具"><span class="nav-number">1.1.</span> <span class="nav-text">获取depot_tools工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加环境变量"><span class="nav-number">1.2.</span> <span class="nav-text">添加环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取chromium源码"><span class="nav-number">2.</span> <span class="nav-text">获取chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译chromium源码"><span class="nav-number">3.</span> <span class="nav-text">编译chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行chromiun"><span class="nav-number">4.</span> <span class="nav-text">运行chromiun</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译iOS平台"><span class="nav-number">5.</span> <span class="nav-text">编译iOS平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单个模块"><span class="nav-number">6.</span> <span class="nav-text">单个模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于LLVM，这些东西你必须知道！"><span class="nav-number">1.</span> <span class="nav-text">关于LLVM，这些东西你必须知道！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM-官方文档"><span class="nav-number">2.</span> <span class="nav-text">LLVM 官方文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM-PROJECT-BLOG"><span class="nav-number">3.</span> <span class="nav-text">LLVM PROJECT BLOG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Compiler"><span class="nav-number">4.</span> <span class="nav-text">The Compiler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM-Tutorial"><span class="nav-number">5.</span> <span class="nav-text">LLVM Tutorial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-tutorial"><span class="nav-number">6.</span> <span class="nav-text">Clang-tutorial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GETTING-STARTED-WITH-LLVM-CLANG-ON-OS-X"><span class="nav-number">7.</span> <span class="nav-text">GETTING STARTED WITH LLVM/CLANG ON OS X</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-Tutorial"><span class="nav-number">8.</span> <span class="nav-text">Clang Tutorial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementing-a-code-generator-with-libclang"><span class="nav-number">9.</span> <span class="nav-text">Implementing a code generator with libclang</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于LLVM的代码混淆"><span class="nav-number">10.</span> <span class="nav-text">基于LLVM的代码混淆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementing-a-JIT-Compiled-Language-with-Haskell-and-LLVM"><span class="nav-number">11.</span> <span class="nav-text">Implementing a JIT Compiled Language with Haskell and LLVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Let’s-Write-an-LLVM-Specializer-for-Python"><span class="nav-number">12.</span> <span class="nav-text">Let’s Write an LLVM Specializer for Python!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-Tutorial-翻译"><span class="nav-number">13.</span> <span class="nav-text">Clang Tutorial 翻译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CLANG技术分享系列"><span class="nav-number">14.</span> <span class="nav-text">CLANG技术分享系列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSPatch-Convertor-实现原理详解"><span class="nav-number">15.</span> <span class="nav-text">JSPatch Convertor 实现原理详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于clang插件的一种iOS包大小瘦身方案"><span class="nav-number">16.</span> <span class="nav-text">基于clang插件的一种iOS包大小瘦身方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#obfuscator-llvm"><span class="nav-number">17.</span> <span class="nav-text">obfuscator-llvm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM二三事"><span class="nav-number">18.</span> <span class="nav-text">LLVM二三事</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Getting-Started-with-LLVM-Core-Libraries"><span class="nav-number">19.</span> <span class="nav-text">Getting Started with LLVM Core Libraries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM-Cookbook"><span class="nav-number">20.</span> <span class="nav-text">LLVM Cookbook</span></a></li></ol></div>
             
           </div>
         </section>
