@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1482320827975.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1482318703701.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1482320959711.png">
-<meta property="og:updated_time" content="2016-12-21T15:02:22.000Z">
+<meta property="og:updated_time" content="2016-12-26T13:32:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于LLVM，这些东西你必须知道！">
 <meta name="twitter:description" content="只要你和代码打交道，了解编译器的工作流程和原理定会让你受益无穷，无论是分析程序，还是基于它写自己的插件，甚至学习一门全新的语音。通过本文，将带你了解LLVM，并使用LLVM来完成一些有意思的事情。">
@@ -462,7 +462,7 @@
 <p>2.创建源文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cd llvm/lib/Transforms/</div><div class="line">mkdir Obfuscation</div><div class="line">cd Obfuscation</div><div class="line"></div><div class="line">touch CMakeLists.txt</div><div class="line">touch LLVMBuild.txt</div><div class="line">touch SimplePass.cpp</div></pre></td></tr></table></figure>
 <p>CMakeLists.txt:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">add_llvm_library(LLVMObfuscation</div><div class="line">  SimplePass.cpp</div><div class="line">  </div><div class="line">  )</div><div class="line"></div><div class="line">  add_dependencies(LLVMObfuscation intrinsics_gen)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">add_llvm_loadable_module(LLVMObfuscation</div><div class="line">  SimplePass.cpp</div><div class="line">  </div><div class="line">  )</div><div class="line"></div><div class="line">  add_dependencies(LLVMObfuscation intrinsics_gen)</div></pre></td></tr></table></figure>
 <p>LLVMBuild.txt:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[component_0]</div><div class="line">type = Library</div><div class="line">name = Obfuscation</div><div class="line">parent = Transforms</div><div class="line">library_name = Obfuscation</div></pre></td></tr></table></figure>
 <p>SimplePass.cpp:</p>
@@ -490,6 +490,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MPM.add(createSimplePass(SimplePass));</div></pre></td></tr></table></figure>
 <p>最后在IPO这个目录的<code>LLVMBuild.txt</code>中添加库的支持，否则在编译的时候会提示链接错误。具体内容如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">required_libraries = Analysis Core InstCombine IRReader Linker Object ProfileData Scalar Support TransformUtils Vectorize Obfuscation</div></pre></td></tr></table></figure>
+<p>修改Pass的CMakeLists.txt为静态库形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">add_llvm_library(LLVMObfuscation</div><div class="line">  SimplePass.cpp</div><div class="line">  )</div><div class="line"></div><div class="line">add_dependencies(LLVMObfuscation intrinsics_gen)</div></pre></td></tr></table></figure>
 <p>最后再编译一次。</p>
 <p>那么我们可以这么去调用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">../build/bin/clang -mllvm -simplepass test.c -o after_test</div></pre></td></tr></table></figure>
