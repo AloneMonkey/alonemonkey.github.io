@@ -1,0 +1,864 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RxSwift," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="走进函数式编程的世界~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift学习之旅 - 初章">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/03/22/rxswift-part-one/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="走进函数式编程的世界~">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490172241211.png">
+<meta property="og:updated_time" content="2017-03-22T11:31:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxSwift学习之旅 - 初章">
+<meta name="twitter:description" content="走进函数式编程的世界~">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490172241211.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RxSwift学习之旅 - 初章 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RxSwift学习之旅 - 初章
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-22T00:00:00+08:00" content="2017-03-22">
+              2017-03-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/22/rxswift-part-one/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/22/rxswift-part-one/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="初识函数式编程"><a href="#初识函数式编程" class="headerlink" title="初识函数式编程"></a>初识函数式编程</h3><p>在开始学习RxSwift之前，我们需要了解什么是函数式编程以及函数式编程的思想，便于你在后面的学习中更好的去掌握和使用RxSwift面向函数编程。</p>
+<p>如果你已经学习了Swift，你会发现它吸收众多语言的优点，并且在语言层面更好的去保障代码的安全，当然也可以在Swift中看到<code>map</code>、<code>filter</code>、<code>reduce</code>等函数式特性。它们接受一个转换函数对每一个元素进行转换处理然后返回一个新的对象。</p>
+<p>所以函数在Swift中是一等值(first-class-values)或者一等公民，你可以把它和一个普通的变量对等起来，它可以作为参数被传递到其它函数，也可以作为其它函数的返回值。</p>
+<p>或许讲到这里，你还不是很明白这个一等值以及它的魅力所在，下面来看一个《functional-swift》中提到的一个例子， 相信你在看完这个例子对Swift中的函数有一个全新的概念。</p>
+<h3 id="战舰游戏"><a href="#战舰游戏" class="headerlink" title="战舰游戏"></a>战舰游戏</h3><p>现在在编写一个战舰类游戏，需要确定当前战舰的攻击范围，有以下几点：</p>
+<ol>
+<li>这个范围在该战舰的攻击范围</li>
+<li>这个范围不能离自己太近</li>
+<li>这个范围不能离友方战舰太近</li>
+</ol>
+<p>如下图:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490172241211.png" alt="image"></p>
+<p>现在需要计算的范围就是图中的阴影区域。</p>
+<h4 id="常规套路"><a href="#常规套路" class="headerlink" title="常规套路"></a>常规套路</h4><p><strong>问题分解:</strong>首先假设战舰在原点，计算以原点为中心的一个范围，先定义两种类型，距离和点。(尽量把变量定义成有意义的名字)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">typealias Distance = Double</div><div class="line"></div><div class="line">struct Position&#123;</div><div class="line">    var x: Double</div><div class="line">    var y: Double</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>给<code>Position</code>添加一个函数<code>inRange(_:)</code>，检验一个点是否在某个范围区域。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">extension Position&#123;</div><div class="line">    func inRange(range: Distance) -&gt; Bool&#123;</div><div class="line">        return sqrt(x * x + y * y) &lt;= range</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>问题进化:</strong>当战舰不在原点的情况，需要把<code>Position</code>作为战舰<code>Ship</code>的一个属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">struct Ship&#123;</div><div class="line">    var position: Position</div><div class="line">    var firingRange: Distance   //可攻击范围</div><div class="line">    var unsafeRange: Distance  //自身的不安全范围</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>给<code>Ship</code>添加一个<code>canSafelyEngageShip(_:)</code>,检测另一个战舰是否在可攻击范围内，但是又不能距离自身太近，也就是<code>unsafeRange</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">extension Ship&#123;</div><div class="line">   func canSafelyEngageShip(target: Ship) -&gt; Bool &#123;</div><div class="line">        let dx = target.position.x - position.x</div><div class="line">        let dy = target.position.y - position.y</div><div class="line">        let targetDistance = sqrt(dx * dx + dy * dy)</div><div class="line">        return targetDistance &lt;=  ringRange &amp;&amp; targetDistance &gt; unsafeRange</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后还要避免战绩攻击范围不能距离友方战舰太近，也就是友方战舰不能和敌方战舰太近。所以<code>canSafelyEngageShip</code>进阶为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">extension Ship&#123;</div><div class="line">   func canSafelyEngageShip(target: Ship, friendly: Ship) -&gt; Bool &#123;</div><div class="line">        let dx = target.position.x - position.x</div><div class="line">        let dy = target.position.y - position.y</div><div class="line">        let targetDistance = sqrt(dx * dx + dy * dy)</div><div class="line">        let friendlyDx = friendly.position.x - target.position.x </div><div class="line">        let friendlyDy = friendly.position.y -   target.position.y </div><div class="line">        let friendlyDistance = sqrt(friendlyDx * friendlyDx + friendlyDy * friendlyDy)</div><div class="line">        return targetDistance &lt;=  ringRange</div><div class="line">                    &amp;&amp; targetDistance &gt; unsafeRange </div><div class="line">                    &amp;&amp; (friendlyDistance &gt; unsafeRange)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>解决问题:</strong>现在发现代码已经变得不是那么好维护了，而且同一个函数中存在处理同样问题的函数(计算距离)。当然可以把这些计算放到<code>Position</code>里面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">extension Position&#123;</div><div class="line">    func minus(p: Position) -&gt; Position&#123;</div><div class="line">        return Position(x: x - p.x, y: y - p.y)</div><div class="line">    &#125;</div><div class="line">    var length: Double&#123;</div><div class="line">        return sqrt(x * x + y * y)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么代码可以变成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">extension Ship &#123;</div><div class="line">func canSafelyEngageShip(target: Ship, friendly: Ship) -&gt; Bool &#123;</div><div class="line">        let targetDistance = target.position.minus(position).length</div><div class="line">        let friendlyDistance = friendly.position.minus(target.position).length</div><div class="line">         return targetDistance &lt;=  ringRange</div><div class="line">                    &amp;&amp; targetDistance &gt; unsafeRange </div><div class="line">                    &amp;&amp; (friendlyDistance &gt; unsafeRange)</div><div class="line">&#125; &#125;</div></pre></td></tr></table></figure>
+<h4 id="函数式思维"><a href="#函数式思维" class="headerlink" title="函数式思维"></a>函数式思维</h4><p>虽然上面已经解决了我们的问题，但是通过函数式的思维把上面解决的问题抽象化，前面提到函数在Swift里面是一等值，所以可以把我们要解决的问题抽象化，用函数的方式去声明。</p>
+<p>比如在上面遇到的一个问题是判断一个点是不是在某个区域内。问题分解：</p>
+<p>输入： 某个点 <code>Position</code><br>输出:   这个点是不是在该区域<br>怎么描述这个区域：暂时还不知道，它可能是一个圆，也可能是一个矩形或者其它的形状。</p>
+<p>写成函数是这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func pointInRange(point: Position) -&gt; Bool&#123;</div><div class="line">    //怎么描述这个区域，暂时还不知道</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为函数就是一等公民，所以可以定义成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">typealias Region = Position -&gt; Bool</div></pre></td></tr></table></figure>
+<p>怎么描述一个区域，你到时跟我说吧，反正你给一个点，我就能告诉你这个点在不在你描述的这个区域，其实就是定义的一个区域范围。<br>假设战舰还是在原点，定义一个在圆心在圆点的一个圆表示它的攻击范围：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func circle(radius: Distance) -&gt; Region&#123;</div><div class="line">    return &#123;point in point.length &lt;= radius&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后把圆心的位置加进去：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func circle(radius: Distance, center: Position) -&gt; Region&#123;</div><div class="line">    return &#123;point in point.minus(center).length &lt;= radius&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样每次在创建这个圆的时候都要指定圆点，是不是可以通过对一个在圆点的圆做一个变换之后来得到一个新的圆呢？ 比如这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func shift(region: Region, offset: Position) -&gt; Region &#123;</div><div class="line">     return &#123; point in region(point.minus(offset)) &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>传一个区域和移动的偏移来生成一个新的圆。代码可以从:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Region circle = circle(10,Position(x:5, y:5))</div></pre></td></tr></table></figure>
+<p>变成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Region circle = circle(10)</div><div class="line">Region newCircle = shift(circle, Position(x:5, y:5))</div></pre></td></tr></table></figure>
+<p>尽量把一些可变的东西抽象出来！</p>
+<p>然后可以基于这个<code>Region</code>操作，比如反转区域：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func invert(region: Region) -&gt; Region &#123;</div><div class="line">     return &#123; point in !region(point) &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>取交集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func intersection(region1: Region, _ region2: Region) -&gt; Region &#123; </div><div class="line">    return &#123; point in region1(point) &amp;&amp; region2(point) &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>取并集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func union(region1: Region, _ region2: Region) -&gt; Region &#123; </div><div class="line">    return &#123; point in region1(point) || region2(point) &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在第一个区域不在第二个区域：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func difference(region: Region, minus: Region) -&gt; Region &#123; </div><div class="line">    return intersection(region, invert(minus))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>针对一开始的函数<code>canSafelyEngageShip</code>可以改写成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">extension Ship &#123;</div><div class="line">    func canSafelyEngageShip(target: Ship, friendly: Ship) -&gt; Bool &#123;</div><div class="line">        let rangeRegion = difference(circle( ringRange), minus: circle(unsafeRange))</div><div class="line">        let  ringRegion = shift(rangeRegion, offset: position) </div><div class="line">        let friendlyRegion = shift(circle(unsafeRange), offset: friendly.position)</div><div class="line">        let resultRegion = difference( ringRegion, minus: friendlyRegion) </div><div class="line">        return resultRegion(target.position)</div><div class="line">&#125; &#125;</div></pre></td></tr></table></figure>
+<p>在上面的例子中，还可以把<code>Region</code>作为一个<code>struct</code>，从而写出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rangeRegion.shift(ownPosition).difference(friendlyRegion)</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个例子告诉我们，在 <code>Swift</code> 中计算和传递函数的方式与整型或布尔型没有任何不同。这让我 们能够写出一些基础的图形组件 (比如圆)，进而能以这些组件为基础，来构建一系列函数。每 个函数都能修改或是合并区域，并以此创建新的区域。比起写复杂的函数来解决某个具体的问 题，现在我们完全可以通过将一些小型函数装配起来，广泛地解决各种各样的问题。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/22/weekly/" rel="next" title="第十一期 Coder群周报">
+                <i class="fa fa-chevron-left"></i> 第十一期 Coder群周报
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/22/rxswift-part-one/"
+     data-title="RxSwift学习之旅 - 初章"
+     data-content=""
+     data-url="http://www.alonemonkey.com/2017/03/22/rxswift-part-one/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/22/rxswift-part-one/"
+           data-title="RxSwift学习之旅 - 初章" data-url="http://www.alonemonkey.com/2017/03/22/rxswift-part-one/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#初识函数式编程"><span class="nav-number">1.</span> <span class="nav-text">初识函数式编程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#战舰游戏"><span class="nav-number">2.</span> <span class="nav-text">战舰游戏</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常规套路"><span class="nav-number">2.1.</span> <span class="nav-text">常规套路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数式思维"><span class="nav-number">2.2.</span> <span class="nav-text">函数式思维</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"alonemonkey"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
