@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="走进函数响应式编程的世界~">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490172241211.png">
-<meta property="og:updated_time" content="2017-03-22T15:23:20.000Z">
+<meta property="og:updated_time" content="2017-03-22T15:34:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - 初章">
 <meta name="twitter:description" content="走进函数响应式编程的世界~">
@@ -410,7 +410,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">int a = 3;</div><div class="line">int b = 4;</div><div class="line">int c = a + b;</div><div class="line">NSLog(@&quot;c is %d&quot;, c);   // =&gt; 7</div><div class="line">a = 5;</div><div class="line">b = 7;</div><div class="line">NSLog(@&quot;c is %d&quot;, c);   // 仍然是7</div></pre></td></tr></table></figure>
 <p>在这里把<code>a,b,c</code>当成某个状态，<code>c</code>是<code>a,b</code>两个状态的组合，正常的编程中，在计算了<code>c</code>的状态之后，再去改变<code>a,b</code>的状态是不会影响到<code>c</code>的状态的。所以在正常编程中我们要去记录很多状态并及时更新状态，比如网络请求的状态，下拉刷新的状态。各种各样的事件响应方式，无形中增加了编码的复杂度。而在响应式编程中，每一个状态的改变都会发出一个信号，更新与之关联的状态。</p>
 <p>比如上面<code>a,b</code>的状态改变之后能够及时更新<code>c</code>的状态，而不用重新通过<code>a+b</code>计算<code>c</code>的状态了，在响应式编程中，我们可以创建很多被观察者对象，当这些对象的状态发生改变时，我们能够链式的去更新和处理各个状态的变化和数据。</p>
-<p>后面我们会讲到<code>RxSwift</code>中的观察者和订阅者。</p>
+<p>后面我们会讲到<code>RxSwift</code>中的被观察者和订阅者。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个例子告诉我们，在 <code>Swift</code> 中计算和传递函数的方式与整型或布尔型没有任何不同。这让我 们能够写出一些基础的图形组件 (比如圆)，进而能以这些组件为基础，来构建一系列函数。每 个函数都能修改或是合并区域，并以此创建新的区域。比起写复杂的函数来解决某个具体的问 题，现在我们完全可以通过将一些小型函数装配起来，广泛地解决各种各样的问题。</p>
 
       
