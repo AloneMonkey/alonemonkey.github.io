@@ -94,22 +94,55 @@
 
 
 
-<meta name="description" content="工具
+<meta name="description" content="密码安全密码检测注册的时候进行密码检测:
 
-基于github的聊天工具分享人：AloneMonkey介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。">
+分为弱、中、强，弱密码不能通过注册，比如: 少于6位数或者全是数字之类的，后台也要对其强弱进行验证检测。
+
+密码存储
+不能简单的对密码进行哈希加密
+加盐应该使用加密的安全随机数生成器(CSPRNG)
+每个用户的每一个密码都要使用独一无二的盐值
+不用告诉用户输错的账号还是密码
+为了使密码难以破解，可以使用慢哈希函数
+
+存储密码的步骤：
+
+使用 CSPRNG">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第一期 Coder群周报">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/07/29/weekly/index.html">
+<meta property="og:title" content="AloneMonkey">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/03/24/安全方案/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="工具
+<meta property="og:description" content="密码安全密码检测注册的时候进行密码检测:
 
-基于github的聊天工具分享人：AloneMonkey介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。">
-<meta property="og:updated_time" content="2016-12-21T02:14:30.000Z">
+分为弱、中、强，弱密码不能通过注册，比如: 少于6位数或者全是数字之类的，后台也要对其强弱进行验证检测。
+
+密码存储
+不能简单的对密码进行哈希加密
+加盐应该使用加密的安全随机数生成器(CSPRNG)
+每个用户的每一个密码都要使用独一无二的盐值
+不用告诉用户输错的账号还是密码
+为了使密码难以破解，可以使用慢哈希函数
+
+存储密码的步骤：
+
+使用 CSPRNG">
+<meta property="og:updated_time" content="2017-03-24T03:38:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一期 Coder群周报">
-<meta name="twitter:description" content="工具
+<meta name="twitter:title" content="AloneMonkey">
+<meta name="twitter:description" content="密码安全密码检测注册的时候进行密码检测:
 
-基于github的聊天工具分享人：AloneMonkey介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。">
+分为弱、中、强，弱密码不能通过注册，比如: 少于6位数或者全是数字之类的，后台也要对其强弱进行验证检测。
+
+密码存储
+不能简单的对密码进行哈希加密
+加盐应该使用加密的安全随机数生成器(CSPRNG)
+每个用户的每一个密码都要使用独一无二的盐值
+不用告诉用户输错的账号还是密码
+为了使密码难以破解，可以使用慢哈希函数
+
+存储密码的步骤：
+
+使用 CSPRNG">
 
 
 
@@ -127,7 +160,7 @@
   };
 </script>
 
-  <title> 第一期 Coder群周报 | AloneMonkey </title>
+  <title>  | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -287,7 +320,7 @@
             
             
               
-                第一期 Coder群周报
+                
               
             
           </h1>
@@ -299,30 +332,11 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-29T00:00:00+08:00" content="2016-07-29">
-              2016-07-29
+            <time itemprop="dateCreated" datetime="2017-03-24T11:38:32+08:00" content="2017-03-24">
+              2017-03-24
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/weekly/" itemprop="url" rel="index">
-                    <span itemprop="name">weekly</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
@@ -346,22 +360,68 @@
       
 
       
-        <blockquote class="blockquote-center"><p>工具</p>
+        <h3 id="密码安全"><a href="#密码安全" class="headerlink" title="密码安全"></a>密码安全</h3><h4 id="密码检测"><a href="#密码检测" class="headerlink" title="密码检测"></a>密码检测</h4><p>注册的时候进行密码检测:</p>
+<blockquote>
+<p>分为弱、中、强，弱密码不能通过注册，比如: 少于6位数或者全是数字之类的，后台也要对其强弱进行验证检测。</p>
 </blockquote>
-<h3 id="基于github的聊天工具"><a href="#基于github的聊天工具" class="headerlink" title="基于github的聊天工具"></a><a href="https://gitter.im" target="_blank" rel="external">基于github的聊天工具</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。</p>
-<a id="more"></a>
-<h3 id="科学上网利器Shadowsocks搭建"><a href="#科学上网利器Shadowsocks搭建" class="headerlink" title="科学上网利器Shadowsocks搭建"></a><a href="http://jackln.github.io/2015/08/23/shadowsocks-server/" target="_blank" rel="external">科学上网利器Shadowsocks搭建</a></h3><p>分享人：<a href="http://jackln.github.io" target="_blank" rel="external">Jack雷锋</a><br>介绍：Shadowsocks服务器搭建，有了它GFW就不在了。科学上网利器。</p>
-<h3 id="路由器附带验证码进行宽带登陆"><a href="#路由器附带验证码进行宽带登陆" class="headerlink" title="路由器附带验证码进行宽带登陆"></a><a href="http://www.unique-liu.com/291.html" target="_blank" rel="external">路由器附带验证码进行宽带登陆</a></h3><p>分享人：<a href="http://www.unique-liu.com" target="_blank" rel="external">老司机</a><br>介绍：因为个别ISP在登录上为了防止路由器或者其他的原因，添加了验证码，而我们就是不想去手动输入，想用路由器自动输入提交。</p>
-<p><br><br><blockquote class="blockquote-center"><p>PHP</p>
-</blockquote></p>
-<h3 id="一款纯PHP开发的开源高性能的PHP-socket-服务器框架"><a href="#一款纯PHP开发的开源高性能的PHP-socket-服务器框架" class="headerlink" title="一款纯PHP开发的开源高性能的PHP socket 服务器框架"></a><a href="http://www.workerman.net/" target="_blank" rel="external">一款纯PHP开发的开源高性能的PHP socket 服务器框架</a></h3><p>分享人：<a href="http://www.fmwhahaha.com" target="_blank" rel="external">fmwhahaha</a><br>介绍：Workerman是一款纯PHP开发的开源高性能的PHP socket 服务器框架。被广泛的用于手机app、手游服务端、网络游戏服务器、聊天室服务器、硬件通讯服务器、智能家居、车联网、物联网等领域的开发。 支持TCP长连接，支持Websocket、HTTP等协议，支持自定义协议。</p>
-<p><br><br><blockquote class="blockquote-center"><p>iOS</p>
-</blockquote></p>
-<h3 id="iOS-9-2-9-3-3-64-位设备越狱指南"><a href="#iOS-9-2-9-3-3-64-位设备越狱指南" class="headerlink" title="iOS 9.2~9.3.3 64 位设备越狱指南"></a><a href="https://jbguide.me/2016/07/25/ios-9-3-3-jailbreak/" target="_blank" rel="external">iOS 9.2~9.3.3 64 位设备越狱指南</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：介绍了本次盘古推出的越狱工具，相关问题的解释，以及插件兼容性测试表格。</p>
-<h3 id="mach-o格式分析"><a href="#mach-o格式分析" class="headerlink" title="mach-o格式分析"></a><a href="http://turingh.github.io/2016/03/07/mach-o%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%88%86%E6%9E%90/" target="_blank" rel="external">mach-o格式分析</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：Mach-O是iOS可执行文件格式，本文简单介绍了Mach-O文件构成以及结构说明。</p>
-<p><br><br><blockquote class="blockquote-center"><p>物联网</p>
-</blockquote></p>
-<h3 id="嵌入式系统知识和接口技术总结"><a href="#嵌入式系统知识和接口技术总结" class="headerlink" title="嵌入式系统知识和接口技术总结"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5MTM5ODQyMA==&amp;mid=2651192306&amp;idx=2&amp;sn=5c9b62c9f16120c45c29e1d582833694&amp;scene=0#wechat_redirect" target="_blank" rel="external">嵌入式系统知识和接口技术总结</a></h3><p>分享人：<a href="http://rayuu.com" target="_blank" rel="external">Rayu</a><br>介绍： 本文主要介绍嵌入式系统的一些基础知识，从嵌入式系统基础，包括嵌入式系统的定义、嵌入式系统的组成、实时系统、逻辑电路基础以及接口技术两方面介绍，希望对各位有帮助。—-摘自物联网智库</p>
+<h4 id="密码存储"><a href="#密码存储" class="headerlink" title="密码存储"></a>密码存储</h4><ol>
+<li>不能简单的对密码进行哈希加密</li>
+<li>加盐应该使用加密的安全随机数生成器(CSPRNG)</li>
+<li>每个用户的每一个密码都要使用独一无二的盐值</li>
+<li>不用告诉用户输错的账号还是密码</li>
+<li>为了使密码难以破解，可以使用慢哈希函数</li>
+</ol>
+<p>存储密码的步骤：</p>
+<ol>
+<li>使用 CSPRNG 生成足够长的随机盐值。</li>
+<li>将盐值混入密码，并使用标准的密码哈希函数进行加密，如Argon2、 bcrypt 、 scrypt 或 PBKDF2 。</li>
+<li>将盐值和对应的哈希值一起存入用户数据库。</li>
+</ol>
+<p>校验密码的步骤：</p>
+<ol>
+<li>从数据库检索出用户的盐值和对应的哈希值。</li>
+<li>将盐值混入用户输入的密码，并且使用通用的哈希函数进行加密。</li>
+<li>比较上一步的结果，是否和数据库存储的哈希值相同。如果它们相同，则表明密码是正确的；否则，该密码错误。</li>
+</ol>
+<h4 id="使用的哈希算法"><a href="#使用的哈希算法" class="headerlink" title="使用的哈希算法"></a>使用的哈希算法</h4><p>可以使用：</p>
+<p>精心设计的密钥扩展算法如 PBKDF2 、bcrypt 和 scrypt 。<br>OpenWall的的 Portable PHP password hashing framework。<br>PBKDF2在PHP、C＃、Java和Ruby的实现。<br>crypt 的安全版本。</p>
+<p>不可使用：</p>
+<p>快速加密哈希函数，如 MD5 、SHA1、SHA256、SHA512、RipeMD、WHIRLPOOL、SHA3等。<br>crypt()的不安全版本。<br>任何自己设计的加密算法。只应该使用那些在公开领域中的、由经验丰富的密码学家完整测试过的技术。</p>
+<h4 id="防止暴力破解"><a href="#防止暴力破解" class="headerlink" title="防止暴力破解"></a>防止暴力破解</h4><p>第一个是上面说的慢哈希，另外就是如果用户在某段时间内，错误次数太多的话，可以让加入验证码拦截或者暂时冻结账户。</p>
+<h3 id="Docker安全"><a href="#Docker安全" class="headerlink" title="Docker安全"></a>Docker安全</h3><p>Docker的安全性主要体现在如下几点：</p>
+<ol>
+<li>Docker容器是否会危害到宿主机或其它容器</li>
+<li>用户如何确保下载下来的镜像是可信的、未被篡改的</li>
+<li>确保client和daemon的连接是可信的</li>
+</ol>
+<p>可以从限制容器资源使用、日志审计、监控、文件系统防护、权限控制等方面去设置。</p>
+<p>具体参考:</p>
+<p><a href="https://segmentfault.com/a/1190000005794220#articleHeader0" target="_blank" rel="external">Docker的安全性</a></p>
+<h3 id="nodejs安全"><a href="#nodejs安全" class="headerlink" title="nodejs安全"></a>nodejs安全</h3><h4 id="HTTP头"><a href="#HTTP头" class="headerlink" title="HTTP头"></a>HTTP头</h4><ul>
+<li>Strict-Transport-Security：强制使用安全连接（SSL/TLS之上的HTTPS）来连接到服务器。</li>
+<li>X-Frame-Options：提供对于“点击劫持”的保护。</li>
+<li>X-XSS-Protection：开启大多现代浏览器内建的对于跨站脚本攻击（XSS）的过滤功能。</li>
+<li>X-Content-Type-Options： 防止浏览器使用MIME-sniffing来确定响应的类型，转而使用明确的content-type来确定。</li>
+<li>Content-Security-Policy：防止受到跨站脚本攻击以及其他跨站注入攻击。</li>
+</ul>
+<p>可以使用<code>nodejs</code>的<code>koa-helmet</code>模块设置。</p>
+<p><a href="https://www.npmjs.com/package/koa-helmet" target="_blank" rel="external">koa-helmet</a></p>
+<h4 id="敏感数据"><a href="#敏感数据" class="headerlink" title="敏感数据"></a>敏感数据</h4><p>不要在代码中暴露密钥之类的敏感数据</p>
+<h4 id="防止暴力破解-1"><a href="#防止暴力破解-1" class="headerlink" title="防止暴力破解"></a>防止暴力破解</h4><p>暴力破解即系统地列举所有可能的结果，并逐一尝试，来找到正确答案。在web应用中，用户登陆就特别适合它发挥。</p>
+<p>通过限制用户的连接频率来防止这类的攻击。在<code>Node.js</code>中，你可以使用<code>koa-ratelimit</code>包。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">var ratelimit = require(&apos;koa-ratelimit&apos;);  </div><div class="line">var redis = require(&apos;redis&apos;);  </div><div class="line">var koa = require(&apos;koa&apos;);  </div><div class="line">var app = koa();</div><div class="line"></div><div class="line">var emailBasedRatelimit = ratelimit(&#123;  </div><div class="line">  db: redis.createClient(),</div><div class="line">  duration: 60000,</div><div class="line">  max: 10,</div><div class="line">  id: function (context) &#123;</div><div class="line">    return context.body.email;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">var ipBasedRatelimit = ratelimit(&#123;  </div><div class="line">  db: redis.createClient(),</div><div class="line">  duration: 60000,</div><div class="line">  max: 10,</div><div class="line">  id: function (context) &#123;</div><div class="line">    return context.ip;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.post(&apos;/login&apos;, ipBasedRatelimit, emailBasedRatelimit, handleLogin);</div></pre></td></tr></table></figure>
+<h4 id="Session管理"><a href="#Session管理" class="headerlink" title="Session管理"></a>Session管理</h4><p>cookie属性设置:</p>
+<ul>
+<li>secure - 这个属性告诉浏览器，仅在请求是通过HTTPS传输时，才传递cookie。</li>
+<li>HttpOnly - 设置这个属性将禁止javascript脚本获取到这个cookie，这可以用来帮助防止跨站脚本攻击。</li>
+</ul>
+<p>在<code>node.js</code>可以使用<code>cookie-session</code>来管理</p>
+<h4 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h4><p>跨站请求伪造（CSRF）是一种迫使用户在他们已登录的web应用中，执行一个并非他们原意的操作的攻击手段。这种攻击常常用于那些会改变用户的状态的请求，通常它们并不窃取数据，因为攻击者并不能看到响应的内容。</p>
+<p><code>nodejs</code>中可以使用<code>csrf</code>来缓和这种攻击。</p>
+<p><a href="https://www.npmjs.com/package/csurf" target="_blank" rel="external">csrf</a></p>
+<h3 id="数据合法性"><a href="#数据合法性" class="headerlink" title="数据合法性"></a>数据合法性</h3><p>SQL注入:<br>使用参数化查询（parameterized queries）或预处理语句（prepared statements）</p>
+<h3 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h3><p>使用<code>Node Security project(nsp)</code>来检查你使用的模块是否是易被一些已知的手段攻击的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npm i nsp -g  </div><div class="line"># either audit the shrinkwrap</div><div class="line">nsp audit-shrinkwrap  </div><div class="line"># or the package.json</div><div class="line">nsp audit-package</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -466,17 +526,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/01/augmented-traffic-control/" rel="next" title="augmented-traffic-control模拟网络环境">
-                <i class="fa fa-chevron-left"></i> augmented-traffic-control模拟网络环境
+              <a href="/2017/03/24/rxswift-part-three/" rel="next" title="RxSwift学习之旅 - 序列的基本操作">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 序列的基本操作
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/07/weekly/" rel="prev" title="第二期 Coder群周报">
-                第二期 Coder群周报 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -651,7 +707,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于github的聊天工具"><span class="nav-number">1.</span> <span class="nav-text">基于github的聊天工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#科学上网利器Shadowsocks搭建"><span class="nav-number">2.</span> <span class="nav-text">科学上网利器Shadowsocks搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由器附带验证码进行宽带登陆"><span class="nav-number">3.</span> <span class="nav-text">路由器附带验证码进行宽带登陆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一款纯PHP开发的开源高性能的PHP-socket-服务器框架"><span class="nav-number">4.</span> <span class="nav-text">一款纯PHP开发的开源高性能的PHP socket 服务器框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-9-2-9-3-3-64-位设备越狱指南"><span class="nav-number">5.</span> <span class="nav-text">iOS 9.2~9.3.3 64 位设备越狱指南</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mach-o格式分析"><span class="nav-number">6.</span> <span class="nav-text">mach-o格式分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入式系统知识和接口技术总结"><span class="nav-number">7.</span> <span class="nav-text">嵌入式系统知识和接口技术总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#密码安全"><span class="nav-number">1.</span> <span class="nav-text">密码安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#密码检测"><span class="nav-number">1.1.</span> <span class="nav-text">密码检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#密码存储"><span class="nav-number">1.2.</span> <span class="nav-text">密码存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用的哈希算法"><span class="nav-number">1.3.</span> <span class="nav-text">使用的哈希算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止暴力破解"><span class="nav-number">1.4.</span> <span class="nav-text">防止暴力破解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker安全"><span class="nav-number">2.</span> <span class="nav-text">Docker安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nodejs安全"><span class="nav-number">3.</span> <span class="nav-text">nodejs安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP头"><span class="nav-number">3.1.</span> <span class="nav-text">HTTP头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#敏感数据"><span class="nav-number">3.2.</span> <span class="nav-text">敏感数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止暴力破解-1"><span class="nav-number">3.3.</span> <span class="nav-text">防止暴力破解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Session管理"><span class="nav-number">3.4.</span> <span class="nav-text">Session管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CSRF"><span class="nav-number">3.5.</span> <span class="nav-text">CSRF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据合法性"><span class="nav-number">4.</span> <span class="nav-text">数据合法性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#npm"><span class="nav-number">5.</span> <span class="nav-text">npm</span></a></li></ol></div>
             
           </div>
         </section>
