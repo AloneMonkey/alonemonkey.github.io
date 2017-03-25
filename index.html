@@ -284,163 +284,6 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/24/安全方案/" itemprop="url">
-                  未命名
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-24T11:38:32+08:00" content="2017-03-24">
-              2017-03-24
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="密码安全"><a href="#密码安全" class="headerlink" title="密码安全"></a>密码安全</h3><h4 id="密码检测"><a href="#密码检测" class="headerlink" title="密码检测"></a>密码检测</h4><p>注册的时候进行密码检测:</p>
-<blockquote>
-<p>分为弱、中、强，弱密码不能通过注册，比如: 少于6位数或者全是数字之类的，后台也要对其强弱进行验证检测。</p>
-</blockquote>
-<h4 id="密码存储"><a href="#密码存储" class="headerlink" title="密码存储"></a>密码存储</h4><ol>
-<li>不能简单的对密码进行哈希加密</li>
-<li>加盐应该使用加密的安全随机数生成器(CSPRNG)</li>
-<li>每个用户的每一个密码都要使用独一无二的盐值</li>
-<li>不用告诉用户输错的账号还是密码</li>
-<li>为了使密码难以破解，可以使用慢哈希函数</li>
-</ol>
-<p>存储密码的步骤：</p>
-<ol>
-<li>使用 CSPRNG 生成足够长的随机盐值。</li>
-<li>将盐值混入密码，并使用标准的密码哈希函数进行加密，如Argon2、 bcrypt 、 scrypt 或 PBKDF2 。</li>
-<li>将盐值和对应的哈希值一起存入用户数据库。</li>
-</ol>
-<p>校验密码的步骤：</p>
-<ol>
-<li>从数据库检索出用户的盐值和对应的哈希值。</li>
-<li>将盐值混入用户输入的密码，并且使用通用的哈希函数进行加密。</li>
-<li>比较上一步的结果，是否和数据库存储的哈希值相同。如果它们相同，则表明密码是正确的；否则，该密码错误。</li>
-</ol>
-<h4 id="使用的哈希算法"><a href="#使用的哈希算法" class="headerlink" title="使用的哈希算法"></a>使用的哈希算法</h4><p>可以使用：</p>
-<p>精心设计的密钥扩展算法如 PBKDF2 、bcrypt 和 scrypt 。<br>OpenWall的的 Portable PHP password hashing framework。<br>PBKDF2在PHP、C＃、Java和Ruby的实现。<br>crypt 的安全版本。</p>
-<p>不可使用：</p>
-<p>快速加密哈希函数，如 MD5 、SHA1、SHA256、SHA512、RipeMD、WHIRLPOOL、SHA3等。<br>crypt()的不安全版本。<br>任何自己设计的加密算法。只应该使用那些在公开领域中的、由经验丰富的密码学家完整测试过的技术。</p>
-<h4 id="防止暴力破解"><a href="#防止暴力破解" class="headerlink" title="防止暴力破解"></a>防止暴力破解</h4><p>第一个是上面说的慢哈希，另外就是如果用户在某段时间内，错误次数太多的话，可以让加入验证码拦截或者暂时冻结账户。</p>
-<h3 id="Docker安全"><a href="#Docker安全" class="headerlink" title="Docker安全"></a>Docker安全</h3><p>Docker的安全性主要体现在如下几点：</p>
-<ol>
-<li>Docker容器是否会危害到宿主机或其它容器</li>
-<li>用户如何确保下载下来的镜像是可信的、未被篡改的</li>
-<li>确保client和daemon的连接是可信的</li>
-</ol>
-<p>可以从限制容器资源使用、日志审计、监控、文件系统防护、权限控制等方面去设置。</p>
-<p>具体参考:</p>
-<p><a href="https://segmentfault.com/a/1190000005794220#articleHeader0" target="_blank" rel="external">Docker的安全性</a></p>
-<h3 id="nodejs安全"><a href="#nodejs安全" class="headerlink" title="nodejs安全"></a>nodejs安全</h3><h4 id="HTTP头"><a href="#HTTP头" class="headerlink" title="HTTP头"></a>HTTP头</h4><ul>
-<li>Strict-Transport-Security：强制使用安全连接（SSL/TLS之上的HTTPS）来连接到服务器。</li>
-<li>X-Frame-Options：提供对于“点击劫持”的保护。</li>
-<li>X-XSS-Protection：开启大多现代浏览器内建的对于跨站脚本攻击（XSS）的过滤功能。</li>
-<li>X-Content-Type-Options： 防止浏览器使用MIME-sniffing来确定响应的类型，转而使用明确的content-type来确定。</li>
-<li>Content-Security-Policy：防止受到跨站脚本攻击以及其他跨站注入攻击。</li>
-</ul>
-<p>可以使用<code>nodejs</code>的<code>koa-helmet</code>模块设置。</p>
-<p><a href="https://www.npmjs.com/package/koa-helmet" target="_blank" rel="external">koa-helmet</a></p>
-<h4 id="敏感数据"><a href="#敏感数据" class="headerlink" title="敏感数据"></a>敏感数据</h4><p>不要在代码中暴露密钥之类的敏感数据</p>
-<h4 id="防止暴力破解-1"><a href="#防止暴力破解-1" class="headerlink" title="防止暴力破解"></a>防止暴力破解</h4><p>暴力破解即系统地列举所有可能的结果，并逐一尝试，来找到正确答案。在web应用中，用户登陆就特别适合它发挥。</p>
-<p>通过限制用户的连接频率来防止这类的攻击。在<code>Node.js</code>中，你可以使用<code>koa-ratelimit</code>包。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">var ratelimit = require(&apos;koa-ratelimit&apos;);  </div><div class="line">var redis = require(&apos;redis&apos;);  </div><div class="line">var koa = require(&apos;koa&apos;);  </div><div class="line">var app = koa();</div><div class="line"></div><div class="line">var emailBasedRatelimit = ratelimit(&#123;  </div><div class="line">  db: redis.createClient(),</div><div class="line">  duration: 60000,</div><div class="line">  max: 10,</div><div class="line">  id: function (context) &#123;</div><div class="line">    return context.body.email;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">var ipBasedRatelimit = ratelimit(&#123;  </div><div class="line">  db: redis.createClient(),</div><div class="line">  duration: 60000,</div><div class="line">  max: 10,</div><div class="line">  id: function (context) &#123;</div><div class="line">    return context.ip;</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.post(&apos;/login&apos;, ipBasedRatelimit, emailBasedRatelimit, handleLogin);</div></pre></td></tr></table></figure>
-<h4 id="Session管理"><a href="#Session管理" class="headerlink" title="Session管理"></a>Session管理</h4><p>cookie属性设置:</p>
-<ul>
-<li>secure - 这个属性告诉浏览器，仅在请求是通过HTTPS传输时，才传递cookie。</li>
-<li>HttpOnly - 设置这个属性将禁止javascript脚本获取到这个cookie，这可以用来帮助防止跨站脚本攻击。</li>
-</ul>
-<p>在<code>node.js</code>可以使用<code>cookie-session</code>来管理</p>
-<h4 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h4><p>跨站请求伪造（CSRF）是一种迫使用户在他们已登录的web应用中，执行一个并非他们原意的操作的攻击手段。这种攻击常常用于那些会改变用户的状态的请求，通常它们并不窃取数据，因为攻击者并不能看到响应的内容。</p>
-<p><code>nodejs</code>中可以使用<code>csrf</code>来缓和这种攻击。</p>
-<p><a href="https://www.npmjs.com/package/csurf" target="_blank" rel="external">csrf</a></p>
-<h3 id="数据合法性"><a href="#数据合法性" class="headerlink" title="数据合法性"></a>数据合法性</h3><p>SQL注入:<br>使用参数化查询（parameterized queries）或预处理语句（prepared statements）</p>
-<h3 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h3><p>使用<code>Node Security project(nsp)</code>来检查你使用的模块是否是易被一些已知的手段攻击的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npm i nsp -g  </div><div class="line"># either audit the shrinkwrap</div><div class="line">nsp audit-shrinkwrap  </div><div class="line"># or the package.json</div><div class="line">nsp audit-package</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-      
-    
-      
-            
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2017/03/24/rxswift-part-three/" itemprop="url">
                   RxSwift学习之旅 - 序列的基本操作
                 </a>
@@ -1522,6 +1365,126 @@
 
       
     
+      
+            
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/28/weekly/" itemprop="url">
+                  第五期 Coder群周报
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-28T00:00:00+08:00" content="2016-08-28">
+              2016-08-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/weekly/" itemprop="url" rel="index">
+                    <span itemprop="name">weekly</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote class="blockquote-center"><p>iOS</p>
+</blockquote>
+<h3 id="移动客户端中高效使用-SQLite"><a href="#移动客户端中高效使用-SQLite" class="headerlink" title="移动客户端中高效使用 SQLite"></a><a href="http://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653577674&amp;idx=1&amp;sn=b1136f8fa3b823c8ed1c2f1df060bf1d&amp;scene=0#rd">移动客户端中高效使用 SQLite</a></h3><p>分享人：<a href="http://www.blogfshare.com">AloneMonkey</a><br>介绍：移动客户端SQLite的使用。</p>
+<h3 id="玩转Podfile"><a href="#玩转Podfile" class="headerlink" title="玩转Podfile"></a><a href="http://mp.weixin.qq.com/s?__biz=MzI2NzQyODU0Ng==&amp;mid=2247483681&amp;idx=1&amp;sn=52bd461e608610eeeca8e2dc42f6c7d7&amp;scene=2&amp;srcid=08186PcT9Dnxhg6kwoI7teOE#rd">玩转Podfile</a></h3><p>分享人：<a href="http://www.blogfshare.com">AloneMonkey</a><br>介绍：Podfile的使用和配置。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/28/weekly/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+      
+    
   </section>
 
   
@@ -1567,7 +1530,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
