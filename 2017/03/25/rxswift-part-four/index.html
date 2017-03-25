@@ -1,0 +1,819 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RxSwift," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="通过一个简单加法运算的Demo来了解实现中的被观察者和订阅者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift学习之旅 - 加法运算Demo">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/03/25/rxswift-part-four/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="通过一个简单加法运算的Demo来了解实现中的被观察者和订阅者">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490431861515.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490434019587.png">
+<meta property="og:updated_time" content="2017-03-25T10:38:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxSwift学习之旅 - 加法运算Demo">
+<meta name="twitter:description" content="通过一个简单加法运算的Demo来了解实现中的被观察者和订阅者">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490431861515.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RxSwift学习之旅 - 加法运算Demo | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RxSwift学习之旅 - 加法运算Demo
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-25T00:00:00+08:00" content="2017-03-25">
+              2017-03-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>通过前面几篇文章了解了很多<code>RxSwift</code>中的概念和序列操作。下面从一个最基础的例子来看看实际开发中的被观察者和订阅者。</p>
+<p>这里要实现的仅仅是输入三个整数并实时把三个整数相加的结果显示出来。</p>
+<h3 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h3><p>这里没有界面设计就是拖了几个<code>UITextField</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490431861515.png" alt="image"></p>
+<p>当每次上面的三个输入框输入改变了的话，就把三个值相加显示出来。</p>
+<h3 id="项目准备"><a href="#项目准备" class="headerlink" title="项目准备"></a>项目准备</h3><p>首先创建一个<code>Swift</code>的项目<code>RxSwiftCalculator</code>，<code>Podfile</code>内容如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">use_frameworks!</div><div class="line"></div><div class="line">target &apos;RxSwiftCalculator&apos; do</div><div class="line"></div><div class="line">pod &apos;RxSwift&apos;</div><div class="line">pod &apos;RxCocoa&apos;</div><div class="line"></div><div class="line">end</div></pre></td></tr></table></figure>
+<p>因为需要用到UI控件里面的Rx扩展，所有引入了<code>RxCocoa</code>。</p>
+<p><code>pod install</code>后打开<code>RxSwiftCalculator.xcworkspace</code>。</p>
+<p>把界面拖一下, 然后关联到属性。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490434019587.png" alt="image"></p>
+<h3 id="UITextField-rx-text"><a href="#UITextField-rx-text" class="headerlink" title="UITextField.rx.text"></a>UITextField.rx.text</h3><p>在这个项目里面我们要监听<code>UITextField</code>的事件，然后把里面的数字取出来相加，最后显示到<code>result</code>这个<code>Label</code>上面。</p>
+<p>所以本例中<code>UITextField</code>就是一个被观察者。</p>
+<p>在<code>RxCocoa</code>里面已经对<code>UITextField</code>进行了扩展，把的里面的文本变成一个可被观察的对象<code>text</code>，源码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">extension Reactive where Base: UITextField &#123;</div><div class="line">    /// Reactive wrapper for `text` property.</div><div class="line">    public var text: ControlProperty&lt;String?&gt; &#123;</div><div class="line">        return value</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    /// Reactive wrapper for `text` property.</div><div class="line">    public var value: ControlProperty&lt;String?&gt; &#123;</div><div class="line">        return UIControl.rx.value(</div><div class="line">            base,</div><div class="line">            getter: &#123; textField in</div><div class="line">                textField.text</div><div class="line">            &#125;, setter: &#123; textField, value in</div><div class="line">                // This check is important because setting text value always clears control state</div><div class="line">                // including marked text selection which is imporant for proper input </div><div class="line">                // when IME input method is used.</div><div class="line">                if textField.text != value &#123;</div><div class="line">                    textField.text = value</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        )</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里返回的是一个<code>ControlProperty</code>类型的字符串，而<code>ControlProperty</code>实现了协议<code>ControlPropertyType</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public struct ControlProperty&lt;PropertyType&gt; : ControlPropertyType &#123;</div><div class="line">    //.....</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>跟进<code>ControlPropertyType</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/// Protocol that enables extension of `ControlProperty`.</div><div class="line">public protocol ControlPropertyType : ObservableType, ObserverType &#123;</div><div class="line"></div><div class="line">    /// - returns: `ControlProperty` interface</div><div class="line">    func asControlProperty() -&gt; ControlProperty&lt;E&gt;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到<code>ControlPropertyType</code>实现了两个协议<code>ObservableType</code>和<code>ObserverType</code>。所以它即可是一个可被观察的对象，同时也可以作为观察者。</p>
+<p>同时，我们看到这里返回了一个<code>UIControl.rx.value</code>生成的对象，跟进去看一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">static func value&lt;C: UIControl, T&gt;(_ control: C, getter: @escaping (C) -&gt; T, setter: @escaping (C, T) -&gt; Void) -&gt; ControlProperty&lt;T&gt; &#123;</div><div class="line">    let source: Observable&lt;T&gt; = Observable.create &#123; [weak weakControl = control] observer in</div><div class="line">            guard let control = weakControl else &#123;</div><div class="line">                observer.on(.completed)</div><div class="line">                return Disposables.create()</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            observer.on(.next(getter(control)))</div><div class="line"></div><div class="line">            let controlTarget = ControlTarget(control: control, controlEvents: [.allEditingEvents, .valueChanged]) &#123; _ in</div><div class="line">                if let control = weakControl &#123;</div><div class="line">                    observer.on(.next(getter(control)))</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            return Disposables.create(with: controlTarget.dispose)</div><div class="line">        &#125;</div><div class="line">        .takeUntil((control as NSObject).rx.deallocated)</div><div class="line"></div><div class="line">    let bindingObserver = UIBindingObserver(UIElement: control, binding: setter)</div><div class="line"></div><div class="line">    return ControlProperty&lt;T&gt;(values: source, valueSink: bindingObserver)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里创建了一个可被观察者，那么发射的值是什么时候发射的呢？ 跟进<code>ControlTarget</code>的<code>init</code>方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">init(control: Control, controlEvents: UIControlEvents, callback: @escaping Callback) &#123;</div><div class="line">    MainScheduler.ensureExecutingOnScheduler()</div><div class="line"></div><div class="line">    self.control = control</div><div class="line">    self.controlEvents = controlEvents</div><div class="line">    self.callback = callback</div><div class="line"></div><div class="line">    super.init()</div><div class="line"></div><div class="line">    control.addTarget(self, action: selector, for: controlEvents)</div><div class="line"></div><div class="line">    let method = self.method(for: selector)</div><div class="line">    if method == nil &#123;</div><div class="line">        rxFatalError(&quot;Can&apos;t find method&quot;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里的<code>control</code>就传进来的<code>UITextField</code>对象，然后把它的<code>controlEvents</code>事件绑定到了<code>selector</code>,这个<code>selector</code>是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let selector: Selector = #selector(ControlTarget.eventHandler(_:))</div></pre></td></tr></table></figure>
+<p>然后这个方法里面会调用初始化传进来的<code>callback</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func eventHandler(_ sender: Control!) &#123;</div><div class="line">    if let callback = self.callback, let control = self.control &#123;</div><div class="line">        callback(control)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后<code>callback</code>里面调用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">observer.on(.next(getter(control)))</div></pre></td></tr></table></figure>
+<p>发射一个值，调用<code>getter</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">getter: &#123; textField in</div><div class="line">                textField.text</div><div class="line">            &#125;</div></pre></td></tr></table></figure>
+<p>也就是发射了一个<code>textField.text</code>。</p>
+<p>这个时候应该明白是怎么回事了吧。</p>
+<h3 id="监听UITextField"><a href="#监听UITextField" class="headerlink" title="监听UITextField"></a>监听UITextField</h3><p>这里测试一下监听<code>UITextField</code>的事件触发发射出来的<code>text</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">numberOne.rx.text.asObservable().subscribe&#123;</div><div class="line">            print($0)</div><div class="line">        &#125;.disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>把它变成一个可被观察者，然后订阅它。</p>
+<p>程序启动会发射一个<code>Optional(&quot;&quot;)</code>, 获得焦点或也会发射一个<code>Optional(&quot;&quot;)</code>，然后每次输入都会把当前的文本发射出来:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">next(Optional(&quot;&quot;))</div><div class="line">next(Optional(&quot;&quot;))</div><div class="line">next(Optional(&quot;1&quot;))</div><div class="line">next(Optional(&quot;12&quot;))</div><div class="line">next(Optional(&quot;123&quot;))</div><div class="line">next(Optional(&quot;1234&quot;))</div></pre></td></tr></table></figure>
+<p>这里发现它是一个<code>Optional</code>的值，可以通过<code>orEmpty</code>可以把<code>String?</code>转成<code>String</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">numberOne.rx.text.orEmpty.asObservable().subscribe&#123;</div><div class="line">            print($0)</div><div class="line">        &#125;.disposed(by: disposeBag)</div><div class="line"></div><div class="line">output:</div><div class="line">next()</div><div class="line">next()</div><div class="line">next(1)</div><div class="line">next(12)</div><div class="line">next(123)</div><div class="line">next(1234)</div></pre></td></tr></table></figure>
+<p>我们再想把空字符串过滤掉，可以使用<code>filter</code>，就不会订阅到<code>next()</code>了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">numberOne.rx.text.orEmpty.asObservable()</div><div class="line">            .filter&#123;</div><div class="line">                return $0 != &quot;&quot;</div><div class="line">            &#125;</div><div class="line">            .subscribe&#123;</div><div class="line">            print($0)</div><div class="line">        &#125;.disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="combineLatest"><a href="#combineLatest" class="headerlink" title="combineLatest"></a>combineLatest</h3><p>还记得我们的目的是获取最新的<code>text</code>然后相加再显示到<code>result</code>吧，那么这里我们可以使用<code>combineLatest</code>来获取最新序列的组合。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Observable.combineLatest(numberOne.rx.text.orEmpty,numberTwo.rx.text.orEmpty,numberThree.rx.text.orEmpty) &#123; (numberOneText, numberTwoText, numberThreeText) -&gt; Int in</div><div class="line">                return (Int(numberOneText) ?? 0) + (Int(numberTwoText) ?? 0) + (Int(numberThreeText) ?? 0)</div><div class="line">            &#125;.map&#123;</div><div class="line">                $0.description</div><div class="line">            &#125;.bindTo(result.rx.text)</div><div class="line">            .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>首先获取最新输入的字符串，然后转成<code>Int</code>， 因为字母会转换失败，所以返回的是一个<code>Optional</code>，如果转换失败就默认0，然后相加返回，再转成字符串绑定到<code>result.rx.text</code>。</p>
+<p>这里的<code>bindTo</code>其实就是订阅序列，然后更新<code>result.rx.text</code>的值。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然这个例子比较简单，但是相信大家能够体会到前面的一大堆概念在开发的应用以及带给我们的便利了，后续会继续学习复杂一点的例子。</p>
+<p>本文代码地址: </p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftCalculator</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/24/rxswift-part-three/" rel="next" title="RxSwift学习之旅 - 序列的基本操作">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 序列的基本操作
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+      <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "",
+          productKey: "68a777ea87db47d58ee038a1efc863df",
+          target: "cloud-tie-wrapper"
+        };
+      </script>
+      <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#界面设计"><span class="nav-number">2.</span> <span class="nav-text">界面设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目准备"><span class="nav-number">3.</span> <span class="nav-text">项目准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UITextField-rx-text"><span class="nav-number">4.</span> <span class="nav-text">UITextField.rx.text</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听UITextField"><span class="nav-number">5.</span> <span class="nav-text">监听UITextField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#combineLatest"><span class="nav-number">6.</span> <span class="nav-text">combineLatest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
