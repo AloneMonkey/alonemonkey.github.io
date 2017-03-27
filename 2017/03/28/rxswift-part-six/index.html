@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="chromium," />
+  <meta name="keywords" content="RxSwift," />
 
 
 
@@ -94,18 +94,16 @@
 
 
 
-<meta name="description" content="在Mac下下载编译并运行chromium的过程。">
+<meta name="description" content="什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac下载编译chromium源码">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/06/15/chromium-source-compile/index.html">
+<meta property="og:title" content="RxSwift学习之旅 - Observable 和 Driver">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/03/28/rxswift-part-six/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="在Mac下下载编译并运行chromium的过程。">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
-<meta property="og:updated_time" content="2016-06-18T03:08:32.000Z">
+<meta property="og:description" content="什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~">
+<meta property="og:updated_time" content="2017-03-27T16:33:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac下载编译chromium源码">
-<meta name="twitter:description" content="在Mac下下载编译并运行chromium的过程。">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png">
+<meta name="twitter:title" content="RxSwift学习之旅 - Observable 和 Driver">
+<meta name="twitter:description" content="什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~">
 
 
 
@@ -123,7 +121,7 @@
   };
 </script>
 
-  <title> Mac下载编译chromium源码 | AloneMonkey </title>
+  <title> RxSwift学习之旅 - Observable 和 Driver | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -283,7 +281,7 @@
             
             
               
-                Mac下载编译chromium源码
+                RxSwift学习之旅 - Observable 和 Driver
               
             
           </h1>
@@ -295,8 +293,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-15T00:00:00+08:00" content="2016-06-15">
-              2016-06-15
+            <time itemprop="dateCreated" datetime="2017-03-28T00:00:00+08:00" content="2017-03-28">
+              2017-03-28
             </time>
           </span>
 
@@ -309,8 +307,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/chrome/" itemprop="url" rel="index">
-                    <span itemprop="name">chrome</span>
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
                   </a>
                 </span>
 
@@ -342,37 +340,57 @@
       
 
       
-        <h3 id="安装depot-tools工具"><a href="#安装depot-tools工具" class="headerlink" title="安装depot_tools工具"></a>安装depot_tools工具</h3><h4 id="获取depot-tools工具"><a href="#获取depot-tools工具" class="headerlink" title="获取depot_tools工具"></a>获取depot_tools工具</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git</div></pre></td></tr></table></figure>
-<h4 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h4><p>把<code>depot_tools</code>工具路径添加到系统的环境变量，<code>~/.bashrc</code> or <code>~/.zshrc</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export PATH=$PATH:/path/to/depot_tools</div></pre></td></tr></table></figure>
-<h3 id="获取chromium源码"><a href="#获取chromium源码" class="headerlink" title="获取chromium源码"></a>获取chromium源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir chromium</div><div class="line">cd chromium</div><div class="line">fetch --no-history chromium</div></pre></td></tr></table></figure>
-<p><code>--no-history</code>参数可以不下载以往的历史信息。<br>如果网络中断了，输入<code>gclient sync</code>继续下载。</p>
-<p>获取依赖：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gclient runhooks</div></pre></td></tr></table></figure>
-<p>更新代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git rebase-update</div><div class="line">gclient sync</div></pre></td></tr></table></figure>
-<h3 id="编译chromium源码"><a href="#编译chromium源码" class="headerlink" title="编译chromium源码"></a>编译chromium源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GYP_DEFINES=mac_sdk=10.11（可选）</div><div class="line">export GYP_GENERATORS=ninja,xcode-ninja</div><div class="line"></div><div class="line">./build/gyp_chromium</div><div class="line"></div><div class="line">ninja -C out/Release/ chrome</div></pre></td></tr></table></figure>
-<p>最新使用<code>gn</code>用于生成ninja文件，<code>gn gen out/Default</code>。</p>
-<p>问题：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Traceback (most recent call last):</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 712, in &lt;module&gt;</div><div class="line">    sys.exit(main(sys.argv[1:]))</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 29, in main</div><div class="line">    exit_code = executor.Dispatch(args)</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 44, in Dispatch</div><div class="line">    return getattr(self, method)(*args[1:])</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 67, in ExecCopyBundleResource</div><div class="line">    self._CopyStringsFile(source, dest)</div><div class="line">  File &quot;./gyp-mac-tool&quot;, line 133, in _CopyStringsFile</div><div class="line">    import CoreFoundation</div><div class="line">ImportError: No module named CoreFoundation</div><div class="line">[6208/20844] MACTOOL copy-bundle-resource ../../chrome/app/nibs/AppMenu.xib</div></pre></td></tr></table></figure>
-<p>解决：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install pyobjc</div></pre></td></tr></table></figure>
-<h3 id="运行chromiun"><a href="#运行chromiun" class="headerlink" title="运行chromiun"></a>运行chromiun</h3><p>编译完成后会在<code>out/Release</code>下生成<code>Chromium.app</code>，直接运行：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1465957731539.png" alt="image"></p>
-<h3 id="编译iOS平台"><a href="#编译iOS平台" class="headerlink" title="编译iOS平台"></a>编译iOS平台</h3><p>为了编译成iOS平台的版本，可以直接把本地存在的Mac checkout转成iOS checkout，只要在<code>chromium/.gclient</code>文件的最后加一行<code>target_os = [&quot;ios&quot;]</code></p>
-<p>这里使用<code>gn</code>生成ninja文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gn args out/Debug-iphonesimulator</div></pre></td></tr></table></figure>
-<p>写入内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># Set to true if you have a valid code signing key.</div><div class="line">ios_enable_code_signing = false</div><div class="line">target_os = &quot;ios&quot;</div><div class="line"># Set to &quot;x86&quot;, &quot;x64&quot;, &quot;arm&quot;, &quot;armv7&quot;, &quot;arm64&quot;. &quot;x86&quot; and &quot;x64&quot; will create a</div><div class="line"># build to run on the iOS simulator (and set use_ios_simulator = true), all</div><div class="line"># others are for an iOS device.</div><div class="line">target_cpu = &quot;x64&quot;</div><div class="line"># Release vs debug build.</div><div class="line">is_debug = true</div></pre></td></tr></table></figure>
-<p>最后执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gclient sync</div></pre></td></tr></table></figure>
-<p>编译：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ninja -C out/Debug-iphonesimulator All</div></pre></td></tr></table></figure>
-<p>运行测试app:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./iossim -d &quot;iPhone 6&quot; -s 9.3 ./base_unittests.app</div></pre></td></tr></table></figure>
-<h3 id="单个模块"><a href="#单个模块" class="headerlink" title="单个模块"></a>单个模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ninja -C out/Debug-iphonesimulator net</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export GYP_GENERATORS=xcode-ninja </div><div class="line">export CHROMIUM_GYP_FILE=&apos;net/net.gyp&apos;</div><div class="line">./build/gyp_chromium</div></pre></td></tr></table></figure>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.chromium.org/developers/how-tos/get-the-code" target="_blank" rel="external">Get the Code: Checkout, Build, &amp; Run Chromium</a></p>
+        <h3 id="什么是Driver"><a href="#什么是Driver" class="headerlink" title="什么是Driver"></a>什么是Driver</h3><p><code>Driver</code>的出现是为了让我们在写UI层的响应式代码的时候更加直观。</p>
+<p>为什么它的名字叫<code>Driver</code>？它意图更好的通过数据去驱动我们的应用程序。</p>
+<p>比如:</p>
+<ul>
+<li>从数据模型去驱动UI</li>
+<li>使用其它UI元素的值去驱动UI</li>
+<li>…….</li>
+</ul>
+<p>在正常开发中，由于用户操作导致错误发生可能会使我们的应用程序崩溃。</p>
+<p>由于UI元素操作通常不是线程安全的，要保证在主线程操作。</p>
+<p>或者某个序列在有多个订阅者者时只需要<code>shareReplay(1)</code>。</p>
+<h3 id="经典例子"><a href="#经典例子" class="headerlink" title="经典例子"></a>经典例子</h3><p>先来看一下经典的例子，看看我们在正常的开发中可能会写出如下的代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .bind(to: resultCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">results</div><div class="line">    .bind(to: resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>这段代码的意图是：</p>
+<ul>
+<li>对用户的输入进行节流</li>
+<li>每次查询连接服务器搜索结果</li>
+<li>绑定结果到UI结果</li>
+</ul>
+<p>我们来看看这段代码有什么问题？</p>
+<ul>
+<li>如果<code>fetchAutoCompleteItems</code>发生了错误，网络错误或者解析出错，这个错误会导致取消所有绑定，UI界面也不会更新新的结果。</li>
+<li>如果<code>fetchAutoCompleteItems</code>在后台线程返回了结果，结果可能会在后台线程绑定到UI界面，这样会导致不确定的崩溃。</li>
+<li>结果绑定到了两个UI元素，意味着，每次用户搜索，会发送2次请求，这不是我们想要的行为。</li>
+</ul>
+<p>所以规范一点的写法应该是这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">            .observeOn(MainScheduler.instance)  // results are returned on MainScheduler</div><div class="line">            .catchErrorJustReturn([])           // in the worst case, errors are handled</div><div class="line">    &#125;</div><div class="line">    .shareReplay(1)                             // HTTP requests are shared and results replayed</div><div class="line">                                                // to all UI elements</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .bind(to: resultCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">results</div><div class="line">    .bind(to: resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>要保证这些所有的情况都被处理在大的系统里面是很难的，这里有一种简单的方法哪就是使用<code>Driver</code>。来看下下面的例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text.asDriver()        // This converts a normal sequence into a `Driver` sequence.</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">            .asDriver(onErrorJustReturn: [])  // Builder just needs info about what to return in case of error.</div><div class="line">    &#125;</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .drive(resultCount.rx.text)               // If there is a `drive` method available instead of `bindTo`,</div><div class="line">    .disposed(by: disposeBag)              // that means that the compiler has proven that all properties</div><div class="line">                                              // are satisfied.</div><div class="line">results</div><div class="line">    .drive(resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="Driver特性"><a href="#Driver特性" class="headerlink" title="Driver特性"></a>Driver特性</h3><p>上面改进后的版本发生了什么？首先第一个<code>asDriver</code>把<code>ControlProperty</code>对象转换成了<code>Driver</code>对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">query.rx.text.asDriver()</div></pre></td></tr></table></figure>
+<p><code>Driver</code>拥有<code>ControlProperty</code>的所有属性，其实它是在上面包了一层。</p>
+<p>第二个改变的地方是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.asDriver(onErrorJustReturn: [])</div></pre></td></tr></table></figure>
+<p>任何的可被观察的序列都能转成<code>Driver</code>，只要满足以下3点:</p>
+<ul>
+<li>不能抛出错误</li>
+<li>订阅在主线程</li>
+<li>多个订阅者<code>shareReplay(1)</code></li>
+</ul>
+<p><code>asDriver(onErrorJustReturn: [])</code>其实等同于:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let safeSequence = xs</div><div class="line">  .observeOn(MainScheduler.instance)       // observe events on main scheduler</div><div class="line">  .catchErrorJustReturn(onErrorJustReturn) // can&apos;t error out</div><div class="line">  .shareReplayLatestWhileConnected         // side effects sharing</div><div class="line">return Driver(raw: safeSequence)           // wrap it up</div></pre></td></tr></table></figure>
+<p>最后一点就是使用<code>drive</code>代替<code>bindTo</code>。</p>
+<p>所以下面的代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let intDriver = sequenceOf(1, 2, 3, 4, 5, 6)</div><div class="line">    .asDriver(onErrorJustReturn: 1)</div><div class="line">    .map &#123; $0 + 1 &#125;</div><div class="line">    .filter &#123; $0 &lt; 5 &#125;</div></pre></td></tr></table></figure>
+<p>等价:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let intObservable = sequenceOf(1, 2, 3, 4, 5, 6)</div><div class="line">    .observeOn(MainScheduler.sharedInstance)</div><div class="line">    .catchErrorJustReturn(1)</div><div class="line">    .map &#123; $0 + 1 &#125;</div><div class="line">    .filter &#123; $0 &lt; 5 &#125;</div><div class="line">    .shareReplay(1)</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过例子，大家也看到了什么时候应该使用<code>Driver</code>，如果你的代码需要满足上面三种情况的话，那么你可以使用<code>Driver</code>。否则如果你要多次切换线程、自己捕获传递错误、或者其它，可以仍用<code>Observable</code>。</p>
+<p>大家试着把上一篇讲的注册项目改成<code>Driver</code>。</p>
+<p>然后参考<code>Driver</code>的版本:</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftRegisterDriver</a></p>
 
       
     </div>
@@ -474,7 +492,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/chromium/" rel="tag">#chromium</a>
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
           
         </div>
       
@@ -483,17 +501,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/25/encrypt-jar-class/" rel="next" title="jar包加密保护解决方案">
-                <i class="fa fa-chevron-left"></i> jar包加密保护解决方案
+              <a href="/2017/03/27/rxswift-part-five/" rel="next" title="RxSwift学习之旅 - 用户注册">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 用户注册
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/06/15/gn-gyp-ninja/" rel="prev" title="GYP，GN和Ninja">
-                GYP，GN和Ninja <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -668,7 +682,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装depot-tools工具"><span class="nav-number">1.</span> <span class="nav-text">安装depot_tools工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取depot-tools工具"><span class="nav-number">1.1.</span> <span class="nav-text">获取depot_tools工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加环境变量"><span class="nav-number">1.2.</span> <span class="nav-text">添加环境变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取chromium源码"><span class="nav-number">2.</span> <span class="nav-text">获取chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译chromium源码"><span class="nav-number">3.</span> <span class="nav-text">编译chromium源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行chromiun"><span class="nav-number">4.</span> <span class="nav-text">运行chromiun</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译iOS平台"><span class="nav-number">5.</span> <span class="nav-text">编译iOS平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单个模块"><span class="nav-number">6.</span> <span class="nav-text">单个模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Driver"><span class="nav-number">1.</span> <span class="nav-text">什么是Driver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典例子"><span class="nav-number">2.</span> <span class="nav-text">经典例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Driver特性"><span class="nav-number">3.</span> <span class="nav-text">Driver特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>
