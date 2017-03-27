@@ -1,0 +1,844 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RxSwift," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文以最常见的用户注册界面为例，学习RxSwift在实践中的更多应用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift学习之旅 - 用户注册">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/03/27/rxswift-part-five/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="本文以最常见的用户注册界面为例，学习RxSwift在实践中的更多应用。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490535465031.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490539454404.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490545656582.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490618590053.png">
+<meta property="og:updated_time" content="2017-03-27T12:56:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxSwift学习之旅 - 用户注册">
+<meta name="twitter:description" content="本文以最常见的用户注册界面为例，学习RxSwift在实践中的更多应用。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490535465031.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RxSwift学习之旅 - 用户注册 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RxSwift学习之旅 - 用户注册
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-27T00:00:00+08:00" content="2017-03-27">
+              2017-03-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>在本文开始前，我们先来理一理一个正常的注册流程中可能会有哪些需求:</p>
+<ul>
+<li>用户名或密码是否为空</li>
+<li>用户名密码是否合法</li>
+<li>重复密码是否一致</li>
+<li>点击登录联网验证</li>
+<li>处理返回结果</li>
+<li>…….</li>
+</ul>
+<p>在这里其实可以把很多处理归并到<code>被观察者 - 订阅者</code>模式，通过某种事件触发某种行为，某种行为依赖不同事件的状态，所以我们可以通过<code>RxSwift</code>很方便的去解决我们的问题。</p>
+<h3 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h3><p>新建项目<code>RxSwiftRegister</code>，<code>pod</code>引入<code>RxSwift</code>和<code>RxCocoa</code>。先来设计一个简单的界面，界面上会有账号和密码的输入框，注册按钮，以及提示信息，然后绑定到<code>LoginViewController</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490535465031.png" alt="image"></p>
+<h3 id="验证为空"><a href="#验证为空" class="headerlink" title="验证为空"></a>验证为空</h3><p>这里需要验证用户名是不是为空，是否已经注册，密码是否为空，重复密码是否一致。</p>
+<p>为了让逻辑与视图分离，这里我们使用<code>MVVM</code>模式，如果你还不知道<code>MVVM</code>可以自己先了解一下。</p>
+<p>新建<code>LoginViewModel</code>文件，接受账号、密码、重复密码作为被观察者，然后对其中的<code>text</code>进行验证处理，返回一个验证的结果(暂时用Bool表示)。</p>
+<p>文件目录:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490539454404.png" alt="image"></p>
+<p><code>LoginViewModel</code>编写如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">class LoginViewModel &#123;</div><div class="line">    let validatedUsername: Observable&lt;Bool&gt;</div><div class="line">    let validatedPassword: Observable&lt;Bool&gt;</div><div class="line">    let validatedPasswordRepeated: Observable&lt;Bool&gt;</div><div class="line">    </div><div class="line">    init(input:(</div><div class="line">        username: Observable&lt;String&gt;,</div><div class="line">        password: Observable&lt;String&gt;,</div><div class="line">        repeatedPassword: Observable&lt;String&gt;,</div><div class="line">        registerTap: Observable&lt;Void&gt;</div><div class="line">        ))&#123;</div><div class="line">        </div><div class="line">        validatedUsername = input.username.map&#123;</div><div class="line">            username in</div><div class="line">            return username == &quot;&quot; ? false : true</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        validatedPassword = input.password.map&#123;</div><div class="line">            password in</div><div class="line">            return password == &quot;&quot; ? false : true</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        validatedPasswordRepeated = Observable.combineLatest(input.password, input.repeatedPassword)&#123;</div><div class="line">            password, repeatedPassword in</div><div class="line">            if repeatedPassword == &quot;&quot;&#123;</div><div class="line">                return false</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            if password != repeatedPassword&#123;</div><div class="line">                return false</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            return true</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里只是简单验证是否为空，后面再改进。</p>
+<p><code>LoginViewController</code>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">class LoginViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    @IBOutlet weak var username: UITextField!</div><div class="line">    @IBOutlet weak var usernameValidation: UILabel!</div><div class="line">    </div><div class="line">    @IBOutlet weak var password: UITextField!</div><div class="line">    @IBOutlet weak var passwordValidation: UILabel!</div><div class="line">    </div><div class="line">    @IBOutlet weak var repoatedPassword: UITextField!</div><div class="line">    @IBOutlet weak var repeatedPasswordValidation: UILabel!</div><div class="line">    </div><div class="line">    @IBOutlet weak var registerIndicator: UIActivityIndicatorView!</div><div class="line">    @IBOutlet weak var register: UIButton!</div><div class="line">    </div><div class="line">    let disposed = DisposeBag()</div><div class="line">    </div><div class="line">    override func viewDidLoad() &#123;</div><div class="line">        super.viewDidLoad()</div><div class="line">        </div><div class="line">        let viewModel = LoginViewModel(input:(</div><div class="line">            username: username.rx.text.orEmpty.asObservable(),</div><div class="line">            password: password.rx.text.orEmpty.asObservable(),</div><div class="line">            repeatedPassword: repoatedPassword.rx.text.orEmpty.asObservable(),</div><div class="line">            registerTap: register.rx.tap.asObservable()</div><div class="line">        ))</div><div class="line">        </div><div class="line">        viewModel.validatedUsername.subscribe(</div><div class="line">            onNext:&#123;</div><div class="line">                valid in</div><div class="line">                print(&quot;username is \(valid)&quot;)</div><div class="line">            &#125;</div><div class="line">        ).disposed(by: disposed)</div><div class="line">        </div><div class="line">        viewModel.validatedPassword.subscribe(</div><div class="line">            onNext:&#123;</div><div class="line">                valid in</div><div class="line">                print(&quot;password is \(valid)&quot;)</div><div class="line">            &#125;</div><div class="line">        ).disposed(by: disposed)</div><div class="line">        </div><div class="line">        viewModel.validatedPasswordRepeated.subscribe(</div><div class="line">            onNext:&#123;</div><div class="line">                valid in</div><div class="line">                print(&quot;repoatedPassword is \(valid)&quot;)</div><div class="line">            &#125;</div><div class="line">        ).disposed(by: disposed)</div><div class="line">        </div><div class="line">    &#125;</div><div class="line"></div><div class="line">    override func didReceiveMemoryWarning() &#123;</div><div class="line">        super.didReceiveMemoryWarning()</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>订阅账号、密码、重复密码是否验证成功的值打印出来，运行可以得到验证，一开始都是false，输入了后变成true。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">username is false</div><div class="line">password is false</div><div class="line">repoatedPassword is false</div><div class="line">username is false</div><div class="line">username is true</div><div class="line">username is true</div><div class="line">password is false</div><div class="line">repoatedPassword is false</div><div class="line">password is true</div><div class="line">repoatedPassword is false</div><div class="line">password is true</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is true</div></pre></td></tr></table></figure>
+<p>接下来来看一些问题，当有两个订阅者去订阅用户名是否验证ok，然后在验证的时候去打印一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">viewModel.validatedUsername.subscribe(</div><div class="line">    onNext:&#123;</div><div class="line">        valid in</div><div class="line">        print(&quot;username is \(valid)&quot;)</div><div class="line">    &#125;</div><div class="line">).disposed(by: disposed)</div><div class="line"></div><div class="line">viewModel.validatedUsername.subscribe(</div><div class="line">    onNext:&#123;</div><div class="line">        valid in</div><div class="line">        print(&quot;username 2 is \(valid)&quot;)</div><div class="line">    &#125;</div><div class="line">).disposed(by: disposed)</div><div class="line"></div><div class="line">-------------------------------------------</div><div class="line"></div><div class="line">validatedUsername = input.username.map&#123;</div><div class="line">    username in</div><div class="line">    print(username)</div><div class="line">    return username == &quot;&quot; ? false : true</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>会发现，多了一个订阅者后，验证的逻辑会执行两次，这并不是我们想要的效果，当验证是一个网络请求的话，会发出两个一样的。同一个值只需要验证一次，然后告诉所有的订阅者就行了。这里需要使用到<code>shareReplay(1)</code>，保证多个订阅者共享单个订阅，并重播最新的一次<code>replay</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">validatedUsername = input.username.map&#123;</div><div class="line">    username in</div><div class="line">    print(username)</div><div class="line">    return username == &quot;&quot; ? false : true</div><div class="line">&#125;.shareReplay(1)</div></pre></td></tr></table></figure>
+<p>同样对密码和重复密码也只需要共享一次。</p>
+<h3 id="绑定错误到Label"><a href="#绑定错误到Label" class="headerlink" title="绑定错误到Label"></a>绑定错误到Label</h3><p>上面只是通过控制台打印了验证的对或错，但是并不知道错的原因，也没有显示到<code>label</code>上，现在来实现这个效果，我们要定义个表示不同验证结果和信息的枚举。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">enum ValidationResult &#123;</div><div class="line">    case ok(message: String)    //验证成功和信息</div><div class="line">    case empty                  //输入为空</div><div class="line">    case validating</div><div class="line">    case failed(message: String)      //验证失败的原因</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后修改返回结果类型为<code>ValidationResult</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">enum ValidationResult &#123;</div><div class="line">    case ok(message: String)</div><div class="line">    case empty</div><div class="line">    case validating</div><div class="line">    case failed(message: String)</div><div class="line">&#125;</div><div class="line"></div><div class="line">class LoginViewModel &#123;</div><div class="line">    let validatedUsername: Observable&lt;ValidationResult&gt;</div><div class="line">    let validatedPassword: Observable&lt;ValidationResult&gt;</div><div class="line">    let validatedPasswordRepeated: Observable&lt;ValidationResult&gt;</div><div class="line">    </div><div class="line">    init(input:(</div><div class="line">        username: Observable&lt;String&gt;,</div><div class="line">        password: Observable&lt;String&gt;,</div><div class="line">        repeatedPassword: Observable&lt;String&gt;,</div><div class="line">        registerTap: Observable&lt;Void&gt;</div><div class="line">        ))&#123;</div><div class="line">        </div><div class="line">        validatedUsername = input.username.map&#123;</div><div class="line">            username in</div><div class="line">            return username == &quot;&quot; ? .empty : .ok(message: &quot;验证通过&quot;)</div><div class="line">        &#125;.shareReplay(1)</div><div class="line">        </div><div class="line">        validatedPassword = input.password.map&#123;</div><div class="line">            password in</div><div class="line">            return password == &quot;&quot; ? .empty : .ok(message: &quot;验证通过&quot;)</div><div class="line">        &#125;.shareReplay(1)</div><div class="line">        </div><div class="line">        validatedPasswordRepeated = Observable.combineLatest(input.password, input.repeatedPassword)&#123;</div><div class="line">            password, repeatedPassword in</div><div class="line">            if repeatedPassword == &quot;&quot;&#123;</div><div class="line">                return .empty</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            if password != repeatedPassword&#123;</div><div class="line">                return .failed(message:&quot;两次输入的密码不一致&quot;)</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            return .ok(message: &quot;验证通过&quot;)</div><div class="line">        &#125;.shareReplay(1)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后绑定错误到<code>label</code>，为了让<code>ValidationResult</code>能绑定到<code>label</code>，需要给出不同结果的文字颜色和文字信息，这时需要给<code>ValidationResult</code>扩展一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">extension ValidationResult: CustomStringConvertible &#123;</div><div class="line">    var description: String &#123;</div><div class="line">        switch self &#123;</div><div class="line">        case let .ok(message):</div><div class="line">            return message</div><div class="line">        case .empty:</div><div class="line">            return &quot;&quot;</div><div class="line">        case .validating:</div><div class="line">            return &quot;validating ...&quot;</div><div class="line">        case let .failed(message):</div><div class="line">            return message</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">struct ValidationColors &#123;</div><div class="line">    static let okColor = UIColor(red: 138.0 / 255.0, green: 221.0 / 255.0, blue: 109.0 / 255.0, alpha: 1.0)</div><div class="line">    static let errorColor = UIColor.red</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension ValidationResult &#123;</div><div class="line">    var textColor: UIColor &#123;</div><div class="line">        switch self &#123;</div><div class="line">        case .ok:</div><div class="line">            return ValidationColors.okColor</div><div class="line">        case .empty:</div><div class="line">            return UIColor.black</div><div class="line">        case .validating:</div><div class="line">            return UIColor.black</div><div class="line">        case .failed:</div><div class="line">            return ValidationColors.errorColor</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同样为了使<code>label</code>能够根据对应的信息和颜色更新，需要提供:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">extension Reactive where Base: UILabel &#123;</div><div class="line">    var validationResult: UIBindingObserver&lt;Base, ValidationResult&gt; &#123;</div><div class="line">        return UIBindingObserver(UIElement: base) &#123; label, result in</div><div class="line">            label.textColor = result.textColor</div><div class="line">            label.text = result.description</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后绑定:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">viewModel.validatedUsername</div><div class="line">    .bindTo(usernameValidation.rx.validationResult)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">viewModel.validatedPassword</div><div class="line">    .bindTo(passwordValidation.rx.validationResult)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">viewModel.validatedPasswordRepeated</div><div class="line">    .bindTo(repeatedPasswordValidation.rx.validationResult)</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>效果如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490545656582.png" alt="image"></p>
+<h3 id="注册按钮状态"><a href="#注册按钮状态" class="headerlink" title="注册按钮状态"></a>注册按钮状态</h3><p>接下来需要根据上面的验证结果来确定注册按钮的可点击状态，只有当账号、密码、重复密码都验证通过之后才会变成可点击的状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">let registerEnabled: Observable&lt;Bool&gt;</div><div class="line"></div><div class="line">registerEnabled = Observable.combineLatest(validatedUsername, validatedPassword, validatedPasswordRepeated)&#123;</div><div class="line">    username, password, repeatedPassword in</div><div class="line">    username.isValid &amp;&amp;</div><div class="line">    password.isValid &amp;&amp;</div><div class="line">    repeatedPassword.isValid</div><div class="line">    &#125;</div><div class="line">    .distinctUntilChanged()</div><div class="line">    .shareReplay(1)</div><div class="line"></div><div class="line">viewModel.registerEnabled.subscribe(</div><div class="line">    onNext:&#123;</div><div class="line">        [weak self] valid in</div><div class="line">        guard let `self` = self else&#123;</div><div class="line">            return</div><div class="line">        &#125;</div><div class="line">        self.register.isEnabled = valid</div><div class="line">        self.register.alpha = valid ? 1.0 : 0.5</div><div class="line">    &#125;</div><div class="line">).disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>这里有几点：</p>
+<ul>
+<li>只需要共享一次，使用<code>shareReplay</code></li>
+<li>不用每次改变都发射给订阅者，只有当发生改变时再发射，使用<code>distinctUntilChanged</code></li>
+<li>捕获<code>self</code>的弱引用，然后再里面转成强引用</li>
+</ul>
+<h3 id="网络验证"><a href="#网络验证" class="headerlink" title="网络验证"></a>网络验证</h3><p>前面只是在本地做了一个简单的验证，现在想要验证输入的账号是否能注册，就需要发送网络请求去验证。</p>
+<p>这里参考官方给出的例子，通过url判断是否有效:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">class GitHubAPI&#123;</div><div class="line">    let URLSession: URLSession</div><div class="line">    </div><div class="line">    static let sharedAPI = GitHubAPI(</div><div class="line">        URLSession: Foundation.URLSession.shared</div><div class="line">    )</div><div class="line">    </div><div class="line">    init(URLSession: URLSession)&#123;</div><div class="line">        self.URLSession = URLSession</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func usernameAvailable(_ username: String) -&gt; Observable&lt;Bool&gt;&#123;</div><div class="line">        let url = URL(string: &quot;https://github.com/\(username.URLEscaped)&quot;)!</div><div class="line">        let request = URLRequest(url: url)</div><div class="line">        return self.URLSession.rx.response(request: request)</div><div class="line">            .map&#123;</div><div class="line">                (response, _) in</div><div class="line">                return response.statusCode == 404</div><div class="line">            &#125;</div><div class="line">            .catchErrorJustReturn(false)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果url存在就认为已注册，否则就是没有。</p>
+<p>那么用户名验证可以改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">//flatMapLatest 如果有新的值发射出来，则会取消原来发出的网络请求</div><div class="line">//flatMap 则不会</div><div class="line">validatedUsername = input.username</div><div class="line">    .flatMapLatest&#123;</div><div class="line">    username -&gt; Observable&lt;ValidationResult&gt; in</div><div class="line">    //是否为空</div><div class="line">    if username.characters.count == 0&#123;</div><div class="line">        return Observable.just(.empty)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //是否是数字和字母</div><div class="line">    if username.rangeOfCharacter(from: CharacterSet.alphanumerics.inverted) != nil &#123;</div><div class="line">        return  Observable.just(.failed(message: &quot;Username can only contain numbers or digits&quot;))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    let loadingValue = ValidationResult.validating</div><div class="line">    </div><div class="line">    return API.usernameAvailable(username)</div><div class="line">            .map&#123;</div><div class="line">                available in</div><div class="line">                if available &#123;</div><div class="line">                    return .ok(message: &quot;Username available&quot;)</div><div class="line">                &#125;</div><div class="line">                else &#123;</div><div class="line">                    return .failed(message: &quot;Username already taken&quot;)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            .startWith(loadingValue)  //开始发射一个正在验证的值</div><div class="line">            .observeOn(MainScheduler.instance)   //将监听事件绑定到主线程</div><div class="line">            .catchErrorJustReturn(.failed(message: &quot;Error contacting server&quot;))</div><div class="line">&#125;.shareReplay(1)</div></pre></td></tr></table></figure>
+<p>同样把密码和重复密码也改下。</p>
+<h3 id="注册请求"><a href="#注册请求" class="headerlink" title="注册请求"></a>注册请求</h3><p>这里和官方例子一样，模拟下注册过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func register(_ username: String, password: String) -&gt; Observable&lt;Bool&gt;&#123;</div><div class="line">    let registerResult = arc4random() % 5 == 0 ? false : true</div><div class="line">    return Observable.just(registerResult)</div><div class="line">            .delay(1.0, scheduler: MainScheduler.instance)  //延迟一秒</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后绑定注册的点击事件，执行注册请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//合并注册点击和账号密码序列，每次注册点击，从第二个序列取最新的值</div><div class="line">let usernameAndPassword = Observable.combineLatest(input.username, input.password) &#123; ($0, $1) &#125;</div><div class="line">        </div><div class="line">registered = input.registerTap.withLatestFrom(usernameAndPassword)</div><div class="line">    .flatMapLatest&#123;</div><div class="line">        (username, password) in</div><div class="line">        return API.register(username, password: password)</div><div class="line">                .observeOn(MainScheduler.instance)</div><div class="line">                .catchErrorJustReturn(false)</div><div class="line">                .trackActivity(registering)</div><div class="line">    &#125;.shareReplay(1)</div></pre></td></tr></table></figure>
+<p><code>trackActivity</code>是官方例子里面的，用于监控序列的计算中和结束。</p>
+<p>到此这个例子就结束了，如图:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490618590053.png" alt="image"></p>
+<h3 id="项目优化"><a href="#项目优化" class="headerlink" title="项目优化"></a>项目优化</h3><p>有几点交互需要优化一下:</p>
+<ul>
+<li>点击背景收起键盘</li>
+<li>点击键盘的<code>Next</code>调到下一个<code>UITextField</code></li>
+<li>点击<code>Go</code>触发注册流程</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//点击背景收起键盘</div><div class="line">let tapBackground = UITapGestureRecognizer()</div><div class="line">tapBackground.rx.event</div><div class="line">    .subscribe(onNext: &#123; [unowned self] _ in</div><div class="line">        self.view.endEditing(true)</div><div class="line">    &#125;)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line">view.addGestureRecognizer(tapBackground)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">username.rx.controlEvent(.editingDidEnd)</div><div class="line">    .subscribe&#123;</div><div class="line">        [unowned self] _ in</div><div class="line">        self.password.becomeFirstResponder()</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">password.rx.controlEvent(.editingDidEnd)</div><div class="line">    .subscribe&#123;</div><div class="line">        [unowned self] _ in</div><div class="line">        self.repoatedPassword.becomeFirstResponder()</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">repoatedPassword.rx.controlEvent(.editingDidEnd)</div><div class="line">    .bindTo(viewModel.registerTap)</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>完整源码见Github</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftRegister</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/25/rxswift-part-four/" rel="next" title="RxSwift学习之旅 - 加法运算">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 加法运算
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+      <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "",
+          productKey: "68a777ea87db47d58ee038a1efc863df",
+          target: "cloud-tie-wrapper"
+        };
+      </script>
+      <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#界面设计"><span class="nav-number">2.</span> <span class="nav-text">界面设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证为空"><span class="nav-number">3.</span> <span class="nav-text">验证为空</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定错误到Label"><span class="nav-number">4.</span> <span class="nav-text">绑定错误到Label</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册按钮状态"><span class="nav-number">5.</span> <span class="nav-text">注册按钮状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络验证"><span class="nav-number">6.</span> <span class="nav-text">网络验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册请求"><span class="nav-number">7.</span> <span class="nav-text">注册请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目优化"><span class="nav-number">8.</span> <span class="nav-text">项目优化</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
