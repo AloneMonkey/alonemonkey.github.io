@@ -102,7 +102,7 @@
 <meta property="og:description" content="在学习从网络获取数据然后更新视图之前，先来了解Moya，它是一个基于Alamofire封装的网络抽象层。">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490776469921.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490776597007.png">
-<meta property="og:updated_time" content="2017-03-29T10:35:06.000Z">
+<meta property="og:updated_time" content="2017-03-29T12:12:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - Moya + ObjectMapper">
 <meta name="twitter:description" content="在学习从网络获取数据然后更新视图之前，先来了解Moya，它是一个基于Alamofire封装的网络抽象层。">
@@ -377,7 +377,6 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">.subscribe&#123;</div><div class="line">    event in</div><div class="line">    switch event&#123;</div><div class="line">    case .next(let users):</div><div class="line">        for user in users&#123;</div><div class="line">            print(&quot;\(user.name)  \(user.age)&quot;)</div><div class="line">        &#125;</div><div class="line">    case .error(let error):</div><div class="line">        var message = &quot;出错了!&quot;</div><div class="line">        if let amerror = error as? AMError, let msg = amerror.message&#123;</div><div class="line">            message = msg</div><div class="line">        &#125;</div><div class="line">        print(message)</div><div class="line">    default:</div><div class="line">        break</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>大家想一想如果<code>result</code>返回的是单个对象的话，应该怎么写？</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><code>Moya</code>本身提供了强大的扩展能力，可以对其进行扩展，再加上<code>Rx</code>和<code>ObjectMapper</code>，我们可以对网络请求的发送、处理以及解析通过链式调用的方法来处理，写出优雅的代码。</p>
-<p>在下一篇文章中，将会讲到如何使用<code>Result</code>来代替这种<code>throw error</code>的方式。</p>
 <p>代码见github:</p>
 <p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftMoya</a></p>
 
