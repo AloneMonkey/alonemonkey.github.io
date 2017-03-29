@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Coder,安全,iOS,Android,逆向,越狱开发,正方,课表" />
+  <meta name="keywords" content="RxSwift," />
 
 
 
@@ -94,22 +94,18 @@
 
 
 
-<meta name="description" content="工具
-
-基于github的聊天工具分享人：AloneMonkey介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。">
+<meta name="description" content="RxSwift中发生的错误应该怎么处理？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第一期 Coder群周报">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/07/29/weekly/index.html">
+<meta property="og:title" content="RxSwift学习之旅 - 使用Result传递Error">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/03/31/rxswift-part-nine/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="工具
-
-基于github的聊天工具分享人：AloneMonkey介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。">
-<meta property="og:updated_time" content="2016-12-21T02:14:30.000Z">
+<meta property="og:description" content="RxSwift中发生的错误应该怎么处理？">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490794130730.png">
+<meta property="og:updated_time" content="2017-03-29T16:14:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一期 Coder群周报">
-<meta name="twitter:description" content="工具
-
-基于github的聊天工具分享人：AloneMonkey介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。">
+<meta name="twitter:title" content="RxSwift学习之旅 - 使用Result传递Error">
+<meta name="twitter:description" content="RxSwift中发生的错误应该怎么处理？">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490794130730.png">
 
 
 
@@ -127,7 +123,7 @@
   };
 </script>
 
-  <title> 第一期 Coder群周报 | AloneMonkey </title>
+  <title> RxSwift学习之旅 - 使用Result传递Error | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -287,7 +283,7 @@
             
             
               
-                第一期 Coder群周报
+                RxSwift学习之旅 - 使用Result传递Error
               
             
           </h1>
@@ -299,8 +295,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-29T00:00:00+08:00" content="2016-07-29">
-              2016-07-29
+            <time itemprop="dateCreated" datetime="2017-03-31T00:00:00+08:00" content="2017-03-31">
+              2017-03-31
             </time>
           </span>
 
@@ -313,8 +309,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/weekly/" itemprop="url" rel="index">
-                    <span itemprop="name">weekly</span>
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
                   </a>
                 </span>
 
@@ -346,22 +342,38 @@
       
 
       
-        <blockquote class="blockquote-center"><p>工具</p>
-</blockquote>
-<h3 id="基于github的聊天工具"><a href="#基于github的聊天工具" class="headerlink" title="基于github的聊天工具"></a><a href="https://gitter.im" target="_blank" rel="external">基于github的聊天工具</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：这是一个基于github的在线聊天工具，可以进入到某个git开源项目和大家一起参与聊天。</p>
-<a id="more"></a>
-<h3 id="科学上网利器Shadowsocks搭建"><a href="#科学上网利器Shadowsocks搭建" class="headerlink" title="科学上网利器Shadowsocks搭建"></a><a href="http://jackln.github.io/2015/08/23/shadowsocks-server/" target="_blank" rel="external">科学上网利器Shadowsocks搭建</a></h3><p>分享人：<a href="http://jackln.github.io" target="_blank" rel="external">Jack雷锋</a><br>介绍：Shadowsocks服务器搭建，有了它GFW就不在了。科学上网利器。</p>
-<h3 id="路由器附带验证码进行宽带登陆"><a href="#路由器附带验证码进行宽带登陆" class="headerlink" title="路由器附带验证码进行宽带登陆"></a><a href="http://www.unique-liu.com/291.html" target="_blank" rel="external">路由器附带验证码进行宽带登陆</a></h3><p>分享人：<a href="http://www.unique-liu.com" target="_blank" rel="external">老司机</a><br>介绍：因为个别ISP在登录上为了防止路由器或者其他的原因，添加了验证码，而我们就是不想去手动输入，想用路由器自动输入提交。</p>
-<p><br><br><blockquote class="blockquote-center"><p>PHP</p>
-</blockquote></p>
-<h3 id="一款纯PHP开发的开源高性能的PHP-socket-服务器框架"><a href="#一款纯PHP开发的开源高性能的PHP-socket-服务器框架" class="headerlink" title="一款纯PHP开发的开源高性能的PHP socket 服务器框架"></a><a href="http://www.workerman.net/" target="_blank" rel="external">一款纯PHP开发的开源高性能的PHP socket 服务器框架</a></h3><p>分享人：<a href="http://www.fmwhahaha.com" target="_blank" rel="external">fmwhahaha</a><br>介绍：Workerman是一款纯PHP开发的开源高性能的PHP socket 服务器框架。被广泛的用于手机app、手游服务端、网络游戏服务器、聊天室服务器、硬件通讯服务器、智能家居、车联网、物联网等领域的开发。 支持TCP长连接，支持Websocket、HTTP等协议，支持自定义协议。</p>
-<p><br><br><blockquote class="blockquote-center"><p>iOS</p>
-</blockquote></p>
-<h3 id="iOS-9-2-9-3-3-64-位设备越狱指南"><a href="#iOS-9-2-9-3-3-64-位设备越狱指南" class="headerlink" title="iOS 9.2~9.3.3 64 位设备越狱指南"></a><a href="https://jbguide.me/2016/07/25/ios-9-3-3-jailbreak/" target="_blank" rel="external">iOS 9.2~9.3.3 64 位设备越狱指南</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：介绍了本次盘古推出的越狱工具，相关问题的解释，以及插件兼容性测试表格。</p>
-<h3 id="mach-o格式分析"><a href="#mach-o格式分析" class="headerlink" title="mach-o格式分析"></a><a href="http://turingh.github.io/2016/03/07/mach-o%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%88%86%E6%9E%90/" target="_blank" rel="external">mach-o格式分析</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：Mach-O是iOS可执行文件格式，本文简单介绍了Mach-O文件构成以及结构说明。</p>
-<p><br><br><blockquote class="blockquote-center"><p>物联网</p>
-</blockquote></p>
-<h3 id="嵌入式系统知识和接口技术总结"><a href="#嵌入式系统知识和接口技术总结" class="headerlink" title="嵌入式系统知识和接口技术总结"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5MTM5ODQyMA==&amp;mid=2651192306&amp;idx=2&amp;sn=5c9b62c9f16120c45c29e1d582833694&amp;scene=0#wechat_redirect" target="_blank" rel="external">嵌入式系统知识和接口技术总结</a></h3><p>分享人：<a href="http://rayuu.com" target="_blank" rel="external">Rayu</a><br>介绍： 本文主要介绍嵌入式系统的一些基础知识，从嵌入式系统基础，包括嵌入式系统的定义、嵌入式系统的组成、实时系统、逻辑电路基础以及接口技术两方面介绍，希望对各位有帮助。—-摘自物联网智库</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我们知道一个可被观察序列在它们收到<code>error</code>或者<code>completed</code>事件的时候会终止，终止也就意味着它的订阅者不会收到任何新的消息了。当我们开始学习<code>Rx</code>的时候可能还不会意识到这条规则的后果。</p>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><p>很多的应用通常会在点击某个按钮的时候发网络请求，下面来看看这个例子。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490794130730.png" alt="image"></p>
+<p>点击<code>Success</code>模拟调用一个api请求，返回成功，同样，点击<code>Failure</code>触发<code>error</code>，点击会增加计数。</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><p>首先把成功的点击返回<code>true</code>，失败的点击返回<code>false</code>，然后合并成单个序列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">let successCount = Observable</div><div class="line">        .of(success.rx.tap.map &#123; true &#125;, failure.rx.tap.map &#123; false &#125;)</div><div class="line">        .merge()</div><div class="line">        .flatMap &#123;</div><div class="line">            [unowned self] performWithSuccess in</div><div class="line">            return self.performAPICall(shouldEndWithSuccess: performWithSuccess)</div><div class="line">        &#125;.scan(0) &#123; accumulator, _ in</div><div class="line">            return accumulator + 1</div><div class="line">        &#125;.map &#123; &quot;\($0)&quot; &#125;</div><div class="line">    </div><div class="line">    successCount.bindTo(self.successCount.rx.text)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">    successCount.subscribe(</div><div class="line">        onDisposed:&#123;</div><div class="line">            print(&quot;dispose&quot;)</div><div class="line">        &#125;</div><div class="line">    ).disposed(by: disposeBag)</div><div class="line">  </div><div class="line">private func performAPICall(shouldEndWithSuccess: Bool) -&gt; Observable&lt;Void&gt; &#123;</div><div class="line">	if shouldEndWithSuccess &#123;</div><div class="line">		return .just(())</div><div class="line">	&#125; else &#123;</div><div class="line">		return .error(SampleError())</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>当点击<code>Success</code>的时候会增加成功次数，但是当你点击<code>Failure</code>的时候，整个可被观察序列会被释放，之后不管你怎么点<code>Success</code>都不会再增加成功次数。</p>
+<p>当<code>performAPICall</code>返回了一个错误的事件的时候，其实和你在发送网络请求的时候也会出现。所以使用<code>flatMap</code>也会把内部的<code>next</code>和<code>error</code>事件传到主序列。</p>
+<p>结果，主序列收到<code>error</code>事件，就终结了。。。</p>
+<h3 id="如何处理？"><a href="#如何处理？" class="headerlink" title="如何处理？"></a>如何处理？</h3><p>上面的情况假如<code>Success</code>按钮是登录按钮，那么在错误后就不能点击了，这不是我们想要的。</p>
+<p>这里我们可以借助<code>Result</code>来传递错误信息。</p>
+<p>其实在上一篇<code>Moya</code>里面很多地方都有使用到<code>Result</code>来传递错误。</p>
+<p>创建一个<code>Result</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">enum Result&lt;T&gt;&#123;</div><div class="line">    case success(T)</div><div class="line">    case failure(Swift.Error)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>修改<code>performAPICall</code>返回<code>Result</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">private func performAPICall2(shouldEndWithSuccess: Bool) -&gt; Observable&lt;Result&lt;Void&gt;&gt; &#123;</div><div class="line">    if shouldEndWithSuccess &#123;</div><div class="line">        return .just(Result.success())</div><div class="line">    &#125; else &#123;</div><div class="line">        return .just(Result.failure(SampleError()))</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后分别处理成功和失败的情况:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">successCount</div><div class="line">    .flatMap&#123;</div><div class="line">        $0.filterValue()</div><div class="line">    &#125;</div><div class="line">    .scan(0) &#123; accumulator, _ in</div><div class="line">        return accumulator + 1</div><div class="line">    &#125;</div><div class="line">    .map &#123; &quot;\($0)&quot; &#125;</div><div class="line">    .bindTo(self.successCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">successCount</div><div class="line">    .flatMap&#123;</div><div class="line">        $0.filterError()</div><div class="line">    &#125;</div><div class="line">    .scan(0) &#123; accumulator, _ in</div><div class="line">        return accumulator + 1</div><div class="line">    &#125;</div><div class="line">    .map &#123; &quot;\($0)&quot; &#125;</div><div class="line">    .bindTo(self.failureCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>这里增加了<code>filterValue</code>和<code>filterError</code>来获取我们想要的值。</p>
+<p>如果不关心原来的错误，只处理成功，也可以增加如下方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">func map&lt;T&gt;(transform: (Value) throws -&gt; T) -&gt; Result&lt;T&gt; &#123;</div><div class="line">    switch self &#123;</div><div class="line">    case .Success(let object):</div><div class="line">        do &#123;</div><div class="line">            let nextObject = try transform(object)</div><div class="line">            return Result&lt;T&gt;.Success(nextObject)</div><div class="line">        &#125; catch &#123;</div><div class="line">            return Result&lt;T&gt;.Failure(error)</div><div class="line">        &#125;</div><div class="line">    case .Failure(let error):</div><div class="line">        return Result&lt;T&gt;.Failure(error)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>错误接着往下传，执行逻辑，成功返回，发生错误传递错误。</p>
+<h3 id="使用RxSwiftExt"><a href="#使用RxSwiftExt" class="headerlink" title="使用RxSwiftExt"></a>使用RxSwiftExt</h3><p>除了上面的方式，也可以使用<code>RxSwiftExt</code>提供的<code>materialize</code>操作。</p>
+<p>它会把<code>Observable&lt;T&gt;</code>into<code>Observable&lt;Event&lt;T&gt;&gt;</code> , 通过下面两个方法分别获取值和错误:</p>
+<ul>
+<li>elements() which returns Observable<t></t></li>
+<li>errors() which returns Observable<error></error></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">let result = Observable</div><div class="line">            .of(success.rx.tap.map &#123; true &#125;, failure.rx.tap.map &#123; false &#125;)</div><div class="line">            .merge()</div><div class="line">            .flatMap &#123; [unowned self] performWithSuccess in</div><div class="line">                return self.performAPICall(shouldEndWithSuccess: performWithSuccess)</div><div class="line">                    .materialize()</div><div class="line">    &#125;.share()  //share </div><div class="line">    </div><div class="line">    result.elements()</div><div class="line">        .scan(0) &#123; accumulator, _ in</div><div class="line">            return accumulator + 1</div><div class="line">        &#125;.map &#123; &quot;\($0)&quot; &#125;</div><div class="line">        .bindTo(successCount.rx.text)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">    result.errors()</div><div class="line">        .scan(0) &#123; accumulator, _ in</div><div class="line">            return accumulator + 1</div><div class="line">        &#125;.map &#123; &quot;\($0)&quot; &#125;</div><div class="line">        .bindTo(failureCount.rx.text)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">    result.subscribe(</div><div class="line">        onDisposed:&#123;</div><div class="line">            print(&quot;dispose&quot;)</div><div class="line">        &#125;</div><div class="line">    ).disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>和上次一样的把元素和错误一起包裹了一下，往下传递。</p>
+<p>本文相关代码:</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftMoya</a></p>
 
       
     </div>
@@ -461,22 +473,24 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/01/augmented-traffic-control/" rel="next" title="augmented-traffic-control模拟网络环境">
-                <i class="fa fa-chevron-left"></i> augmented-traffic-control模拟网络环境
+              <a href="/2017/03/30/rxswift-part-eight/" rel="next" title="RxSwift学习之旅 - Moya + ObjectMapper">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - Moya + ObjectMapper
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/07/weekly/" rel="prev" title="第二期 Coder群周报">
-                第二期 Coder群周报 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -651,7 +665,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于github的聊天工具"><span class="nav-number">1.</span> <span class="nav-text">基于github的聊天工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#科学上网利器Shadowsocks搭建"><span class="nav-number">2.</span> <span class="nav-text">科学上网利器Shadowsocks搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由器附带验证码进行宽带登陆"><span class="nav-number">3.</span> <span class="nav-text">路由器附带验证码进行宽带登陆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一款纯PHP开发的开源高性能的PHP-socket-服务器框架"><span class="nav-number">4.</span> <span class="nav-text">一款纯PHP开发的开源高性能的PHP socket 服务器框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-9-2-9-3-3-64-位设备越狱指南"><span class="nav-number">5.</span> <span class="nav-text">iOS 9.2~9.3.3 64 位设备越狱指南</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mach-o格式分析"><span class="nav-number">6.</span> <span class="nav-text">mach-o格式分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入式系统知识和接口技术总结"><span class="nav-number">7.</span> <span class="nav-text">嵌入式系统知识和接口技术总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">2.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">3.</span> <span class="nav-text">code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何处理？"><span class="nav-number">4.</span> <span class="nav-text">如何处理？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用RxSwiftExt"><span class="nav-number">5.</span> <span class="nav-text">使用RxSwiftExt</span></a></li></ol></div>
             
           </div>
         </section>
