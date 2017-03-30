@@ -94,16 +94,16 @@
 
 
 
-<meta name="description" content="什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~">
+<meta name="description" content="直接设置UITextField的text不会触发事件？UILabel为什么不是一个可被观察对象？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RxSwift学习之旅 - Observable 和 Driver">
-<meta property="og:url" content="http://www.alonemonkey.com/2017/03/28/rxswift-part-six/index.html">
+<meta property="og:title" content="RxSwift学习之旅 - 双向绑定">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/04/01/rxswift-part-ten/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~">
-<meta property="og:updated_time" content="2017-03-27T16:33:50.000Z">
+<meta property="og:description" content="直接设置UITextField的text不会触发事件？UILabel为什么不是一个可被观察对象？">
+<meta property="og:updated_time" content="2017-03-30T13:53:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RxSwift学习之旅 - Observable 和 Driver">
-<meta name="twitter:description" content="什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~">
+<meta name="twitter:title" content="RxSwift学习之旅 - 双向绑定">
+<meta name="twitter:description" content="直接设置UITextField的text不会触发事件？UILabel为什么不是一个可被观察对象？">
 
 
 
@@ -121,7 +121,7 @@
   };
 </script>
 
-  <title> RxSwift学习之旅 - Observable 和 Driver | AloneMonkey </title>
+  <title> RxSwift学习之旅 - 双向绑定 | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +281,7 @@
             
             
               
-                RxSwift学习之旅 - Observable 和 Driver
+                RxSwift学习之旅 - 双向绑定
               
             
           </h1>
@@ -293,8 +293,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-28T00:00:00+08:00" content="2017-03-28">
-              2017-03-28
+            <time itemprop="dateCreated" datetime="2017-04-01T00:00:00+08:00" content="2017-04-01">
+              2017-04-01
             </time>
           </span>
 
@@ -340,57 +340,40 @@
       
 
       
-        <h3 id="什么是Driver"><a href="#什么是Driver" class="headerlink" title="什么是Driver"></a>什么是Driver</h3><p><code>Driver</code>的出现是为了让我们在写UI层的响应式代码的时候更加直观。</p>
-<p>为什么它的名字叫<code>Driver</code>？它意图更好的通过数据去驱动我们的应用程序。</p>
-<p>比如:</p>
-<ul>
-<li>从数据模型去驱动UI</li>
-<li>使用其它UI元素的值去驱动UI</li>
-<li>…….</li>
-</ul>
-<p>在正常开发中，由于用户操作导致错误发生可能会使我们的应用程序崩溃。</p>
-<p>由于UI元素操作通常不是线程安全的，要保证在主线程操作。</p>
-<p>或者某个序列在有多个订阅者者时只需要<code>shareReplay(1)</code>。</p>
-<h3 id="经典例子"><a href="#经典例子" class="headerlink" title="经典例子"></a>经典例子</h3><p>先来看一下经典的例子，看看我们在正常的开发中可能会写出如下的代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .bind(to: resultCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">results</div><div class="line">    .bind(to: resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>这段代码的意图是：</p>
-<ul>
-<li>对用户的输入进行节流</li>
-<li>每次查询连接服务器搜索结果</li>
-<li>绑定结果到UI结果</li>
-</ul>
-<p>我们来看看这段代码有什么问题？</p>
-<ul>
-<li>如果<code>fetchAutoCompleteItems</code>发生了错误，网络错误或者解析出错，这个错误会导致取消所有绑定，UI界面也不会更新新的结果。</li>
-<li>如果<code>fetchAutoCompleteItems</code>在后台线程返回了结果，结果可能会在后台线程绑定到UI界面，这样会导致不确定的崩溃。</li>
-<li>结果绑定到了两个UI元素，意味着，每次用户搜索，会发送2次请求，这不是我们想要的行为。</li>
-</ul>
-<p>所以规范一点的写法应该是这样:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">            .observeOn(MainScheduler.instance)  // results are returned on MainScheduler</div><div class="line">            .catchErrorJustReturn([])           // in the worst case, errors are handled</div><div class="line">    &#125;</div><div class="line">    .shareReplay(1)                             // HTTP requests are shared and results replayed</div><div class="line">                                                // to all UI elements</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .bind(to: resultCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">results</div><div class="line">    .bind(to: resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>要保证这些所有的情况都被处理在大的系统里面是很难的，这里有一种简单的方法哪就是使用<code>Driver</code>。来看下下面的例子:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text.asDriver()        // This converts a normal sequence into a `Driver` sequence.</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">            .asDriver(onErrorJustReturn: [])  // Builder just needs info about what to return in case of error.</div><div class="line">    &#125;</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .drive(resultCount.rx.text)               // If there is a `drive` method available instead of `bindTo`,</div><div class="line">    .disposed(by: disposeBag)              // that means that the compiler has proven that all properties</div><div class="line">                                              // are satisfied.</div><div class="line">results</div><div class="line">    .drive(resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<h3 id="Driver特性"><a href="#Driver特性" class="headerlink" title="Driver特性"></a>Driver特性</h3><p>上面改进后的版本发生了什么？首先第一个<code>asDriver</code>把<code>ControlProperty</code>对象转换成了<code>Driver</code>对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">query.rx.text.asDriver()</div></pre></td></tr></table></figure>
-<p><code>Driver</code>拥有<code>ControlProperty</code>的所有属性，其实它是在上面包了一层。</p>
-<p>第二个改变的地方是:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.asDriver(onErrorJustReturn: [])</div></pre></td></tr></table></figure>
-<p>任何的可被观察的序列都能转成<code>Driver</code>，只要满足以下3点:</p>
-<ul>
-<li>不能抛出错误</li>
-<li>订阅在主线程</li>
-<li>多个订阅者<code>shareReplay(1)</code></li>
-</ul>
-<p><code>asDriver(onErrorJustReturn: [])</code>其实等同于:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let safeSequence = xs</div><div class="line">  .observeOn(MainScheduler.instance)       // observe events on main scheduler</div><div class="line">  .catchErrorJustReturn(onErrorJustReturn) // can&apos;t error out</div><div class="line">  .shareReplayLatestWhileConnected         // side effects sharing</div><div class="line">return Driver(raw: safeSequence)           // wrap it up</div></pre></td></tr></table></figure>
-<p>最后一点就是使用<code>drive</code>代替<code>bindTo</code>。</p>
-<p>所以下面的代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let intDriver = sequenceOf(1, 2, 3, 4, 5, 6)</div><div class="line">    .asDriver(onErrorJustReturn: 1)</div><div class="line">    .map &#123; $0 + 1 &#125;</div><div class="line">    .filter &#123; $0 &lt; 5 &#125;</div></pre></td></tr></table></figure>
-<p>等价:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let intObservable = sequenceOf(1, 2, 3, 4, 5, 6)</div><div class="line">    .observeOn(MainScheduler.sharedInstance)</div><div class="line">    .catchErrorJustReturn(1)</div><div class="line">    .map &#123; $0 + 1 &#125;</div><div class="line">    .filter &#123; $0 &lt; 5 &#125;</div><div class="line">    .shareReplay(1)</div></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过例子，大家也看到了什么时候应该使用<code>Driver</code>，如果你的代码需要满足上面三种情况的话，那么你可以使用<code>Driver</code>。否则如果你要多次切换线程、自己捕获传递错误、或者其它，可以仍用<code>Observable</code>。</p>
-<p>大家试着把上一篇讲的注册项目改成<code>Driver</code>。</p>
-<p>然后参考<code>Driver</code>的版本:</p>
-<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftRegisterDriver</a></p>
+        <h3 id="抛出问题"><a href="#抛出问题" class="headerlink" title="抛出问题"></a>抛出问题</h3><p>首先来看几个问题吧，我们知道监听<code>UITextField</code>可以通过如下的方式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">textfield.rx.text</div><div class="line">        .asObservable()</div><div class="line">        .subscribe&#123;</div><div class="line">            print($0)</div><div class="line">        &#125;</div><div class="line">        .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>但是如果我们这样去改变它的值，是订阅不到的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">textfield.text = &quot;这是我修改的值&quot;</div></pre></td></tr></table></figure>
+<p>还有<code>UILabel</code>不是一个可被观察对象，所以下面这么写是会报错的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">label.rx.text</div><div class="line">            .asObservable()</div></pre></td></tr></table></figure>
+<p>但是<code>UITextView</code>既可以被订阅，修改<code>text</code>也可以被订阅到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">textview.rx.text</div><div class="line">    .asObservable()</div><div class="line">    .subscribe&#123;</div><div class="line">        print(&quot;textview: \($0)&quot;)</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">textview.text = &quot;这是我修改的值&quot;</div></pre></td></tr></table></figure>
+<p>为什么都是<code>UI</code>控件差别这么大(捂脸</p>
+<h3 id="why？"><a href="#why？" class="headerlink" title="why？"></a>why？</h3><p>其实这个时候你要思考一下，为什么他们能被观察为什么又不可以？</p>
+<p><code>UITextField</code>我们前面讲过，它的<code>.allEditingEvents</code>和<code>.valueChanged</code>事件会发射值，所以它可以作为被观察对象。</p>
+<p>但是<code>textfield.text = &quot;这是我修改的值&quot;</code>并不会触发上面两种事件，所以你这样修改并没有被订阅到。</p>
+<p><code>UILabel</code>是继承<code>UIView</code>不是继承<code>UIControl</code>所以它不会响应事件，也就不能作为可被观察对象。</p>
+<p><code>UITextView</code>来看下它是怎么发射值的。</p>
+<p>从源码可以看到它是通过<code>NSTextStorageDelegate.textStorage(_:didProcessEditing:range:changeInLength:)</code>这个<code>delegate</code>的回调来发射值的。所以可以作为一个被观察者。</p>
+<p>当我们<code>textview.text = &quot;这是我修改的值&quot;</code>这样去修改<code>text</code>的时候，会触发上面<code>delegate</code>的回调，所以会被订阅到。</p>
+<h3 id="解决？"><a href="#解决？" class="headerlink" title="解决？"></a>解决？</h3><p>问题已经找到了，怎么去解决这些问题？</p>
+<p>比如我想要</p>
+<p><code>textfield.text = &quot;这是我修改的值&quot;</code></p>
+<p>这样去赋值也会发射事件。</p>
+<p>这里我们可以用到双向绑定，把<code>UITextField</code>的修改和赋值绑定到一个<code>Subject</code>，同时还可以被订阅。</p>
+<p>首先重载<code>&lt;-&gt;</code>操作符，后面我们通过这个操作符去进行双向绑定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">func &lt;-&gt; &lt;Base: UITextInput&gt;(textInput: TextInput&lt;Base&gt;, variable: Variable&lt;String&gt;) -&gt; Disposable &#123;</div><div class="line">    let bindToUIDisposable = variable.asObservable()</div><div class="line">        .bindTo(textInput.text)</div><div class="line">    let bindToVariable = textInput.text</div><div class="line">        .subscribe(onNext: &#123; [weak base = textInput.base] n in</div><div class="line">            guard let base = base else &#123;</div><div class="line">                return</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            let nonMarkedTextValue = nonMarkedText(base)</div><div class="line">            </div><div class="line">            /**</div><div class="line">             In some cases `textInput.textRangeFromPosition(start, toPosition: end)` will return nil even though the underlying</div><div class="line">             value is not nil. This appears to be an Apple bug. If it&apos;s not, and we are doing something wrong, please let us know.</div><div class="line">             The can be reproed easily if replace bottom code with</div><div class="line">             </div><div class="line">             if nonMarkedTextValue != variable.value &#123;</div><div class="line">             variable.value = nonMarkedTextValue ?? &quot;&quot;</div><div class="line">             &#125;</div><div class="line">             </div><div class="line">             and you hit &quot;Done&quot; button on keyboard.</div><div class="line">             */</div><div class="line">            if let nonMarkedTextValue = nonMarkedTextValue, nonMarkedTextValue != variable.value &#123;</div><div class="line">                variable.value = nonMarkedTextValue</div><div class="line">            &#125;</div><div class="line">            &#125;, onCompleted:  &#123;</div><div class="line">                bindToUIDisposable.dispose()</div><div class="line">        &#125;)</div><div class="line">    </div><div class="line">    return Disposables.create(bindToUIDisposable, bindToVariable)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用<code>&lt;-&gt;</code>双向绑定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let text = Variable(&quot;双向绑定&quot;)</div><div class="line">        </div><div class="line">    _  = textfield.rx.textInput &lt;-&gt; text</div><div class="line">    </div><div class="line">    textfield.rx.text</div><div class="line">        .asObservable()</div><div class="line">        .subscribe&#123;</div><div class="line">            print(&quot;textfield: \($0)&quot;)</div><div class="line">        &#125;</div><div class="line">        .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>那么这样去修改<code>text</code>就能被订阅到了。</p>
+<p>再来扩展一下<code>UILabel</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">extension UILabel &#123;</div><div class="line">    public var rx_text: ControlProperty&lt;String&gt; &#123;</div><div class="line">        // 观察text</div><div class="line">        let source: Observable&lt;String&gt; = self.rx.observe(String.self, &quot;text&quot;).map &#123; $0 ?? &quot;&quot; &#125;</div><div class="line">        let setter: (UILabel, String) -&gt; Void = &#123; $0.text = $1 &#125;</div><div class="line">        let bindingObserver = UIBindingObserver(UIElement: self, binding: setter)</div><div class="line">        return ControlProperty&lt;String&gt;(values: source, valueSink: bindingObserver)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>观察<code>text</code>的改变，改变的时候发射值，代码可以这么写了:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">textfield.rx.text</div><div class="line">        .asObservable()</div><div class="line">        .subscribe&#123;</div><div class="line">            print(&quot;textfield: \($0)&quot;)</div><div class="line">        &#125;</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">    textfield.text = &quot;这是我修改的值&quot;</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>所以现在知道了为什么前面有几种不同的表现了吧。</p>
+<p>其实很多<code>UIControl</code>的子类控件，都可以通过这种双向绑定的方式，以便我们修改它的值时能够被订阅者订阅到。</p>
+<p>代码见github:</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftMoya</a></p>
 
       
     </div>
@@ -501,17 +484,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/27/rxswift-part-five/" rel="next" title="RxSwift学习之旅 - 用户注册">
-                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 用户注册
+              <a href="/2017/03/31/rxswift-part-nine/" rel="next" title="RxSwift学习之旅 - 使用Result传递Error">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 使用Result传递Error
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/29/rxswift-part-seven/" rel="prev" title="RxSwift学习之旅 - UITableView操作">
-                RxSwift学习之旅 - UITableView操作 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -686,7 +665,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Driver"><span class="nav-number">1.</span> <span class="nav-text">什么是Driver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典例子"><span class="nav-number">2.</span> <span class="nav-text">经典例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Driver特性"><span class="nav-number">3.</span> <span class="nav-text">Driver特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#抛出问题"><span class="nav-number">1.</span> <span class="nav-text">抛出问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#why？"><span class="nav-number">2.</span> <span class="nav-text">why？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决？"><span class="nav-number">3.</span> <span class="nav-text">解决？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>
