@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="RxSwift中发生的错误应该怎么处理？">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490794130730.png">
-<meta property="og:updated_time" content="2017-03-29T16:14:39.000Z">
+<meta property="og:updated_time" content="2017-04-05T06:32:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - 使用Result传递Error">
 <meta name="twitter:description" content="RxSwift中发生的错误应该怎么处理？">
@@ -373,7 +373,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">let result = Observable</div><div class="line">            .of(success.rx.tap.map &#123; true &#125;, failure.rx.tap.map &#123; false &#125;)</div><div class="line">            .merge()</div><div class="line">            .flatMap &#123; [unowned self] performWithSuccess in</div><div class="line">                return self.performAPICall(shouldEndWithSuccess: performWithSuccess)</div><div class="line">                    .materialize()</div><div class="line">    &#125;.share()  //share </div><div class="line">    </div><div class="line">    result.elements()</div><div class="line">        .scan(0) &#123; accumulator, _ in</div><div class="line">            return accumulator + 1</div><div class="line">        &#125;.map &#123; &quot;\($0)&quot; &#125;</div><div class="line">        .bindTo(successCount.rx.text)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">    result.errors()</div><div class="line">        .scan(0) &#123; accumulator, _ in</div><div class="line">            return accumulator + 1</div><div class="line">        &#125;.map &#123; &quot;\($0)&quot; &#125;</div><div class="line">        .bindTo(failureCount.rx.text)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">    result.subscribe(</div><div class="line">        onDisposed:&#123;</div><div class="line">            print(&quot;dispose&quot;)</div><div class="line">        &#125;</div><div class="line">    ).disposed(by: disposeBag)</div></pre></td></tr></table></figure>
 <p>和上次一样的把元素和错误一起包裹了一下，往下传递。</p>
 <p>本文相关代码:</p>
-<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftMoya</a></p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftResult</a></p>
 
       
     </div>
@@ -573,7 +573,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
