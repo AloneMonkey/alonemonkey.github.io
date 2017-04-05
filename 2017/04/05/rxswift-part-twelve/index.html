@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Coder,安全,iOS,Android,逆向,越狱开发,正方,课表" />
+  <meta name="keywords" content="RxSwift," />
 
 
 
@@ -94,25 +94,18 @@
 
 
 
-<meta name="description" content="iOS
-
-移动客户端中高效使用 SQLite分享人：AloneMonkey介绍：移动客户端SQLite的使用。
-玩转Podfile分享人：AloneMonkey介绍：Podfile的使用和配置。">
+<meta name="description" content="有tableview的地方大都会有搜索功能，如何使用RxSwift写一个简单的搜索功能，请看本文内容。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第五期 Coder群周报">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/08/28/weekly/index.html">
+<meta property="og:title" content="RxSwift学习之旅 - 城市搜索">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/04/05/rxswift-part-twelve/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="iOS
-
-移动客户端中高效使用 SQLite分享人：AloneMonkey介绍：移动客户端SQLite的使用。
-玩转Podfile分享人：AloneMonkey介绍：Podfile的使用和配置。">
-<meta property="og:updated_time" content="2016-12-21T02:13:51.000Z">
+<meta property="og:description" content="有tableview的地方大都会有搜索功能，如何使用RxSwift写一个简单的搜索功能，请看本文内容。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491380143544.png">
+<meta property="og:updated_time" content="2017-04-05T09:01:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第五期 Coder群周报">
-<meta name="twitter:description" content="iOS
-
-移动客户端中高效使用 SQLite分享人：AloneMonkey介绍：移动客户端SQLite的使用。
-玩转Podfile分享人：AloneMonkey介绍：Podfile的使用和配置。">
+<meta name="twitter:title" content="RxSwift学习之旅 - 城市搜索">
+<meta name="twitter:description" content="有tableview的地方大都会有搜索功能，如何使用RxSwift写一个简单的搜索功能，请看本文内容。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491380143544.png">
 
 
 
@@ -130,7 +123,7 @@
   };
 </script>
 
-  <title> 第五期 Coder群周报 | AloneMonkey </title>
+  <title> RxSwift学习之旅 - 城市搜索 | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -290,7 +283,7 @@
             
             
               
-                第五期 Coder群周报
+                RxSwift学习之旅 - 城市搜索
               
             
           </h1>
@@ -302,8 +295,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-28T00:00:00+08:00" content="2016-08-28">
-              2016-08-28
+            <time itemprop="dateCreated" datetime="2017-04-05T00:00:00+08:00" content="2017-04-05">
+              2017-04-05
             </time>
           </span>
 
@@ -316,8 +309,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/weekly/" itemprop="url" rel="index">
-                    <span itemprop="name">weekly</span>
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
                   </a>
                 </span>
 
@@ -349,19 +342,22 @@
       
 
       
-        <blockquote class="blockquote-center"><p>iOS</p>
-</blockquote>
-<h3 id="移动客户端中高效使用-SQLite"><a href="#移动客户端中高效使用-SQLite" class="headerlink" title="移动客户端中高效使用 SQLite"></a><a href="http://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653577674&amp;idx=1&amp;sn=b1136f8fa3b823c8ed1c2f1df060bf1d&amp;scene=0#rd" target="_blank" rel="external">移动客户端中高效使用 SQLite</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：移动客户端SQLite的使用。</p>
-<h3 id="玩转Podfile"><a href="#玩转Podfile" class="headerlink" title="玩转Podfile"></a><a href="http://mp.weixin.qq.com/s?__biz=MzI2NzQyODU0Ng==&amp;mid=2247483681&amp;idx=1&amp;sn=52bd461e608610eeeca8e2dc42f6c7d7&amp;scene=2&amp;srcid=08186PcT9Dnxhg6kwoI7teOE#rd" target="_blank" rel="external">玩转Podfile</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：Podfile的使用和配置。</p>
-<a id="more"></a>
-<h3 id="iOS-10-应用扩展的剧变，对你的-iPhone-有什么影响？"><a href="#iOS-10-应用扩展的剧变，对你的-iPhone-有什么影响？" class="headerlink" title="iOS 10 应用扩展的剧变，对你的 iPhone 有什么影响？"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjAyNDUyMA==&amp;mid=2650493853&amp;idx=1&amp;sn=355a5436d8190e7fe25384cad369b838&amp;scene=0#rd" target="_blank" rel="external">iOS 10 应用扩展的剧变，对你的 iPhone 有什么影响？</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：RT</p>
-<h3 id="iOS开发通过代码方式使用AutoLayout"><a href="#iOS开发通过代码方式使用AutoLayout" class="headerlink" title="iOS开发通过代码方式使用AutoLayout"></a><a href="http://www.cocoachina.com/ios/20151022/13872.html" target="_blank" rel="external">iOS开发通过代码方式使用AutoLayout</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：iOS中兼容性自动布局的问题以及自动布局的第三方库。</p>
-<h3 id="iOS-8-WebKit框架概览（上）"><a href="#iOS-8-WebKit框架概览（上）" class="headerlink" title="iOS 8 WebKit框架概览（上）"></a><a href="http://www.cocoachina.com/ios/20150203/11089.html" target="_blank" rel="external">iOS 8 WebKit框架概览（上）</a></h3><h3 id="iOS-8-WebKit框架概览（下）"><a href="#iOS-8-WebKit框架概览（下）" class="headerlink" title="iOS 8 WebKit框架概览（下）"></a><a href="http://www.cocoachina.com/ios/20150205/11108.html" target="_blank" rel="external">iOS 8 WebKit框架概览（下）</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：WKWebView的一些特性和使用。</p>
-<h3 id="如何进行-HTTP-Mock（iOS）"><a href="#如何进行-HTTP-Mock（iOS）" class="headerlink" title="如何进行 HTTP Mock（iOS）"></a><a href="http://draveness.me/http-mock/" target="_blank" rel="external">如何进行 HTTP Mock（iOS）</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：这篇文章会对 OHHTTPStubs 源代码的分析，其实现原理是建立在 NSURLProtocol 的基础上的。</p>
-<p><br><br><blockquote class="blockquote-center"><p>技术无关</p>
-</blockquote></p>
-<h3 id="魏晓军：技术人如何打造技术品牌"><a href="#魏晓军：技术人如何打造技术品牌" class="headerlink" title="魏晓军：技术人如何打造技术品牌"></a><a href="http://mp.weixin.qq.com/s?__biz=MzA3ODg4MDk0Ng==&amp;mid=2651112605&amp;idx=1&amp;sn=f5a9e918aa5e3213d6fd41179b044ec1&amp;scene=0#rd" target="_blank" rel="external">魏晓军：技术人如何打造技术品牌</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：技术人不能只做技术。</p>
-<h3 id="为什么支付宝很难做成社交，而又一定会继续做？"><a href="#为什么支付宝很难做成社交，而又一定会继续做？" class="headerlink" title="为什么支付宝很难做成社交，而又一定会继续做？"></a><a href="http://36kr.com/p/5051411.html" target="_blank" rel="external">为什么支付宝很难做成社交，而又一定会继续做？</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
+        <h3 id="Demo介绍"><a href="#Demo介绍" class="headerlink" title="Demo介绍"></a>Demo介绍</h3><p>这是一个通过<code>SearchBar</code>来搜索<code>tableview</code>内容的一个简单的例子，界面如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491380143544.png" alt="image"></p>
+<h3 id="mock数据"><a href="#mock数据" class="headerlink" title="mock数据"></a>mock数据</h3><p>首先添加一个<code>mock</code>数据到<code>tableview</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//mock数据</div><div class="line">var shownCities = [String]() // Data source for UITableView</div><div class="line"></div><div class="line">let allCities = [&quot;ChangSha&quot;,</div><div class="line">                    &quot;HangZhou&quot;,</div><div class="line">                    &quot;ShangHai&quot;,</div><div class="line">                    &quot;BeiJing&quot;,</div><div class="line">                    &quot;ShenZhen&quot;,</div><div class="line">                    &quot;New York&quot;,</div><div class="line">                    &quot;London&quot;,</div><div class="line">                    &quot;Oslo&quot;,</div><div class="line">                    &quot;Warsaw&quot;,</div><div class="line">                    &quot;Berlin&quot;,</div><div class="line">                    &quot;Praga&quot;] // Our mocked API data source</div><div class="line"></div><div class="line">//数据源</div><div class="line">let dataSource = RxTableViewSectionedReloadDataSource&lt;SectionModel&lt;String, String&gt;&gt;()</div><div class="line"></div><div class="line">dataSource.configureCell = &#123;</div><div class="line">    (_, tv, indexPath, element) in</div><div class="line">    let cell = tv.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!</div><div class="line">    cell.textLabel?.text = &quot;\(element)&quot;</div><div class="line">    return cell</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="获取输入"><a href="#获取输入" class="headerlink" title="获取输入"></a>获取输入</h3><p>获取用户的搜索输入，并简单判断前缀来返回结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//获取输入</div><div class="line">let searchResult = searchbar.rx</div><div class="line">                        .text</div><div class="line">                        .orEmpty</div><div class="line">                        .flatMapLatest&#123;</div><div class="line">                            [unowned self] query -&gt; Observable&lt;[String]&gt; in</div><div class="line">                            print(&quot;\(query)&quot;)</div><div class="line">                            if query.isEmpty&#123;</div><div class="line">                                return Observable.just([])</div><div class="line">                            &#125;else&#123;</div><div class="line">                                let results = self.allCities.filter&#123; $0.hasPrefix(query)&#125;</div><div class="line">                                return Observable.just(results)</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                        .shareReplay(1)</div></pre></td></tr></table></figure>
+<h3 id="绑定结果"><a href="#绑定结果" class="headerlink" title="绑定结果"></a>绑定结果</h3><p>绑定结果到<code>dataSource</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">searchResult</div><div class="line">       .map&#123; [SectionModel(model:&quot;&quot;,items:$0)] &#125;</div><div class="line">       .bindTo(tableview.rx.items(dataSource: dataSource))</div><div class="line">       .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>现在已经能使用搜索了。</p>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>运行后发现每次输入文字，都会发送请求，可以使用<code>debounce</code>指定一段时间后不再有输入再发送请求，同时使用<code>distinctUntilChanged</code>来过滤和上次一样的输入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">let searchResult = searchbar.rx</div><div class="line">            .text</div><div class="line">            .orEmpty</div><div class="line">            .debounce(0.5, scheduler: MainScheduler.instance)</div><div class="line">            .distinctUntilChanged()</div><div class="line">            .flatMapLatest&#123;</div><div class="line">                [unowned self] query -&gt; Observable&lt;[String]&gt; in</div><div class="line">                print(&quot;\(query)&quot;)</div><div class="line">                if query.isEmpty&#123;</div><div class="line">                    return Observable.just([])</div><div class="line">                &#125;else&#123;</div><div class="line">                    let results = self.allCities.filter&#123; $0.hasPrefix(query)&#125;</div><div class="line">                    return Observable.just(results)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            .shareReplay(1)</div></pre></td></tr></table></figure>
+<p>还可以使用<code>filter</code>直接过滤空的搜索。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">let searchResult = searchbar.rx</div><div class="line">                        .text</div><div class="line">                        .orEmpty</div><div class="line">                        .debounce(0.5, scheduler: MainScheduler.instance)</div><div class="line">                        .distinctUntilChanged()</div><div class="line">                        .filter&#123; !$0.isEmpty &#125;</div><div class="line">                        .flatMapLatest&#123;</div><div class="line">                            [unowned self] query -&gt; Observable&lt;[String]&gt; in</div><div class="line">                            print(&quot;\(query)&quot;)</div><div class="line">                            return Observable.just(self.allCities.filter&#123; $0.hasPrefix(query)&#125;)</div><div class="line">                        &#125;</div><div class="line">                        .shareReplay(1)</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这里主要用到节流来处理用户输入，大家可以结合网络实时从接口获取数据，但是要主要线程切换。</p>
+<p>代码见github:</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftCitySearch</a></p>
 
       
     </div>
@@ -461,22 +457,24 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/21/weekly/" rel="next" title="第四期 Coder群周报">
-                <i class="fa fa-chevron-left"></i> 第四期 Coder群周报
+              <a href="/2017/04/02/rxswift-part-eleven/" rel="next" title="RxSwift学习之旅 - share vs replay vs shareReplay">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - share vs replay vs shareReplay
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/04/weekly/" rel="prev" title="第六期 Coder群周报">
-                第六期 Coder群周报 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -651,7 +649,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#移动客户端中高效使用-SQLite"><span class="nav-number">1.</span> <span class="nav-text">移动客户端中高效使用 SQLite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#玩转Podfile"><span class="nav-number">2.</span> <span class="nav-text">玩转Podfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-10-应用扩展的剧变，对你的-iPhone-有什么影响？"><span class="nav-number">3.</span> <span class="nav-text">iOS 10 应用扩展的剧变，对你的 iPhone 有什么影响？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS开发通过代码方式使用AutoLayout"><span class="nav-number">4.</span> <span class="nav-text">iOS开发通过代码方式使用AutoLayout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-8-WebKit框架概览（上）"><span class="nav-number">5.</span> <span class="nav-text">iOS 8 WebKit框架概览（上）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-8-WebKit框架概览（下）"><span class="nav-number">6.</span> <span class="nav-text">iOS 8 WebKit框架概览（下）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何进行-HTTP-Mock（iOS）"><span class="nav-number">7.</span> <span class="nav-text">如何进行 HTTP Mock（iOS）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#魏晓军：技术人如何打造技术品牌"><span class="nav-number">8.</span> <span class="nav-text">魏晓军：技术人如何打造技术品牌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么支付宝很难做成社交，而又一定会继续做？"><span class="nav-number">9.</span> <span class="nav-text">为什么支付宝很难做成社交，而又一定会继续做？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo介绍"><span class="nav-number">1.</span> <span class="nav-text">Demo介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mock数据"><span class="nav-number">2.</span> <span class="nav-text">mock数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取输入"><span class="nav-number">3.</span> <span class="nav-text">获取输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定结果"><span class="nav-number">4.</span> <span class="nav-text">绑定结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化"><span class="nav-number">5.</span> <span class="nav-text">优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>
