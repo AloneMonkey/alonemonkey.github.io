@@ -1,0 +1,829 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RxSwift," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="在进行某些耗时的操作时，常常需要切换到后台线程运行，更新UI的操作要确保在主线程进行，本文来看看Rx中的线程切换。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift学习之旅 - 多线程调度">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/04/06/rxswift-part-thirteen/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="在进行某些耗时的操作时，常常需要切换到后台线程运行，更新UI的操作要确保在主线程进行，本文来看看Rx中的线程切换。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491484089713.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491488110688.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491488168714.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491488363703.png">
+<meta property="og:updated_time" content="2017-04-06T15:02:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxSwift学习之旅 - 多线程调度">
+<meta name="twitter:description" content="在进行某些耗时的操作时，常常需要切换到后台线程运行，更新UI的操作要确保在主线程进行，本文来看看Rx中的线程切换。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491484089713.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RxSwift学习之旅 - 多线程调度 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RxSwift学习之旅 - 多线程调度
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-04-06T00:00:00+08:00" content="2017-04-06">
+              2017-04-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在前面我们基本都是在讲如何将事件转成序列，然后去驱动数据，很少考虑到当前在什么线程。</p>
+<p>如果某些操作是耗时的、耗内存的是不应该在主线程进行，这样会阻塞主线程，导致界面卡顿等等。</p>
+<p>所以我们要在不同的线程去执行不同的操作。</p>
+<h3 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h3><p>当<code>Rx</code>进行一些操作时，如果不去主动切换线程，那么它将一直在同一个线程进行。</p>
+<p>但是调度器并不等同于线程，准确的说它是一个处理发生的上下文，这个上下文可以是一个线程也是是一个调度队列，甚至<code>OperationQueueScheduler</code>里面使用的<code>NSOperation</code>。<br>你可以在同一线程创建多个调度器，或者在不同线程使用同一个调度器，虽然有点奇怪，但是确定可以。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491484089713.png" alt="image"></p>
+<p>有两种类型的调度器，串行调度器和并行调度器。</p>
+<p>下面有几种不同的内建的调度器:</p>
+<ul>
+<li>当前线程调度器(CurrentThreadScheduler)(串行调度器)</li>
+</ul>
+<p>当前线程的调度，也是默认的调度器</p>
+<ul>
+<li>主调度器(MainScheduler)(串行调度器)</li>
+</ul>
+<p>主线程的调度</p>
+<ul>
+<li>串行调度队列调度器(SerialDispatchQueueScheduler)(串行调度)</li>
+</ul>
+<p>特殊队列调度<code>dispatch_queue_t</code></p>
+<ul>
+<li>并行调度队列调度器(ConcurrentDispatchQueueScheduler)(并发调度)</li>
+</ul>
+<p>特殊队列调度<code>dispatch_queue_t</code></p>
+<ul>
+<li>操作队列调度器(OperationQueueScheduler)(并发调度)</li>
+</ul>
+<p>特殊队列调度<code>NSOperationQueue</code>，适合在后台处理大块的工作。</p>
+<p>传一个并行队列给串行调度器，会把它转化成串行队列。传一个串行队列给并行调度器，也不会引起任何问题，但是还是要避免这么做。</p>
+<h3 id="subscribeOn-amp-observeOn"><a href="#subscribeOn-amp-observeOn" class="headerlink" title="subscribeOn() &amp; observeOn()"></a>subscribeOn() &amp; observeOn()</h3><h4 id="SubscribeOn"><a href="#SubscribeOn" class="headerlink" title="SubscribeOn"></a>SubscribeOn</h4><p>指定Observable自身在哪个调度器上执行</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491488110688.png" alt="image"></p>
+<h4 id="ObserveOn"><a href="#ObserveOn" class="headerlink" title="ObserveOn"></a>ObserveOn</h4><p>指定一个观察者在哪个调度器上观察这个Observable</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491488168714.png" alt="image"></p>
+<ul>
+<li><code>SubscribeOn</code>的调用切换之前的线程。</li>
+<li><code>ObserveOn</code>的调用切换之后的线程。</li>
+<li><code>ObserveOn</code>之后，不可再调用<code>SubscribeOn</code>切换之后的线程。</li>
+</ul>
+<p>再来看下两者的组合使用:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1491488363703.png" alt="image"></p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>来看一个简单的例子，使用<code>RxAlamofire</code>从<code>github</code>搜索他人的项目，然后使用<code>ObjectMapper</code>解析json，最后展示到界面。由于涉及到网络以及解析，还有UI操作所以需求切换线程。</p>
+<p>老套路，创建项目，导入<code>pod</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">use_frameworks!</div><div class="line"></div><div class="line">target &apos;RxSwiftMultithreading&apos; do</div><div class="line"></div><div class="line">pod &apos;RxAlamofire/RxCocoa&apos;</div><div class="line">pod &apos;ObjectMapper&apos;</div><div class="line"></div><div class="line">end</div></pre></td></tr></table></figure>
+<h3 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h3><p>界面还是一个<code>UITableView</code>和<code>UISearchBar</code>。</p>
+<p>然后获取搜索的输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var rx_searchBarText: Observable&lt;String&gt; &#123;</div><div class="line">    return searchbar</div><div class="line">        .rx.text</div><div class="line">        .orEmpty</div><div class="line">        .filter &#123; $0.characters.count &gt; 0 &#125; // notice the filter new line</div><div class="line">        .throttle(0.5, scheduler: MainScheduler.instance)</div><div class="line">        .distinctUntilChanged()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="网络和解析"><a href="#网络和解析" class="headerlink" title="网络和解析"></a>网络和解析</h3><p>创建<code>Model</code>类:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">class Repository: Mappable &#123;</div><div class="line">    var identifier: Int!</div><div class="line">    var language: String!</div><div class="line">    var url: String!</div><div class="line">    var name: String!</div><div class="line">    </div><div class="line">    required init?(map: Map) &#123; &#125;</div><div class="line">    </div><div class="line">    func mapping(map: Map) &#123;</div><div class="line">        identifier &lt;- map[&quot;id&quot;]</div><div class="line">        language &lt;- map[&quot;language&quot;]</div><div class="line">        url &lt;- map[&quot;url&quot;]</div><div class="line">        name &lt;- map[&quot;name&quot;]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后发起网络请求，正常的写法那就是这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">private func fetchRepositories() -&gt; Driver&lt;[Repository]&gt; &#123;</div><div class="line">    return repositoryName</div><div class="line">        .flatMapLatest &#123; text in</div><div class="line">            return RxAlamofire</div><div class="line">                .requestJSON(.GET, &quot;https://api.github.com/users/\(text)/repos&quot;)</div><div class="line">                .debug()</div><div class="line">                .catchError &#123; error in</div><div class="line">                    return Observable.never()</div><div class="line">                &#125;</div><div class="line">        &#125;</div><div class="line">        .map &#123; (response, json) -&gt; [Repository] in</div><div class="line">            if let repos = Mapper&lt;Repository&gt;().mapArray(json) &#123;</div><div class="line">                return repos</div><div class="line">            &#125; else &#123;</div><div class="line">                return []</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        .asDriver(onErrorJustReturn: [])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>把输入的文字转成网络请求序列，然后对请求的结果进行<code>map</code>转成<code>Repository</code>数组，最后返回。这里使用了<code>Driver</code>保证回到主线程，并不抛出错误。</p>
+<p>然后在<code>ViewController</code>里面订阅结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">searchViewModel</div><div class="line">    .rx_repositories</div><div class="line">    .drive(tableview.rx.items(cellIdentifier: &quot;Cell&quot;, cellType: UITableViewCell.self)) &#123; (row, repository, cell) in</div><div class="line">        cell.textLabel?.text = repository.name</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">searchViewModel</div><div class="line">    .rx_repositories</div><div class="line">    .drive(</div><div class="line">        onNext: &#123;</div><div class="line">            repositories in</div><div class="line">            if repositories.count == 0 &#123;</div><div class="line">                let alert = UIAlertController(title: &quot;sorry!&quot;, message: &quot;No repositories for this user.&quot;, preferredStyle: .alert)</div><div class="line">                alert.addAction(UIAlertAction(title: &quot;OK&quot;, style: .default, handler: nil))</div><div class="line">                if self.navigationController?.visibleViewController?.isMember(of: UIAlertController.self) != true &#123;</div><div class="line">                    self.present(alert, animated: true, completion: nil)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="多线程优化"><a href="#多线程优化" class="headerlink" title="多线程优化"></a>多线程优化</h3><p>我们要确保网络请求和json解析在后台线程运行，所以使用<code>observeOn</code>主动切换线程，如果还要在之前或者之前才操作UI的话，也要切换线程如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">fileprivate func fetchRepositories() -&gt; Driver&lt;[Repository]&gt; &#123;</div><div class="line">    return repositoryName</div><div class="line">        .subscribeOn(MainScheduler.instance) // Make sure we are on MainScheduler</div><div class="line">        .do(onNext: &#123; response in</div><div class="line">            UIApplication.shared.isNetworkActivityIndicatorVisible = true</div><div class="line">        &#125;)</div><div class="line">        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))</div><div class="line">        .flatMapLatest &#123; text in // .background thread, network request</div><div class="line">            return RxAlamofire</div><div class="line">                .requestJSON(.get, &quot;https://api.github.com/users/\(text)/repos&quot;)</div><div class="line">                .debug()</div><div class="line">                .catchError &#123; error in</div><div class="line">                    return Observable.never()</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))</div><div class="line">        .map &#123; (response, json) -&gt; [Repository] in // again back to .background, map objects</div><div class="line">            if let repos = Mapper&lt;Repository&gt;().mapArray(JSONObject: json) &#123;</div><div class="line">                return repos</div><div class="line">            &#125; else &#123;</div><div class="line">                return []</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        .observeOn(MainScheduler.instance) // switch to MainScheduler, UI updates</div><div class="line">        .do(onNext: &#123; response in</div><div class="line">            UIApplication.shared.isNetworkActivityIndicatorVisible = false</div><div class="line">        &#125;)</div><div class="line">        .asDriver(onErrorJustReturn: []) // This also makes sure that we are on MainScheduler</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在编写代码的时候要能意识到当前是在哪个线程进行的操作，并且把一些耗时操作放到后台，UI更新操作放到主线程。</p>
+<p>代码见github:</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftMultithreading</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/05/rxswift-part-twelve/" rel="next" title="RxSwift学习之旅 - 城市搜索">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 城市搜索
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+      <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "",
+          productKey: "68a777ea87db47d58ee038a1efc863df",
+          target: "cloud-tie-wrapper"
+        };
+      </script>
+      <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调度器"><span class="nav-number">2.</span> <span class="nav-text">调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subscribeOn-amp-observeOn"><span class="nav-number">3.</span> <span class="nav-text">subscribeOn() & observeOn()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SubscribeOn"><span class="nav-number">3.1.</span> <span class="nav-text">SubscribeOn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ObserveOn"><span class="nav-number">3.2.</span> <span class="nav-text">ObserveOn</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-number">4.</span> <span class="nav-text">Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI"><span class="nav-number">5.</span> <span class="nav-text">UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络和解析"><span class="nav-number">6.</span> <span class="nav-text">网络和解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程优化"><span class="nav-number">7.</span> <span class="nav-text">多线程优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
