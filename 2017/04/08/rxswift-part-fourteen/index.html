@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Coder,安全,iOS,Android,逆向,越狱开发,正方,课表" />
+  <meta name="keywords" content="RxSwift," />
 
 
 
@@ -94,24 +94,16 @@
 
 
 
-<meta name="description" content="iOS
-
-现代iOS应用安全分享人：AloneMonkey介绍：在QCon纽约2016大会上，Trail of Bits首席执行官兼安全专家Dan Guido阐述了如何确保iOS应用安全，包括正确地使用所有iOS安全配置，而且不要忘记，应用可能运行在一部已经越狱的手机上。">
+<meta name="description" content="Action是observable的一个抽象库，它定义了一个动作，传入输入的事件，然后对事件进行处理，返回处理结果。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第三期 Coder群周报">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/08/14/weekly/index.html">
+<meta property="og:title" content="RxSwift学习之旅 - Action">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/04/08/rxswift-part-fourteen/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="iOS
-
-现代iOS应用安全分享人：AloneMonkey介绍：在QCon纽约2016大会上，Trail of Bits首席执行官兼安全专家Dan Guido阐述了如何确保iOS应用安全，包括正确地使用所有iOS安全配置，而且不要忘记，应用可能运行在一部已经越狱的手机上。">
-<meta property="og:image" content="http://7xlqnm.com1.z0.glb.clouddn.com/QQ%E6%88%AA%E5%9B%BE20160813224428.jpg">
-<meta property="og:updated_time" content="2016-12-21T02:14:00.000Z">
+<meta property="og:description" content="Action是observable的一个抽象库，它定义了一个动作，传入输入的事件，然后对事件进行处理，返回处理结果。">
+<meta property="og:updated_time" content="2017-04-08T09:48:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第三期 Coder群周报">
-<meta name="twitter:description" content="iOS
-
-现代iOS应用安全分享人：AloneMonkey介绍：在QCon纽约2016大会上，Trail of Bits首席执行官兼安全专家Dan Guido阐述了如何确保iOS应用安全，包括正确地使用所有iOS安全配置，而且不要忘记，应用可能运行在一部已经越狱的手机上。">
-<meta name="twitter:image" content="http://7xlqnm.com1.z0.glb.clouddn.com/QQ%E6%88%AA%E5%9B%BE20160813224428.jpg">
+<meta name="twitter:title" content="RxSwift学习之旅 - Action">
+<meta name="twitter:description" content="Action是observable的一个抽象库，它定义了一个动作，传入输入的事件，然后对事件进行处理，返回处理结果。">
 
 
 
@@ -129,7 +121,7 @@
   };
 </script>
 
-  <title> 第三期 Coder群周报 | AloneMonkey </title>
+  <title> RxSwift学习之旅 - Action | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -289,7 +281,7 @@
             
             
               
-                第三期 Coder群周报
+                RxSwift学习之旅 - Action
               
             
           </h1>
@@ -301,8 +293,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-14T00:00:00+08:00" content="2016-08-14">
-              2016-08-14
+            <time itemprop="dateCreated" datetime="2017-04-08T00:00:00+08:00" content="2017-04-08">
+              2017-04-08
             </time>
           </span>
 
@@ -315,8 +307,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/weekly/" itemprop="url" rel="index">
-                    <span itemprop="name">weekly</span>
+                  <a href="/categories/rxswift/" itemprop="url" rel="index">
+                    <span itemprop="name">rxswift</span>
                   </a>
                 </span>
 
@@ -348,22 +340,37 @@
       
 
       
-        <blockquote class="blockquote-center"><p>iOS</p>
-</blockquote>
-<h3 id="现代iOS应用安全"><a href="#现代iOS应用安全" class="headerlink" title="现代iOS应用安全"></a><a href="http://www.infoq.com/cn/news/2016/08/modern-ios-app-security" target="_blank" rel="external">现代iOS应用安全</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：在QCon纽约2016大会上，Trail of Bits首席执行官兼安全专家Dan Guido阐述了如何确保iOS应用安全，包括正确地使用所有iOS安全配置，而且不要忘记，应用可能运行在一部已经越狱的手机上。</p>
-<a id="more"></a>
-<h3 id="iOS-资源大全"><a href="#iOS-资源大全" class="headerlink" title="iOS 资源大全"></a><a href="http://ios.jobbole.com/83907/" target="_blank" rel="external">iOS 资源大全</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：这是个精心编排的列表，它包含了优秀的 iOS 框架、库、教程、XCode 插件、组件等等。</p>
-<h3 id="App适配iPhone-6-Plus和iOS-8：10条小秘诀"><a href="#App适配iPhone-6-Plus和iOS-8：10条小秘诀" class="headerlink" title="App适配iPhone 6/ Plus和iOS 8：10条小秘诀"></a><a href="http://www.cocoachina.com/ios/20150108/10864.html" target="_blank" rel="external">App适配iPhone 6/ Plus和iOS 8：10条小秘诀</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：RT。</p>
-<h3 id="扩展UIColor，支持十六进制颜色设置"><a href="#扩展UIColor，支持十六进制颜色设置" class="headerlink" title="扩展UIColor，支持十六进制颜色设置"></a><a href="http://my.oschina.net/leejan97/blog/307491" target="_blank" rel="external">扩展UIColor，支持十六进制颜色设置</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：让UIColor能够设置十六进制颜色。</p>
-<h3 id="JavaScript与Objective-C之间的通信"><a href="#JavaScript与Objective-C之间的通信" class="headerlink" title="JavaScript与Objective-C之间的通信"></a><a href="http://www.tanhao.me/pieces/1607.html/" target="_blank" rel="external">JavaScript与Objective-C之间的通信</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：JS和OC之间的简单通信。</p>
-<p><br><br><blockquote class="blockquote-center"><p>工具</p>
-</blockquote></p>
-<h3 id="Sketch"><a href="#Sketch" class="headerlink" title="Sketch"></a><a href="http://www.sketchcn.com/" target="_blank" rel="external">Sketch</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：Sketch是一款轻量，易用的矢量设计工具，让UI设计更简单，更高效。</p>
-<h3 id="转载-Windows-爱奇艺VIP播放器-电脑版，更新接口2个-V1-2-注意是播放器，不是账号获取！"><a href="#转载-Windows-爱奇艺VIP播放器-电脑版，更新接口2个-V1-2-注意是播放器，不是账号获取！" class="headerlink" title="[转载][Windows]爱奇艺VIP播放器(电脑版，更新接口2个)V1.2_注意是播放器，不是账号获取！"></a>[转载][Windows]<a href="http://pan.baidu.com/s/1hrNAURq" target="_blank" rel="external">爱奇艺VIP播放器(电脑版，更新接口2个)V1.2_注意是播放器，不是账号获取！</a></h3><p>密码: n83i<br>截止8月13日截图可用。</p>
-<p><img src="http://7xlqnm.com1.z0.glb.clouddn.com/QQ%E6%88%AA%E5%9B%BE20160813224428.jpg" alt="截图"></p>
-<p><br><br><blockquote class="blockquote-center"><p>单片机</p>
-</blockquote></p>
-<h3 id="瑞萨单片机系统低功耗的设计"><a href="#瑞萨单片机系统低功耗的设计" class="headerlink" title="瑞萨单片机系统低功耗的设计"></a><a href="http://blog.rayuu.com/lowpower.html" target="_blank" rel="external">瑞萨单片机系统低功耗的设计</a></h3><p>分享人： <a href="http://rayuu.com" target="_blank" rel="external">Rayu</a><br>介绍：瑞萨单片机系统低功耗的设计。</p>
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Action是observable的一个抽象库，它定义了一个动作，传入输入的事件，然后对事件进行处理，返回处理结果。它有如下特点:</p>
+<ul>
+<li>只有<code>enabled</code>的时候才会执行，可以传入<code>enabledIf</code>参数</li>
+<li>同时只能执行一个，下次<code>input</code>必须等上次的<code>action</code>执行完</li>
+<li>可以分别处理错误和next</li>
+</ul>
+<h3 id="创建Action"><a href="#创建Action" class="headerlink" title="创建Action"></a>创建Action</h3><p><code>Action</code>被定义为一个类<code>Action&lt;Input, Element&gt;</code>,<code>Input</code>是输入的元素，<code>Element</code>是<code>Action</code>处理完之后返回的元素。</p>
+<p>一个简单的例子，没有输入也没有输出如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let buttonAction: Action&lt;Void, Void&gt; = Action &#123;</div><div class="line">    print(&quot;Doing some work&quot;)</div><div class="line">    return Observable.empty()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>或者传入用户名密码，返回登录结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let loginAction: Action&lt;(String,String), Bool&gt; = Action&#123;</div><div class="line">    (username, password) in</div><div class="line">    print(&quot;\(username) \(password)&quot;)</div><div class="line">    return Observable.just(true)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="连接Button"><a href="#连接Button" class="headerlink" title="连接Button"></a>连接Button</h3><p><code>buttonAction</code>怎么使用，你可以把它和<code>button</code>的点击绑定起来:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">button.rx.action = buttonAction</div></pre></td></tr></table></figure>
+<p>每次点击按钮<code>Action</code>都会执行，如果上一次的点击<code>Action</code>没有完成的话，这个的点击将会无效。</p>
+<p>设置为<code>nil</code>去取消绑定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">button.rx.action = nil</div></pre></td></tr></table></figure>
+<h3 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h3><p>我们可以把输入的账号密码绑定到上面的<code>loginAction</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">let usernameAndPassword = Observable.combineLatest(username.rx.text.orEmpty, password.rx.text.orEmpty)</div><div class="line">        </div><div class="line">login.rx.tap.asObservable()</div><div class="line">    .withLatestFrom(usernameAndPassword)</div><div class="line">    .bindTo(loginAction.inputs)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">loginAction.elements</div><div class="line">    .filter&#123; $0 &#125;</div><div class="line">    .subscribe(</div><div class="line">        onNext:&#123;</div><div class="line">            _ in</div><div class="line">            print(&quot;login ok!&quot;)</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">loginAction.errors</div><div class="line">    .subscribe(</div><div class="line">        onError:&#123;</div><div class="line">            error in</div><div class="line">            print(&quot;error&quot;)</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>输入的账号密码绑定到<code>loginAction.inputs</code>，然后订阅<code>loginAction</code>的结果。</p>
+<h3 id="cell点击"><a href="#cell点击" class="headerlink" title="cell点击"></a>cell点击</h3><p>可以给每个<code>UITableViewCell</code>里面的button去绑定一个<code>Action</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">let items = Observable.just(</div><div class="line">            (0...20).map&#123; &quot;\($0)&quot; &#125;</div><div class="line">        )</div><div class="line">        </div><div class="line">items.bindTo(tableview.rx.items(cellIdentifier: &quot;Cell&quot;, cellType: UITableViewCell.self))&#123;</div><div class="line">    (row, elememt, cell) in</div><div class="line">    </div><div class="line">    let title = cell.viewWithTag(100) as! UILabel</div><div class="line">    </div><div class="line">    title.text = elememt</div><div class="line">    </div><div class="line">    var button = cell.viewWithTag(101) as! UIButton</div><div class="line">    </div><div class="line">    button.rx.action = CocoaAction &#123;</div><div class="line">        print(&quot;to do something \(elememt)&quot;)</div><div class="line">        return .empty()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;.disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="execute"><a href="#execute" class="headerlink" title="execute"></a>execute</h3><p>除了绑定输入以外，还可以主动去执行<code>Action</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">loginAction.execute((&quot;admin&quot;,&quot;password&quot;))</div><div class="line">    .subscribe&#123;</div><div class="line">        print($0)</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>通过<code>execute</code>传入账号密码，然后执行<code>Action</code>并订阅结果。</p>
+<h3 id="enabledIf"><a href="#enabledIf" class="headerlink" title="enabledIf"></a>enabledIf</h3><p>只有当条件满足的时候<code>Action</code>才会执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let usernameCount = username.rx.text</div><div class="line">            .orEmpty</div><div class="line">            .asObservable()</div><div class="line">            .map&#123;</div><div class="line">                $0.characters.count &gt; 6</div><div class="line">            &#125;</div><div class="line">        </div><div class="line">let validateUsername:Action&lt;String, Bool&gt; = Action(enabledIf: usernameCount, workFactory: &#123; input in</div><div class="line">    print(&quot;username validating.....&quot;)</div><div class="line">    return Observable.just(true)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">username.rx.controlEvent(.editingDidEnd)</div><div class="line">    .subscribe(</div><div class="line">        onNext:&#123;</div><div class="line">            [unowned self] _ in</div><div class="line">            validateUsername.execute(self.username.text ?? &quot;&quot;)</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="UIAlertAction"><a href="#UIAlertAction" class="headerlink" title="UIAlertAction"></a>UIAlertAction</h3><p><code>UIAlert</code>的<code>Action</code>绑定:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">validateUsername.elements</div><div class="line">    .observeOn(MainScheduler.instance)</div><div class="line">    .subscribe&#123;</div><div class="line">        [unowned self] _ in</div><div class="line">        print(&quot;username validate ok&quot;)</div><div class="line">        let alertController = UIAlertController(title: &quot;validate&quot;, message: &quot;username validate is ok!&quot;, preferredStyle: .alert)</div><div class="line">        var ok = UIAlertAction.Action(&quot;OK&quot;, style: .default)</div><div class="line">        ok.rx.action = CocoaAction &#123;</div><div class="line">            print(&quot;Alert&apos;s OK button was pressed&quot;)</div><div class="line">            return .empty()</div><div class="line">        &#125;</div><div class="line">        alertController.addAction(ok)</div><div class="line">        self.present(alertController, animated: true, completion: nil)</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><code>Action</code>可以用来定一个动作触发后的一个行为，也可以绑定多个动态到同一个<code>Action</code>，和<code>MVVM</code>结合的时候变得尤为合适。</p>
+<p>代码见github:</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftAction</a></p>
 
       
     </div>
@@ -463,22 +470,24 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/RxSwift/" rel="tag">#RxSwift</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/07/weekly/" rel="next" title="第二期 Coder群周报">
-                <i class="fa fa-chevron-left"></i> 第二期 Coder群周报
+              <a href="/2017/04/06/rxswift-part-thirteen/" rel="next" title="RxSwift学习之旅 - 多线程调度">
+                <i class="fa fa-chevron-left"></i> RxSwift学习之旅 - 多线程调度
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/21/weekly/" rel="prev" title="第四期 Coder群周报">
-                第四期 Coder群周报 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -653,7 +662,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#现代iOS应用安全"><span class="nav-number">1.</span> <span class="nav-text">现代iOS应用安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-资源大全"><span class="nav-number">2.</span> <span class="nav-text">iOS 资源大全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#App适配iPhone-6-Plus和iOS-8：10条小秘诀"><span class="nav-number">3.</span> <span class="nav-text">App适配iPhone 6/ Plus和iOS 8：10条小秘诀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展UIColor，支持十六进制颜色设置"><span class="nav-number">4.</span> <span class="nav-text">扩展UIColor，支持十六进制颜色设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript与Objective-C之间的通信"><span class="nav-number">5.</span> <span class="nav-text">JavaScript与Objective-C之间的通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sketch"><span class="nav-number">6.</span> <span class="nav-text">Sketch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载-Windows-爱奇艺VIP播放器-电脑版，更新接口2个-V1-2-注意是播放器，不是账号获取！"><span class="nav-number">7.</span> <span class="nav-text">[转载][Windows]爱奇艺VIP播放器(电脑版，更新接口2个)V1.2_注意是播放器，不是账号获取！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#瑞萨单片机系统低功耗的设计"><span class="nav-number">8.</span> <span class="nav-text">瑞萨单片机系统低功耗的设计</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Action"><span class="nav-number">2.</span> <span class="nav-text">创建Action</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接Button"><span class="nav-number">3.</span> <span class="nav-text">连接Button</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户登录"><span class="nav-number">4.</span> <span class="nav-text">用户登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cell点击"><span class="nav-number">5.</span> <span class="nav-text">cell点击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#execute"><span class="nav-number">6.</span> <span class="nav-text">execute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#enabledIf"><span class="nav-number">7.</span> <span class="nav-text">enabledIf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UIAlertAction"><span class="nav-number">8.</span> <span class="nav-text">UIAlertAction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>

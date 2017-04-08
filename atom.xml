@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-04-06T15:02:12.000Z</updated>
+  <updated>2017-04-08T09:48:51.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,59 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RxSwift学习之旅 - Action</title>
+    <link href="http://www.alonemonkey.com/2017/04/08/rxswift-part-fourteen/"/>
+    <id>http://www.alonemonkey.com/2017/04/08/rxswift-part-fourteen/</id>
+    <published>2017-04-07T16:00:00.000Z</published>
+    <updated>2017-04-08T09:48:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Action是observable的一个抽象库，它定义了一个动作，传入输入的事件，然后对事件进行处理，返回处理结果。它有如下特点:</p>
+<ul>
+<li>只有<code>enabled</code>的时候才会执行，可以传入<code>enabledIf</code>参数</li>
+<li>同时只能执行一个，下次<code>input</code>必须等上次的<code>action</code>执行完</li>
+<li>可以分别处理错误和next</li>
+</ul>
+<h3 id="创建Action"><a href="#创建Action" class="headerlink" title="创建Action"></a>创建Action</h3><p><code>Action</code>被定义为一个类<code>Action&lt;Input, Element&gt;</code>,<code>Input</code>是输入的元素，<code>Element</code>是<code>Action</code>处理完之后返回的元素。</p>
+<p>一个简单的例子，没有输入也没有输出如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let buttonAction: Action&lt;Void, Void&gt; = Action &#123;</div><div class="line">    print(&quot;Doing some work&quot;)</div><div class="line">    return Observable.empty()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>或者传入用户名密码，返回登录结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let loginAction: Action&lt;(String,String), Bool&gt; = Action&#123;</div><div class="line">    (username, password) in</div><div class="line">    print(&quot;\(username) \(password)&quot;)</div><div class="line">    return Observable.just(true)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="连接Button"><a href="#连接Button" class="headerlink" title="连接Button"></a>连接Button</h3><p><code>buttonAction</code>怎么使用，你可以把它和<code>button</code>的点击绑定起来:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">button.rx.action = buttonAction</div></pre></td></tr></table></figure>
+<p>每次点击按钮<code>Action</code>都会执行，如果上一次的点击<code>Action</code>没有完成的话，这个的点击将会无效。</p>
+<p>设置为<code>nil</code>去取消绑定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">button.rx.action = nil</div></pre></td></tr></table></figure>
+<h3 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h3><p>我们可以把输入的账号密码绑定到上面的<code>loginAction</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">let usernameAndPassword = Observable.combineLatest(username.rx.text.orEmpty, password.rx.text.orEmpty)</div><div class="line">        </div><div class="line">login.rx.tap.asObservable()</div><div class="line">    .withLatestFrom(usernameAndPassword)</div><div class="line">    .bindTo(loginAction.inputs)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">loginAction.elements</div><div class="line">    .filter&#123; $0 &#125;</div><div class="line">    .subscribe(</div><div class="line">        onNext:&#123;</div><div class="line">            _ in</div><div class="line">            print(&quot;login ok!&quot;)</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">loginAction.errors</div><div class="line">    .subscribe(</div><div class="line">        onError:&#123;</div><div class="line">            error in</div><div class="line">            print(&quot;error&quot;)</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>输入的账号密码绑定到<code>loginAction.inputs</code>，然后订阅<code>loginAction</code>的结果。</p>
+<h3 id="cell点击"><a href="#cell点击" class="headerlink" title="cell点击"></a>cell点击</h3><p>可以给每个<code>UITableViewCell</code>里面的button去绑定一个<code>Action</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">let items = Observable.just(</div><div class="line">            (0...20).map&#123; &quot;\($0)&quot; &#125;</div><div class="line">        )</div><div class="line">        </div><div class="line">items.bindTo(tableview.rx.items(cellIdentifier: &quot;Cell&quot;, cellType: UITableViewCell.self))&#123;</div><div class="line">    (row, elememt, cell) in</div><div class="line">    </div><div class="line">    let title = cell.viewWithTag(100) as! UILabel</div><div class="line">    </div><div class="line">    title.text = elememt</div><div class="line">    </div><div class="line">    var button = cell.viewWithTag(101) as! UIButton</div><div class="line">    </div><div class="line">    button.rx.action = CocoaAction &#123;</div><div class="line">        print(&quot;to do something \(elememt)&quot;)</div><div class="line">        return .empty()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;.disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="execute"><a href="#execute" class="headerlink" title="execute"></a>execute</h3><p>除了绑定输入以外，还可以主动去执行<code>Action</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">loginAction.execute((&quot;admin&quot;,&quot;password&quot;))</div><div class="line">    .subscribe&#123;</div><div class="line">        print($0)</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<p>通过<code>execute</code>传入账号密码，然后执行<code>Action</code>并订阅结果。</p>
+<h3 id="enabledIf"><a href="#enabledIf" class="headerlink" title="enabledIf"></a>enabledIf</h3><p>只有当条件满足的时候<code>Action</code>才会执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let usernameCount = username.rx.text</div><div class="line">            .orEmpty</div><div class="line">            .asObservable()</div><div class="line">            .map&#123;</div><div class="line">                $0.characters.count &gt; 6</div><div class="line">            &#125;</div><div class="line">        </div><div class="line">let validateUsername:Action&lt;String, Bool&gt; = Action(enabledIf: usernameCount, workFactory: &#123; input in</div><div class="line">    print(&quot;username validating.....&quot;)</div><div class="line">    return Observable.just(true)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">username.rx.controlEvent(.editingDidEnd)</div><div class="line">    .subscribe(</div><div class="line">        onNext:&#123;</div><div class="line">            [unowned self] _ in</div><div class="line">            validateUsername.execute(self.username.text ?? &quot;&quot;)</div><div class="line">        &#125;</div><div class="line">    )</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="UIAlertAction"><a href="#UIAlertAction" class="headerlink" title="UIAlertAction"></a>UIAlertAction</h3><p><code>UIAlert</code>的<code>Action</code>绑定:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">validateUsername.elements</div><div class="line">    .observeOn(MainScheduler.instance)</div><div class="line">    .subscribe&#123;</div><div class="line">        [unowned self] _ in</div><div class="line">        print(&quot;username validate ok&quot;)</div><div class="line">        let alertController = UIAlertController(title: &quot;validate&quot;, message: &quot;username validate is ok!&quot;, preferredStyle: .alert)</div><div class="line">        var ok = UIAlertAction.Action(&quot;OK&quot;, style: .default)</div><div class="line">        ok.rx.action = CocoaAction &#123;</div><div class="line">            print(&quot;Alert&apos;s OK button was pressed&quot;)</div><div class="line">            return .empty()</div><div class="line">        &#125;</div><div class="line">        alertController.addAction(ok)</div><div class="line">        self.present(alertController, animated: true, completion: nil)</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><code>Action</code>可以用来定一个动作触发后的一个行为，也可以绑定多个动态到同一个<code>Action</code>，和<code>MVVM</code>结合的时候变得尤为合适。</p>
+<p>代码见github:</p>
+<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftAction</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      Action是observable的一个抽象库，它定义了一个动作，传入输入的事件，然后对事件进行处理，返回处理结果。
+    
+    </summary>
+    
+      <category term="rxswift" scheme="http://www.alonemonkey.com/categories/rxswift/"/>
+    
+    
+      <category term="RxSwift" scheme="http://www.alonemonkey.com/tags/RxSwift/"/>
+    
+  </entry>
   
   <entry>
     <title>RxSwift学习之旅 - 多线程调度</title>
@@ -1253,42 +1306,6 @@
 &lt;p&gt;介绍：直播很火，可以了解一下~&lt;/p&gt;
 &lt;h3 id=&quot;UIKit与Core-Graphics绘图技术详解&quot;&gt;&lt;a href=&quot;#UIKit与Core-Graphics绘图技术详解&quot; class=&quot;headerlink&quot; title=&quot;UIKit与Core Graphics绘图技术详解&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/liangliang2727/article/details/45478963&quot;&gt;UIKit与Core Graphics绘图技术详解&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.alonemonkey.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;介绍：iOS上的绘图技术。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="weekly" scheme="http://www.alonemonkey.com/categories/weekly/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>第五期 Coder群周报</title>
-    <link href="http://www.alonemonkey.com/2016/08/28/weekly/"/>
-    <id>http://www.alonemonkey.com/2016/08/28/weekly/</id>
-    <published>2016-08-27T16:00:00.000Z</published>
-    <updated>2016-12-21T02:13:51.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>iOS</p>
-</blockquote>
-<h3 id="移动客户端中高效使用-SQLite"><a href="#移动客户端中高效使用-SQLite" class="headerlink" title="移动客户端中高效使用 SQLite"></a><a href="http://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653577674&amp;idx=1&amp;sn=b1136f8fa3b823c8ed1c2f1df060bf1d&amp;scene=0#rd" target="_blank" rel="external">移动客户端中高效使用 SQLite</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：移动客户端SQLite的使用。</p>
-<h3 id="玩转Podfile"><a href="#玩转Podfile" class="headerlink" title="玩转Podfile"></a><a href="http://mp.weixin.qq.com/s?__biz=MzI2NzQyODU0Ng==&amp;mid=2247483681&amp;idx=1&amp;sn=52bd461e608610eeeca8e2dc42f6c7d7&amp;scene=2&amp;srcid=08186PcT9Dnxhg6kwoI7teOE#rd" target="_blank" rel="external">玩转Podfile</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：Podfile的使用和配置。</p>
-<a id="more"></a>
-<h3 id="iOS-10-应用扩展的剧变，对你的-iPhone-有什么影响？"><a href="#iOS-10-应用扩展的剧变，对你的-iPhone-有什么影响？" class="headerlink" title="iOS 10 应用扩展的剧变，对你的 iPhone 有什么影响？"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjAyNDUyMA==&amp;mid=2650493853&amp;idx=1&amp;sn=355a5436d8190e7fe25384cad369b838&amp;scene=0#rd" target="_blank" rel="external">iOS 10 应用扩展的剧变，对你的 iPhone 有什么影响？</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：RT</p>
-<h3 id="iOS开发通过代码方式使用AutoLayout"><a href="#iOS开发通过代码方式使用AutoLayout" class="headerlink" title="iOS开发通过代码方式使用AutoLayout"></a><a href="http://www.cocoachina.com/ios/20151022/13872.html" target="_blank" rel="external">iOS开发通过代码方式使用AutoLayout</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：iOS中兼容性自动布局的问题以及自动布局的第三方库。</p>
-<h3 id="iOS-8-WebKit框架概览（上）"><a href="#iOS-8-WebKit框架概览（上）" class="headerlink" title="iOS 8 WebKit框架概览（上）"></a><a href="http://www.cocoachina.com/ios/20150203/11089.html" target="_blank" rel="external">iOS 8 WebKit框架概览（上）</a></h3><h3 id="iOS-8-WebKit框架概览（下）"><a href="#iOS-8-WebKit框架概览（下）" class="headerlink" title="iOS 8 WebKit框架概览（下）"></a><a href="http://www.cocoachina.com/ios/20150205/11108.html" target="_blank" rel="external">iOS 8 WebKit框架概览（下）</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：WKWebView的一些特性和使用。</p>
-<h3 id="如何进行-HTTP-Mock（iOS）"><a href="#如何进行-HTTP-Mock（iOS）" class="headerlink" title="如何进行 HTTP Mock（iOS）"></a><a href="http://draveness.me/http-mock/" target="_blank" rel="external">如何进行 HTTP Mock（iOS）</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：这篇文章会对 OHHTTPStubs 源代码的分析，其实现原理是建立在 NSURLProtocol 的基础上的。</p>
-<p><br><br><blockquote class="blockquote-center"><p>技术无关</p>
-</blockquote></p>
-<h3 id="魏晓军：技术人如何打造技术品牌"><a href="#魏晓军：技术人如何打造技术品牌" class="headerlink" title="魏晓军：技术人如何打造技术品牌"></a><a href="http://mp.weixin.qq.com/s?__biz=MzA3ODg4MDk0Ng==&amp;mid=2651112605&amp;idx=1&amp;sn=f5a9e918aa5e3213d6fd41179b044ec1&amp;scene=0#rd" target="_blank" rel="external">魏晓军：技术人如何打造技术品牌</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a><br>介绍：技术人不能只做技术。</p>
-<h3 id="为什么支付宝很难做成社交，而又一定会继续做？"><a href="#为什么支付宝很难做成社交，而又一定会继续做？" class="headerlink" title="为什么支付宝很难做成社交，而又一定会继续做？"></a><a href="http://36kr.com/p/5051411.html" target="_blank" rel="external">为什么支付宝很难做成社交，而又一定会继续做？</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;iOS&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;移动客户端中高效使用-SQLite&quot;&gt;&lt;a href=&quot;#移动客户端中高效使用-SQLite&quot; class=&quot;headerlink&quot; title=&quot;移动客户端中高效使用 SQLite&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;amp;mid=2653577674&amp;amp;idx=1&amp;amp;sn=b1136f8fa3b823c8ed1c2f1df060bf1d&amp;amp;scene=0#rd&quot;&gt;移动客户端中高效使用 SQLite&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.blogfshare.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;br&gt;介绍：移动客户端SQLite的使用。&lt;/p&gt;
-&lt;h3 id=&quot;玩转Podfile&quot;&gt;&lt;a href=&quot;#玩转Podfile&quot; class=&quot;headerlink&quot; title=&quot;玩转Podfile&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://mp.weixin.qq.com/s?__biz=MzI2NzQyODU0Ng==&amp;amp;mid=2247483681&amp;amp;idx=1&amp;amp;sn=52bd461e608610eeeca8e2dc42f6c7d7&amp;amp;scene=2&amp;amp;srcid=08186PcT9Dnxhg6kwoI7teOE#rd&quot;&gt;玩转Podfile&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.blogfshare.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;br&gt;介绍：Podfile的使用和配置。&lt;/p&gt;
     
     </summary>
     
