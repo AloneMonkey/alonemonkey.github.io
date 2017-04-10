@@ -771,7 +771,7 @@
     <link href="http://www.alonemonkey.com/2017/03/24/rxswift-part-three/"/>
     <id>http://www.alonemonkey.com/2017/03/24/rxswift-part-three/</id>
     <published>2017-03-23T16:00:00.000Z</published>
-    <updated>2017-04-10T13:59:23.000Z</updated>
+    <updated>2017-04-10T14:00:33.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="合并操作"><a href="#合并操作" class="headerlink" title="合并操作"></a>合并操作</h3><p>合并多个序列或者值成单个序列。</p>
 <h4 id="startWith"><a href="#startWith" class="headerlink" title="startWith"></a>startWith</h4><p>在序列触发值之前插入一个多个元素的特殊序列。</p>
@@ -798,7 +798,7 @@
 <p>大家想想把这里的<code>switchLatest</code>改成<code>merge</code>会输出什么？</p>
 <p>图例:</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490282812918.png" alt="image"></p>
-<h4 id="sampe"><a href="#sampe" class="headerlink" title="sampe"></a>sampe</h4><p>当收到目标事件，就会从源序列取一个最新的事件，发送到序列，如果两次目标事件之间没有源序列的事件，则不发射值。</p>
+<h4 id="sample"><a href="#sample" class="headerlink" title="sample"></a>sample</h4><p>当收到目标事件，就会从源序列取一个最新的事件，发送到序列，如果两次目标事件之间没有源序列的事件，则不发射值。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">let source = PublishSubject&lt;Int&gt;()</div><div class="line">let target = PublishSubject&lt;String&gt;()</div><div class="line"></div><div class="line">let subscription = source</div><div class="line">    .sample(target)</div><div class="line">    .subscribe &#123; event in</div><div class="line">        print(event)</div><div class="line">&#125;</div><div class="line">source.onNext(1)</div><div class="line">target.onNext(&quot;A&quot;)  //获取最新的source</div><div class="line">source.onNext(2)</div><div class="line">source.onNext(3)</div><div class="line">target.onNext(&quot;B&quot;)  //获取最新的source</div><div class="line">target.onNext(&quot;C&quot;)  //没有最新的source，不发射</div><div class="line"></div><div class="line">output:</div><div class="line">next(1)</div><div class="line">next(3)</div></pre></td></tr></table></figure>
 <h3 id="转换操作"><a href="#转换操作" class="headerlink" title="转换操作"></a>转换操作</h3><p>对当前序列的值进行转换发射一个新的序列。</p>
 <h4 id="map"><a href="#map" class="headerlink" title="map"></a>map</h4><p>和<code>Swift</code>里面的<code>map</code>类似，转换其中的每一个元素。</p>
