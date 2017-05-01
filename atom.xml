@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-04-10T09:50:36.000Z</updated>
+  <updated>2017-05-01T14:02:36.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,58 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>在Centos部署nodejs</title>
+    <link href="http://www.alonemonkey.com/2017/05/01/nodejs-on-centos/"/>
+    <id>http://www.alonemonkey.com/2017/05/01/nodejs-on-centos/</id>
+    <published>2017-04-30T16:00:00.000Z</published>
+    <updated>2017-05-01T14:02:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>今天突然发现自己买了一年快过期了的搬瓦工，除了少数时间拿来当梯子用用其它也没用上，所以流量还剩这么多。。。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1493644280591.png" alt="image"></p>
+<p>所以就想试试把本地写的nodejs的demo部署上去看看。</p>
+<p>顺便把原来买的域名解析上去QAQ</p>
+<h3 id="安装node和npm"><a href="#安装node和npm" class="headerlink" title="安装node和npm"></a>安装node和npm</h3><p>在官网下载编译好的node包:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget https://nodejs.org/dist/v6.10.2/node-v6.10.2-linux-x86.tar.xz</div><div class="line"></div><div class="line">xz -d node-v6.10.2-linux-x86.tar.xz</div><div class="line"></div><div class="line">tar -xf node-v6.10.2-linux-x86.tar</div></pre></td></tr></table></figure>
+<p>解压后得到<code>node-v6.10.2-linux-x86</code>文件夹，里面有个<code>bin</code>目录，包含了我们需要的<code>node</code>和<code>npm</code>。</p>
+<p>这里需要注意的是，<code>npm</code>是链接到<code>../lib/node_modules/npm/bin/npm-cli.js</code>的，不能直接拷贝到<code>/usr/bin/</code>,否则会出错，可以使用<code>ll</code>看到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-rwxrwxr-x 1 500 500 28746408 Apr  4 05:04 node</div><div class="line">lrwxrwxrwx 1 500 500       38 May  1 08:03 npm -&gt; ../lib/node_modules/npm/bin/npm-cli.js</div></pre></td></tr></table></figure>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>编辑<code>/etc/profile</code>文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/profile</div></pre></td></tr></table></figure>
+<p>增加路径:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PATH=$PATH:/home/node-v6.10.2-linux-x86/bin</div><div class="line">export PATH</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source /etc/profile</div></pre></td></tr></table></figure>
+<h3 id="新建nodejs项目"><a href="#新建nodejs项目" class="headerlink" title="新建nodejs项目"></a>新建nodejs项目</h3><p>我自己的代码就不献丑了，这里就拿网上的一个demo来看看效果好了。<a href="https://my.oschina.net/u/1416844/blog/660951" target="_blank" rel="external">demo</a></p>
+<p>安装git：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install git</div></pre></td></tr></table></figure>
+<p>ok, 在服务器拉下demo的代码，<code>npm install</code>，然后使用<code>pm2</code>来运行程序。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install pm2 -g</div><div class="line">pm2 start start.js -n demo</div></pre></td></tr></table></figure>
+<p>输入<code>IP:8080</code>就能看到<code>Hello World!</code>了！</p>
+<h3 id="域名绑定到ip"><a href="#域名绑定到ip" class="headerlink" title="域名绑定到ip"></a>域名绑定到ip</h3><p>想起来原来有一个空闲的域名，正好试下域名绑定。</p>
+<p>在域名的<code>A</code>记录填写服务器的ip地址，等其生效即可。</p>
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><p>然后通过域名直接访问，发现并不能访问到我们的程序，因为默认访问的端口是<code>80</code>，而我们监听的端口是<code>8080</code>。这里可以通过：</p>
+<ul>
+<li>Nginx 反向代理</li>
+<li>iptables 端口转发</li>
+</ul>
+<p>为了简单，直接用<code>iptables</code>端口转发了。。。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080</div><div class="line">service iptables save  //保存规则</div></pre></td></tr></table></figure>
+<p>这下可以愉快的通过域名访问刚刚部署的nodejs服务了。。。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      突然发现自己买了一年快到期的搬瓦工一直没用，就想试试部署一个简单的nodejs服务玩玩
+    
+    </summary>
+    
+      <category term="rxswift" scheme="http://www.alonemonkey.com/categories/rxswift/"/>
+    
+    
+      <category term="RxSwift" scheme="http://www.alonemonkey.com/tags/RxSwift/"/>
+    
+  </entry>
   
   <entry>
     <title>RxSwift学习之旅 - RxGesture</title>
@@ -1263,50 +1315,6 @@
 &lt;/blockquote&gt;
 &lt;h3 id=&quot;iOS-10-的适配问题&quot;&gt;&lt;a href=&quot;#iOS-10-的适配问题&quot; class=&quot;headerlink&quot; title=&quot;iOS 10 的适配问题&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://mp.weixin.qq.com/s?__biz=MzA3NzM0NzkxMQ==&amp;amp;mid=2655358043&amp;amp;idx=1&amp;amp;sn=a1433f4bed139ea18dccf625fde9fe3c&amp;amp;chksm=84e24173b395c8657776918340eb76b694b770bde044b64e6fd5c10301936a118fb8c33aadca&amp;amp;scene=1&amp;amp;srcid=0923VYhPRIFeQbnkgTBo6Odl#rd&quot;&gt;iOS 10 的适配问题&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.blogfshare.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;介绍：随着iOS10发布的临近,大家的App都需要适配iOS10,下面是我总结的一些关于iOS10适配方面的问题,如果有错误,欢迎指出.&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="weekly" scheme="http://www.alonemonkey.com/categories/weekly/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>第七期 Coder群周报</title>
-    <link href="http://www.alonemonkey.com/2016/09/11/weekly/"/>
-    <id>http://www.alonemonkey.com/2016/09/11/weekly/</id>
-    <published>2016-09-10T16:00:00.000Z</published>
-    <updated>2016-12-21T02:13:44.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>iOS</p>
-</blockquote>
-<h3 id="UIKit与Core-Graphics绘图技术详解"><a href="#UIKit与Core-Graphics绘图技术详解" class="headerlink" title="UIKit与Core Graphics绘图技术详解"></a><a href="http://blog.csdn.net/liangliang2727/article/details/45478963" target="_blank" rel="external">UIKit与Core Graphics绘图技术详解</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：iOS支持两套图形API族：Core Graphics/QuartZ 2D 和OpenGL ES。OpenGL ES是跨平台的图形API，属于OpenGL的一个简化版本。QuartZ 2D是苹果公司开发的一套API，它是Core Graphics Framework的一部分。</p>
-<h3 id="HTTP-HTTP2-0-SPDY-HTTPS你应该知道的一些事"><a href="#HTTP-HTTP2-0-SPDY-HTTPS你应该知道的一些事" class="headerlink" title="HTTP,HTTP2.0,SPDY,HTTPS你应该知道的一些事"></a><a href="http://web.jobbole.com/87695/" target="_blank" rel="external">HTTP,HTTP2.0,SPDY,HTTPS你应该知道的一些事</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：作为一个经常和网络打交道的程序员，了解这些协议是必须的。</p>
-<a id="more"></a>
-<h3 id="放肆的使用UIBezierPath和CAShapeLayer画各种图形"><a href="#放肆的使用UIBezierPath和CAShapeLayer画各种图形" class="headerlink" title="放肆的使用UIBezierPath和CAShapeLayer画各种图形"></a><a href="http://www.jianshu.com/p/c5cbb5e05075" target="_blank" rel="external">放肆的使用UIBezierPath和CAShapeLayer画各种图形</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：画图详解。</p>
-<h3 id="JavaScriptCore初探"><a href="#JavaScriptCore初探" class="headerlink" title="JavaScriptCore初探"></a><a href="https://hjgitbook.gitbooks.io/ios/content/04-technical-research/04-javascriptcore-note.html" target="_blank" rel="external">JavaScriptCore初探</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：在iOS7之前，原生应用和Web应用之间很难通信。如果你想在iOS设备上渲染HTML或者运行JavaScript，你不得不使用UIWebView。iOS7引入了JavaScriptCore，功能更强大，使用更简单。</p>
-<h3 id="iOS-App组件化开发实践"><a href="#iOS-App组件化开发实践" class="headerlink" title="iOS App组件化开发实践"></a><a href="http://mp.weixin.qq.com/s?__biz=MzA3ODg4MDk0Ng==&amp;mid=2651112676&amp;idx=1&amp;sn=d89305910fd0e12f83299cfbc25dd662" target="_blank" rel="external">iOS App组件化开发实践</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：iOS 组件化方案介绍。</p>
-<h3 id="实现Uber的启动动画"><a href="#实现Uber的启动动画" class="headerlink" title="实现Uber的启动动画"></a><a href="http://www.jianshu.com/p/0c9991ecd17d" target="_blank" rel="external">实现Uber的启动动画</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：还原Uber启动画面动画效果。</p>
-<p><br><br><blockquote class="blockquote-center"><p>PHP</p>
-</blockquote></p>
-<h3 id="phpsocket客户端以及服务器例子"><a href="#phpsocket客户端以及服务器例子" class="headerlink" title="phpsocket客户端以及服务器例子"></a><a href="http://blog.csdn.net/zouhao619/article/details/32324819" target="_blank" rel="external">phpsocket客户端以及服务器例子</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：简单socket通信，可以使用php作为server，其它端与之通信。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;iOS&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;UIKit与Core-Graphics绘图技术详解&quot;&gt;&lt;a href=&quot;#UIKit与Core-Graphics绘图技术详解&quot; class=&quot;headerlink&quot; title=&quot;UIKit与Core Graphics绘图技术详解&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/liangliang2727/article/details/45478963&quot;&gt;UIKit与Core Graphics绘图技术详解&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.blogfshare.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;介绍：iOS支持两套图形API族：Core Graphics/QuartZ 2D 和OpenGL ES。OpenGL ES是跨平台的图形API，属于OpenGL的一个简化版本。QuartZ 2D是苹果公司开发的一套API，它是Core Graphics Framework的一部分。&lt;/p&gt;
-&lt;h3 id=&quot;HTTP-HTTP2-0-SPDY-HTTPS你应该知道的一些事&quot;&gt;&lt;a href=&quot;#HTTP-HTTP2-0-SPDY-HTTPS你应该知道的一些事&quot; class=&quot;headerlink&quot; title=&quot;HTTP,HTTP2.0,SPDY,HTTPS你应该知道的一些事&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://web.jobbole.com/87695/&quot;&gt;HTTP,HTTP2.0,SPDY,HTTPS你应该知道的一些事&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.blogfshare.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;介绍：作为一个经常和网络打交道的程序员，了解这些协议是必须的。&lt;/p&gt;
     
     </summary>
     
