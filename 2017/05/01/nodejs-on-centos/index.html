@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="突然发现自己买了一年快到期的搬瓦工一直没用，就想试试部署一个简单的nodejs服务玩玩">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1493644280591.png">
-<meta property="og:updated_time" content="2017-05-01T14:02:36.000Z">
+<meta property="og:updated_time" content="2017-05-01T14:07:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在Centos部署nodejs">
 <meta name="twitter:description" content="突然发现自己买了一年快到期的搬瓦工一直没用，就想试试部署一个简单的nodejs服务玩玩">
@@ -362,6 +362,8 @@
 <p>ok, 在服务器拉下demo的代码，<code>npm install</code>，然后使用<code>pm2</code>来运行程序。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install pm2 -g</div><div class="line">pm2 start start.js -n demo</div></pre></td></tr></table></figure>
 <p>输入<code>IP:8080</code>就能看到<code>Hello World!</code>了！</p>
+<p>停止项目:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pm2 stop demo -f</div></pre></td></tr></table></figure>
 <h3 id="域名绑定到ip"><a href="#域名绑定到ip" class="headerlink" title="域名绑定到ip"></a>域名绑定到ip</h3><p>想起来原来有一个空闲的域名，正好试下域名绑定。</p>
 <p>在域名的<code>A</code>记录填写服务器的ip地址，等其生效即可。</p>
 <h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><p>然后通过域名直接访问，发现并不能访问到我们的程序，因为默认访问的端口是<code>80</code>，而我们监听的端口是<code>8080</code>。这里可以通过：</p>
@@ -490,6 +492,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/05/25/antiantidebug/" rel="prev" title="关于反调试&反反调试那些事">
+                关于反调试&反反调试那些事 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -567,7 +573,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -575,7 +581,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -584,7 +590,7 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
