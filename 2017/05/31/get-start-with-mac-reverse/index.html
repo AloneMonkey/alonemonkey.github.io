@@ -1,0 +1,915 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="逆向," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="除了iOS上面的逆向，其实Mac上面的逆向原理都差不多，这篇文章就带大家来试一把Mac上面的逆向。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一篇文章走进Mac逆向的世界">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/05/31/get-start-with-mac-reverse/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="除了iOS上面的逆向，其实Mac上面的逆向原理都差不多，这篇文章就带大家来试一把Mac上面的逆向。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496202790459.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496202987912.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203071610.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203184764.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203632361.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496214065433.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496216671572.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496284722475.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496285419802.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287517422.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287617990.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288222865.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288264564.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288458933.png">
+<meta property="og:updated_time" content="2017-06-01T06:34:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一篇文章走进Mac逆向的世界">
+<meta name="twitter:description" content="除了iOS上面的逆向，其实Mac上面的逆向原理都差不多，这篇文章就带大家来试一把Mac上面的逆向。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496202790459.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 一篇文章走进Mac逆向的世界 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一篇文章走进Mac逆向的世界
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-31T00:00:00+08:00" content="2017-05-31">
+              2017-05-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/逆向/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在玩了iOS逆向之后，看到Mac上面的应用莫名有了一种想要搞事情的冲动。其实在思想上iOS逆向和Mac逆向是差不多的，原理都差不多，走的流程可能不太一样，这篇文章的目的主要是让大家了解一下Mac上面玩逆向的大致流程和分析方法，所以在本文中去实现什么样的功能并不是重点，重点是让大家懂得怎么去分析找到实现。</p>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>既然是逆向分析，总的有个目的，有目的才有动力，那么就以QQ撤回这个功能为例吧，网上也有很多文章讲解应该hook哪个函数，具体的分析过程却不是那么清晰，所以这里还是着重分析的过程，最终的实现大家自由发挥。</p>
+<h3 id="分析思路"><a href="#分析思路" class="headerlink" title="分析思路"></a>分析思路</h3><p>在iOS逆向分析中，大致的思想是这样的(不同情况略有差异)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">界面分析  -&gt;  动态分析  -&gt;  静态分析  -&gt;  动态库注入  -&gt;  ...</div></pre></td></tr></table></figure>
+<p>那么在Mac逆向过程中，也可以按照这个套路来搞一波。</p>
+<h3 id="界面分析"><a href="#界面分析" class="headerlink" title="界面分析"></a>界面分析</h3><p>要分析QQ撤回的动作，这个动作是有在界面上面体现的，别人撤回一条消息后，那条消息会变成被撤回的通知。所以先分析界面上负责处理该状态的类，然后再去看类的调用。</p>
+<p>在Mac上面也有类似iOS <code>Reveal</code>的工具叫做<a href="https://www.interface-inspector.com/" target="_blank" rel="external">Interface Inspector</a>。</p>
+<p>下载下来后打开，发现是一个需要<code>License</code>的货，既然遇到了那就搞一搞吧。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496202790459.png" alt="image"></p>
+<p>首先从界面关键词<code>Register</code>入手吧，拖到<code>hopper</code>,在<code>Strings</code>里面搜索<code>Register</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496202987912.png" alt="image"></p>
+<p>找到之后按<code>x</code>查找引用关系，发现是在<code>-[SMEnterLicenseViewController loadView]</code>这个函数里面存在这个字符串。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203071610.png" alt="image"></p>
+<p>继续找到<code>action</code>为<code>-[SMEnterLicenseViewController register:]</code>。</p>
+<p>里面会调用<code>[r14 enterLicenseViewControllerDidSelectRegister:r15 withLicenseName:r12 code:rbx];</code></p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203184764.png" alt="image"></p>
+<p>这里通过<code>[SMLicenseManager registerLicenseWithName:code:]</code>验证的。</p>
+<p>那直接修改代码返回<code>YES</code>。</p>
+<p><code>Modify -&gt; Assemble Instruction...</code></p>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mov        eax, 0x1    //eax用来保存返回值</div><div class="line">ret</div></pre></td></tr></table></figure>
+<p>生成一个新的可执行文件，<code>File -&gt; Produce New Executable...</code>。</p>
+<p>选择<code>Remove Signature</code>。</p>
+<p>替换原可执行文件，然后打开，弹出了:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203632361.png" alt="image"></p>
+<p>看来它还验证签名了。</p>
+<p>那么找到启动时的回调:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-[SMAppDelegate applicationWillFinishLaunching:]</div></pre></td></tr></table></figure>
+<p>可以找到对应的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if ([rax codeSignState] != 0x2) goto loc_100024851;</div></pre></td></tr></table></figure>
+<p>如果<code>codeSignState</code>返回不为2就会弹出刚刚那个。</p>
+<p>所以这里把:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jne        loc_100024851</div></pre></td></tr></table></figure>
+<p>对应的二进制<code>0F 85 CD 03 00 00</code>改成<code>0F 84 CD 03 00 00</code>。</p>
+<p>重新打开不显示那个签名问题，但是直接闪退了。</p>
+<p>猜测某些地方还有检测，然后<code>exit</code>或者<code>terminate</code>了。</p>
+<p>在<code>Strings</code>中查找字符串找到<code>terminate:</code>的引用。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496214065433.png" alt="image"></p>
+<p>查看每一处调用，发现这么一段代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">void ___24+[SMLicenseManager load]_block_invoke(void * _block) &#123;</div><div class="line">    if ([SMLicenseManager verifyLicenseWithName:@&quot;Test User&quot; code:@&quot;GAWAE-8C69D-7LZ5H-9D8M3-HVEG7-KHNQC-CQ7RF-SEPQC-CRF82-G47U5-H6DKAB-8SKA7-EWSCM-7Q7SV-MYF4&quot;] != 0x0) &#123;</div><div class="line">            [*_NSApp terminate:0x0];</div><div class="line">    &#125;</div><div class="line">    return;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>作者自己拿了假的<code>License</code>测试，如果通过就直接退出了。</p>
+<p>所以这里<code>je         loc_10010ec26</code>对应二进制<code>74 1A</code>改成<code>75 1A</code>。</p>
+<p>然后重新生成可执行文件，打开随便填入<code>License</code>注册即可。</p>
+<p>额，好像有点扯远了，不过本文的目的就是为了学习Mac逆向的分析过程，所以这一部分并不是多余的。</p>
+<p>当然这里还有坑，如何你发现<code>attach process</code>的时候报错的话，请参考<a href="http://bbs.iosre.com/t/fix-bug-for-interface-inspector-on-macos-serria/5665" target="_blank" rel="external">Fix Bug for Interface Inspector on macOS Serria</a>这篇文章重新编译<code>mach_inject_bundle_stub.bundle</code>。</p>
+<p>终于准备好了，附加到QQ，选中聊天界面。可以找到<code>MQAIOChatViewController</code>这样的一个<code>ViewController</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496216671572.png" alt="image"></p>
+<p>下面通过动态跟踪函数调用来看看这个类的调用流程。</p>
+<h3 id="动态跟踪"><a href="#动态跟踪" class="headerlink" title="动态跟踪"></a>动态跟踪</h3><p>动态跟踪的方法有多种，除了iOS逆向中使用的<a href="https://www.frida.re/" target="_blank" rel="external">Frida</a>, lldb , Mac上面还可以使用Dtrace。</p>
+<h4 id="Frida"><a href="#Frida" class="headerlink" title="Frida"></a>Frida</h4><p><code>Frida</code>是一个通过<code>js</code>和<code>Native</code>交互的跨平台工具，可以通过<code>frida QQ</code>的方式附加，查看当前加载的类，类的方法等等。除此外还可以加载自己的<code>js</code>脚本<code>frida QQ -l trace.js</code>。</p>
+<p>在<code>python</code>中，有可以<code>import frida</code>来获取设置以及目标等相关信息，同时也能调用<code>js</code>并获取返回结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ObjC.classes.MQAIOChatViewController.$methods</div></pre></td></tr></table></figure>
+<p><code>frida</code>还提供了一个非常有用的功能，可以用于此处，也就是<code>frida-trace</code>。</p>
+<p>可以通过这个工具来跟踪指定方法或者指定类的调用过程，这里感兴趣的是<code>MQAIOChatViewController</code>这个类的调用过程，所以可以通过如下命令来跟踪：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">frida-trace -m &quot;-[MQAIOChatViewController *]&quot; QQ</div></pre></td></tr></table></figure>
+<p>然后撤回一条消息可以看到如下调用过程:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">25623 ms  -[MQAIOChatViewController revokeMessages:0x618000206220 ]</div><div class="line">25623 ms     | -[MQAIOChatViewController topMsgListViewController]</div><div class="line">25623 ms     | -[MQAIOChatViewController topMsgListViewController]</div><div class="line">25625 ms     | -[MQAIOChatViewController scrollViewDidScrollToBottom:0x7fc28b0dffb0 ]</div><div class="line">25632 ms     | -[MQAIOChatViewController scheduleRecognitionLogic]</div><div class="line">25633 ms     | -[MQAIOChatViewController topMsgListViewController]</div><div class="line">25639 ms  -[MQAIOChatViewController isSimplestModel]</div><div class="line">25639 ms  -[MQAIOChatViewController isSimplestModel]</div><div class="line">25639 ms  -[MQAIOChatViewController isSimplestModel]</div></pre></td></tr></table></figure>
+<p>这便找到了一个上层撤回的调用，后面还会继续深入。</p>
+<h4 id="Dtrace"><a href="#Dtrace" class="headerlink" title="Dtrace"></a>Dtrace</h4><p>讲<code>lldb</code>前，先讲下<code>Dtrace</code>这个Linux上的动态追踪神器，可以通过它来监控应用程序或者内核的调用，所以这里可以用于监控OC函数的调用。</p>
+<p>新建文件<code>trace.d</code>，写入内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#!/usr/sbin/dtrace -s</div><div class="line"></div><div class="line">objc$target:MQAIOChatViewController::entry&#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后找到<code>QQ</code>的进程id <code>ps -e | grep QQ</code>。再运行<code>dtrace</code>脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./trace.d -p 24105</div></pre></td></tr></table></figure>
+<p>撤回消息可得到如下输出结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">2  30436           -revokeMessages::entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">2  30382 -scrollViewDidScrollToBottom::entry</div><div class="line">2  44569  -scheduleRecognitionLogic:entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">6  44608           -isSimplestModel:entry</div><div class="line">6  44608           -isSimplestModel:entry</div><div class="line">0  44608           -isSimplestModel:entry</div></pre></td></tr></table></figure>
+<p>也可以直接运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo dtrace -n &apos;objc$target:MQAIOChatViewController::entry&#123;&#125;&apos; -p 24105</div></pre></td></tr></table></figure>
+<p>只是在文件里面可以进行更多的操作。</p>
+<h4 id="lldb"><a href="#lldb" class="headerlink" title="lldb"></a>lldb</h4><p><code>lldb</code>这部分的动态跟踪在后面<code>Xcode</code>调试会有讲到。</p>
+<h3 id="Xcode"><a href="#Xcode" class="headerlink" title="Xcode"></a>Xcode</h3><p>找到了函数之后，可以写个动态库注入为了方便调试以及动态库注入这里创建一个<code>dylib</code>的Xcode项目，选择<code>macOS Library</code>，点击创建，Type选择<code>Dynamic</code>。</p>
+<p>为了<code>Hook</code>函数，先选择一个现成的库来做，可以选择:</p>
+<ul>
+<li><a href="https://github.com/alexzielenski/ZKSwizzle" target="_blank" rel="external">ZKSwizzle</a></li>
+<li><a href="https://github.com/steipete/Aspects" target="_blank" rel="external">Aspects</a></li>
+<li><a href="https://github.com/comex/substitute" target="_blank" rel="external">substitute</a></li>
+<li>……</li>
+</ul>
+<p>这里你可能会想一个撤回一条命令一个文件哪有这么麻烦，而这些都是一般逆向中可能用到的，不针对功能。</p>
+<p>我个人倾向于使用<code>substitute</code>，它有着和<code>substrate</code>一样的api接口。</p>
+<p>那么首先要编译一个<code>Mac</code>平台的<code>substitute</code>动态库。</p>
+<p>直接编译会报错<code>syscall</code>被弃用，到<a href="https://github.com/phracker/MacOSX-SDKs" target="_blank" rel="external">这里</a>下载一个早一点的比如<code>MacOSX10.11.sdk</code>，然后放到<code>/Applications/XCode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs</code>下。</p>
+<p>然后通过如下命令行编译:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --xcode-sdk macosx10.11 &amp;&amp; make -j8</div></pre></td></tr></table></figure>
+<p>在<code>out</code>目录就可以看到生成的动态库。</p>
+<p>查看动态库的加载地址，把其重命名为<code>libsubstitute.0.dylib</code>并拷贝到<code>/usr/local/lib/</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  out git:(master) ✗ otool -L libsubstitute.dylib</div><div class="line">libsubstitute.dylib:</div><div class="line">	/usr/local/lib/libsubstitute.0.dylib (compatibility version 0.0.0, current version 0.0.0)</div></pre></td></tr></table></figure>
+<p>然后把头文件和动态库引入Xcode项目， 然后在构造函数里面hook<code>-[MQAIOChatViewController revokeMessages:]</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#import &quot;substrate.h&quot;</div><div class="line"></div><div class="line">@class MQAIOChatViewController;</div><div class="line"></div><div class="line">static void (*origin_MQAIOChatViewController_revokeMessages)(MQAIOChatViewController*,SEL,id);</div><div class="line">static void new_MQAIOChatViewController_revokeMessages(MQAIOChatViewController* self,SEL _cmd,id arrays)&#123;</div><div class="line">    NSLog(@&quot;revokeMessages:%@&quot;,arrays);</div><div class="line">    return;</div><div class="line">&#125;</div><div class="line"></div><div class="line">static void __attribute__((constructor)) initialize(void) &#123;</div><div class="line">    MSHookMessageEx(objc_getClass(&quot;MQAIOChatViewController&quot;),  @selector(revokeMessages:), (IMP)&amp;new_MQAIOChatViewController_revokeMessages, (IMP*)&amp;origin_MQAIOChatViewController_revokeMessages);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译生成动态库<code>libMacQQRevoke.dylib</code>。</p>
+<h3 id="动态库注入"><a href="#动态库注入" class="headerlink" title="动态库注入"></a>动态库注入</h3><p>动态库注入可以通过<code>DYLD_INSERT_LIBRARIES</code>注入，也可以直接注入到可执行文件的<code>Load Command</code>。</p>
+<p>这里为了方便就直接通过环境变量注入了。</p>
+<p>点击<code>Build Phases</code>左上角的<code>+</code>，然后点击<code>New Run Script Phase</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496284722475.png" alt="image"></p>
+<p>写入脚本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $&#123;TARGET_BUILD_DIR&#125;</div><div class="line">export DYLD_INSERT_LIBRARIES=./libMacQQRevoke.dylib &amp;&amp; /Applications/QQ.app/Contents/MacOS/QQ</div></pre></td></tr></table></figure>
+<p><code>Command + B</code>， 注入动态库，运行QQ。</p>
+<p>然后撤回消息，发现消息还在，并且控制台有如下输出。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496285419802.png" alt="image"></p>
+<p>也就是Hook生效了，但是重启QQ后，那条消息还是变成了撤回状态。</p>
+<p>这个时候需要继续往上层调用去探索。</p>
+<h3 id="符号还原-Xcode调试"><a href="#符号还原-Xcode调试" class="headerlink" title="符号还原+Xcode调试"></a>符号还原+Xcode调试</h3><p>为了能看到<code>revokeMessages:</code>被调用的堆栈，先使用<a href="https://github.com/tobefuturer/restore-symbol" target="_blank" rel="external">restore-symbol</a>还原符号，然后再使用<a href="https://github.com/steakknife/unsign" target="_blank" rel="external">unsign</a>去掉签名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./restore-symbol QQ -o QQ_symbol</div><div class="line">mv QQ_symbol QQ</div><div class="line">./unsign QQ</div><div class="line">mv QQ.unsigned QQ</div></pre></td></tr></table></figure>
+<p>替换原可执行文件之后，在<code>new_MQAIOChatViewController_revokeMessages</code>断点，<code>Command + B</code>重新运行。</p>
+<p>然后选择<code>Debug -&gt; Attach to Process</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287517422.png" alt="image"></p>
+<p>附加到QQ进程。</p>
+<p>撤回消息，Xcode便断在了<code>new_MQAIOChatViewController_revokeMessages</code>。</p>
+<p>查看堆栈如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287617990.png" alt="image"></p>
+<p>因为block的符号没恢复，所以看来是block里面调用过来的。</p>
+<p>找到block内存地址<code>0x103a69663</code>减去加载基地址<code>0x0000000003757000</code>,对应到文件偏移<code>0x0000000100312663</code>。</p>
+<p><code>Hopper</code>加载文件按<code>g</code>跳转到指定地址:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288222865.png" alt="image"></p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288264564.png" alt="image"></p>
+<p>所以可以找到是从:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-[BHMessageChatModel revokeMessageModel:]</div><div class="line">-[MQAIOChatViewController chatMessageModel]</div></pre></td></tr></table></figure>
+<p>调过来的。<br>在<code>revokeMessageModel</code>下断点<code>b -[BHMessageChatModel revokeMessageModel:]</code>，再撤回，可以看到调用堆栈。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288458933.png" alt="image"></p>
+<p>这下应该就比较清楚了。</p>
+<p>那么就在比较上层的调用中去处理，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-[RecallProcessor solveRecallNotify:isOnline:]</div><div class="line">-[QQMessageRevokeEngine handleRecallNotify:isOnline:]</div></pre></td></tr></table></figure>
+<p>测试直接hook<code>-[QQMessageRevokeEngine handleRecallNotify:isOnline:]</code>是不会再本地删除的。</p>
+<p>关于hook中的参数类型可以使用<a href="https://github.com/nygard/class-dump" target="_blank" rel="external">class-dump</a> dump出头文件，从头文件可以看到第一个参数是<code>struct RecallModel</code>类型。</p>
+<h3 id="lldb-1"><a href="#lldb-1" class="headerlink" title="lldb"></a>lldb</h3><p>补充一下上面说的lldb跟踪程序，有了符号直接可以直接通过符号断点来跟踪程序。比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">rb \[MQAIOChatViewController *\]</div><div class="line">br com add 1</div><div class="line">po $rdi</div><div class="line">x/s $rsi</div><div class="line">c</div><div class="line">DONE</div></pre></td></tr></table></figure>
+<p>撤回消息即可看到打印结果如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa1f89e: &quot;revokeMessages:&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa1f973: &quot;scheduleRecognitionLogic&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10f9e881c: &quot;isSimplestModel&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div></pre></td></tr></table></figure>
+<p>在x64汇编中，传递参数依次通过以下寄存器传递。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rdi, rsi, rdx, rcx, r8, r9</div></pre></td></tr></table></figure>
+<p>在很多动态分析的过程中可以借助lldb调试来帮助分析解决问题。</p>
+<h3 id="MachO注入"><a href="#MachO注入" class="headerlink" title="MachO注入"></a>MachO注入</h3><p>为了避免每次从环境变量注入，还可以直接使用<a href="https://github.com/Tyilo/insert_dylib" target="_blank" rel="external">insert_dylib</a>注入可执行文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./insert_dylib --weak /path/to/dylib QQ QQ_patch</div><div class="line">mv QQ_patch QQ</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总的来说，Mac上的逆向和iOS逆向差不太多，反而Mac上面操作更方便一些，不用连着手机，还有像<code>Dtrace</code>这样的神器。</p>
+<p>这篇文章主要还是领大家走进Mac逆向的世界，其它靠自己慢慢去探索~</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag">#逆向</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/25/antiantidebug/" rel="next" title="关于反调试&反反调试那些事">
+                <i class="fa fa-chevron-left"></i> 关于反调试&反反调试那些事
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+      <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "",
+          productKey: "68a777ea87db47d58ee038a1efc863df",
+          target: "cloud-tie-wrapper"
+        };
+      </script>
+      <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目的"><span class="nav-number">2.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析思路"><span class="nav-number">3.</span> <span class="nav-text">分析思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#界面分析"><span class="nav-number">4.</span> <span class="nav-text">界面分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态跟踪"><span class="nav-number">5.</span> <span class="nav-text">动态跟踪</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Frida"><span class="nav-number">5.1.</span> <span class="nav-text">Frida</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dtrace"><span class="nav-number">5.2.</span> <span class="nav-text">Dtrace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lldb"><span class="nav-number">5.3.</span> <span class="nav-text">lldb</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Xcode"><span class="nav-number">6.</span> <span class="nav-text">Xcode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态库注入"><span class="nav-number">7.</span> <span class="nav-text">动态库注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#符号还原-Xcode调试"><span class="nav-number">8.</span> <span class="nav-text">符号还原+Xcode调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lldb-1"><span class="nav-number">9.</span> <span class="nav-text">lldb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MachO注入"><span class="nav-number">10.</span> <span class="nav-text">MachO注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">11.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

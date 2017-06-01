@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-05-25T11:10:06.000Z</updated>
+  <updated>2017-06-01T06:34:24.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,162 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一篇文章走进Mac逆向的世界</title>
+    <link href="http://www.alonemonkey.com/2017/05/31/get-start-with-mac-reverse/"/>
+    <id>http://www.alonemonkey.com/2017/05/31/get-start-with-mac-reverse/</id>
+    <published>2017-05-30T16:00:00.000Z</published>
+    <updated>2017-06-01T06:34:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在玩了iOS逆向之后，看到Mac上面的应用莫名有了一种想要搞事情的冲动。其实在思想上iOS逆向和Mac逆向是差不多的，原理都差不多，走的流程可能不太一样，这篇文章的目的主要是让大家了解一下Mac上面玩逆向的大致流程和分析方法，所以在本文中去实现什么样的功能并不是重点，重点是让大家懂得怎么去分析找到实现。</p>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>既然是逆向分析，总的有个目的，有目的才有动力，那么就以QQ撤回这个功能为例吧，网上也有很多文章讲解应该hook哪个函数，具体的分析过程却不是那么清晰，所以这里还是着重分析的过程，最终的实现大家自由发挥。</p>
+<h3 id="分析思路"><a href="#分析思路" class="headerlink" title="分析思路"></a>分析思路</h3><p>在iOS逆向分析中，大致的思想是这样的(不同情况略有差异)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">界面分析  -&gt;  动态分析  -&gt;  静态分析  -&gt;  动态库注入  -&gt;  ...</div></pre></td></tr></table></figure>
+<p>那么在Mac逆向过程中，也可以按照这个套路来搞一波。</p>
+<h3 id="界面分析"><a href="#界面分析" class="headerlink" title="界面分析"></a>界面分析</h3><p>要分析QQ撤回的动作，这个动作是有在界面上面体现的，别人撤回一条消息后，那条消息会变成被撤回的通知。所以先分析界面上负责处理该状态的类，然后再去看类的调用。</p>
+<p>在Mac上面也有类似iOS <code>Reveal</code>的工具叫做<a href="https://www.interface-inspector.com/" target="_blank" rel="external">Interface Inspector</a>。</p>
+<p>下载下来后打开，发现是一个需要<code>License</code>的货，既然遇到了那就搞一搞吧。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496202790459.png" alt="image"></p>
+<p>首先从界面关键词<code>Register</code>入手吧，拖到<code>hopper</code>,在<code>Strings</code>里面搜索<code>Register</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496202987912.png" alt="image"></p>
+<p>找到之后按<code>x</code>查找引用关系，发现是在<code>-[SMEnterLicenseViewController loadView]</code>这个函数里面存在这个字符串。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203071610.png" alt="image"></p>
+<p>继续找到<code>action</code>为<code>-[SMEnterLicenseViewController register:]</code>。</p>
+<p>里面会调用<code>[r14 enterLicenseViewControllerDidSelectRegister:r15 withLicenseName:r12 code:rbx];</code></p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203184764.png" alt="image"></p>
+<p>这里通过<code>[SMLicenseManager registerLicenseWithName:code:]</code>验证的。</p>
+<p>那直接修改代码返回<code>YES</code>。</p>
+<p><code>Modify -&gt; Assemble Instruction...</code></p>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mov        eax, 0x1    //eax用来保存返回值</div><div class="line">ret</div></pre></td></tr></table></figure>
+<p>生成一个新的可执行文件，<code>File -&gt; Produce New Executable...</code>。</p>
+<p>选择<code>Remove Signature</code>。</p>
+<p>替换原可执行文件，然后打开，弹出了:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203632361.png" alt="image"></p>
+<p>看来它还验证签名了。</p>
+<p>那么找到启动时的回调:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-[SMAppDelegate applicationWillFinishLaunching:]</div></pre></td></tr></table></figure>
+<p>可以找到对应的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if ([rax codeSignState] != 0x2) goto loc_100024851;</div></pre></td></tr></table></figure>
+<p>如果<code>codeSignState</code>返回不为2就会弹出刚刚那个。</p>
+<p>所以这里把:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jne        loc_100024851</div></pre></td></tr></table></figure>
+<p>对应的二进制<code>0F 85 CD 03 00 00</code>改成<code>0F 84 CD 03 00 00</code>。</p>
+<p>重新打开不显示那个签名问题，但是直接闪退了。</p>
+<p>猜测某些地方还有检测，然后<code>exit</code>或者<code>terminate</code>了。</p>
+<p>在<code>Strings</code>中查找字符串找到<code>terminate:</code>的引用。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496214065433.png" alt="image"></p>
+<p>查看每一处调用，发现这么一段代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">void ___24+[SMLicenseManager load]_block_invoke(void * _block) &#123;</div><div class="line">    if ([SMLicenseManager verifyLicenseWithName:@&quot;Test User&quot; code:@&quot;GAWAE-8C69D-7LZ5H-9D8M3-HVEG7-KHNQC-CQ7RF-SEPQC-CRF82-G47U5-H6DKAB-8SKA7-EWSCM-7Q7SV-MYF4&quot;] != 0x0) &#123;</div><div class="line">            [*_NSApp terminate:0x0];</div><div class="line">    &#125;</div><div class="line">    return;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>作者自己拿了假的<code>License</code>测试，如果通过就直接退出了。</p>
+<p>所以这里<code>je         loc_10010ec26</code>对应二进制<code>74 1A</code>改成<code>75 1A</code>。</p>
+<p>然后重新生成可执行文件，打开随便填入<code>License</code>注册即可。</p>
+<p>额，好像有点扯远了，不过本文的目的就是为了学习Mac逆向的分析过程，所以这一部分并不是多余的。</p>
+<p>当然这里还有坑，如何你发现<code>attach process</code>的时候报错的话，请参考<a href="http://bbs.iosre.com/t/fix-bug-for-interface-inspector-on-macos-serria/5665" target="_blank" rel="external">Fix Bug for Interface Inspector on macOS Serria</a>这篇文章重新编译<code>mach_inject_bundle_stub.bundle</code>。</p>
+<p>终于准备好了，附加到QQ，选中聊天界面。可以找到<code>MQAIOChatViewController</code>这样的一个<code>ViewController</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496216671572.png" alt="image"></p>
+<p>下面通过动态跟踪函数调用来看看这个类的调用流程。</p>
+<h3 id="动态跟踪"><a href="#动态跟踪" class="headerlink" title="动态跟踪"></a>动态跟踪</h3><p>动态跟踪的方法有多种，除了iOS逆向中使用的<a href="https://www.frida.re/" target="_blank" rel="external">Frida</a>, lldb , Mac上面还可以使用Dtrace。</p>
+<h4 id="Frida"><a href="#Frida" class="headerlink" title="Frida"></a>Frida</h4><p><code>Frida</code>是一个通过<code>js</code>和<code>Native</code>交互的跨平台工具，可以通过<code>frida QQ</code>的方式附加，查看当前加载的类，类的方法等等。除此外还可以加载自己的<code>js</code>脚本<code>frida QQ -l trace.js</code>。</p>
+<p>在<code>python</code>中，有可以<code>import frida</code>来获取设置以及目标等相关信息，同时也能调用<code>js</code>并获取返回结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ObjC.classes.MQAIOChatViewController.$methods</div></pre></td></tr></table></figure>
+<p><code>frida</code>还提供了一个非常有用的功能，可以用于此处，也就是<code>frida-trace</code>。</p>
+<p>可以通过这个工具来跟踪指定方法或者指定类的调用过程，这里感兴趣的是<code>MQAIOChatViewController</code>这个类的调用过程，所以可以通过如下命令来跟踪：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">frida-trace -m &quot;-[MQAIOChatViewController *]&quot; QQ</div></pre></td></tr></table></figure>
+<p>然后撤回一条消息可以看到如下调用过程:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">25623 ms  -[MQAIOChatViewController revokeMessages:0x618000206220 ]</div><div class="line">25623 ms     | -[MQAIOChatViewController topMsgListViewController]</div><div class="line">25623 ms     | -[MQAIOChatViewController topMsgListViewController]</div><div class="line">25625 ms     | -[MQAIOChatViewController scrollViewDidScrollToBottom:0x7fc28b0dffb0 ]</div><div class="line">25632 ms     | -[MQAIOChatViewController scheduleRecognitionLogic]</div><div class="line">25633 ms     | -[MQAIOChatViewController topMsgListViewController]</div><div class="line">25639 ms  -[MQAIOChatViewController isSimplestModel]</div><div class="line">25639 ms  -[MQAIOChatViewController isSimplestModel]</div><div class="line">25639 ms  -[MQAIOChatViewController isSimplestModel]</div></pre></td></tr></table></figure>
+<p>这便找到了一个上层撤回的调用，后面还会继续深入。</p>
+<h4 id="Dtrace"><a href="#Dtrace" class="headerlink" title="Dtrace"></a>Dtrace</h4><p>讲<code>lldb</code>前，先讲下<code>Dtrace</code>这个Linux上的动态追踪神器，可以通过它来监控应用程序或者内核的调用，所以这里可以用于监控OC函数的调用。</p>
+<p>新建文件<code>trace.d</code>，写入内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#!/usr/sbin/dtrace -s</div><div class="line"></div><div class="line">objc$target:MQAIOChatViewController::entry&#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后找到<code>QQ</code>的进程id <code>ps -e | grep QQ</code>。再运行<code>dtrace</code>脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./trace.d -p 24105</div></pre></td></tr></table></figure>
+<p>撤回消息可得到如下输出结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">2  30436           -revokeMessages::entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">2  30382 -scrollViewDidScrollToBottom::entry</div><div class="line">2  44569  -scheduleRecognitionLogic:entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">6  44608           -isSimplestModel:entry</div><div class="line">6  44608           -isSimplestModel:entry</div><div class="line">0  44608           -isSimplestModel:entry</div></pre></td></tr></table></figure>
+<p>也可以直接运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo dtrace -n &apos;objc$target:MQAIOChatViewController::entry&#123;&#125;&apos; -p 24105</div></pre></td></tr></table></figure>
+<p>只是在文件里面可以进行更多的操作。</p>
+<h4 id="lldb"><a href="#lldb" class="headerlink" title="lldb"></a>lldb</h4><p><code>lldb</code>这部分的动态跟踪在后面<code>Xcode</code>调试会有讲到。</p>
+<h3 id="Xcode"><a href="#Xcode" class="headerlink" title="Xcode"></a>Xcode</h3><p>找到了函数之后，可以写个动态库注入为了方便调试以及动态库注入这里创建一个<code>dylib</code>的Xcode项目，选择<code>macOS Library</code>，点击创建，Type选择<code>Dynamic</code>。</p>
+<p>为了<code>Hook</code>函数，先选择一个现成的库来做，可以选择:</p>
+<ul>
+<li><a href="https://github.com/alexzielenski/ZKSwizzle" target="_blank" rel="external">ZKSwizzle</a></li>
+<li><a href="https://github.com/steipete/Aspects" target="_blank" rel="external">Aspects</a></li>
+<li><a href="https://github.com/comex/substitute" target="_blank" rel="external">substitute</a></li>
+<li>……</li>
+</ul>
+<p>这里你可能会想一个撤回一条命令一个文件哪有这么麻烦，而这些都是一般逆向中可能用到的，不针对功能。</p>
+<p>我个人倾向于使用<code>substitute</code>，它有着和<code>substrate</code>一样的api接口。</p>
+<p>那么首先要编译一个<code>Mac</code>平台的<code>substitute</code>动态库。</p>
+<p>直接编译会报错<code>syscall</code>被弃用，到<a href="https://github.com/phracker/MacOSX-SDKs" target="_blank" rel="external">这里</a>下载一个早一点的比如<code>MacOSX10.11.sdk</code>，然后放到<code>/Applications/XCode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs</code>下。</p>
+<p>然后通过如下命令行编译:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --xcode-sdk macosx10.11 &amp;&amp; make -j8</div></pre></td></tr></table></figure>
+<p>在<code>out</code>目录就可以看到生成的动态库。</p>
+<p>查看动态库的加载地址，把其重命名为<code>libsubstitute.0.dylib</code>并拷贝到<code>/usr/local/lib/</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  out git:(master) ✗ otool -L libsubstitute.dylib</div><div class="line">libsubstitute.dylib:</div><div class="line">	/usr/local/lib/libsubstitute.0.dylib (compatibility version 0.0.0, current version 0.0.0)</div></pre></td></tr></table></figure>
+<p>然后把头文件和动态库引入Xcode项目， 然后在构造函数里面hook<code>-[MQAIOChatViewController revokeMessages:]</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#import &quot;substrate.h&quot;</div><div class="line"></div><div class="line">@class MQAIOChatViewController;</div><div class="line"></div><div class="line">static void (*origin_MQAIOChatViewController_revokeMessages)(MQAIOChatViewController*,SEL,id);</div><div class="line">static void new_MQAIOChatViewController_revokeMessages(MQAIOChatViewController* self,SEL _cmd,id arrays)&#123;</div><div class="line">    NSLog(@&quot;revokeMessages:%@&quot;,arrays);</div><div class="line">    return;</div><div class="line">&#125;</div><div class="line"></div><div class="line">static void __attribute__((constructor)) initialize(void) &#123;</div><div class="line">    MSHookMessageEx(objc_getClass(&quot;MQAIOChatViewController&quot;),  @selector(revokeMessages:), (IMP)&amp;new_MQAIOChatViewController_revokeMessages, (IMP*)&amp;origin_MQAIOChatViewController_revokeMessages);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译生成动态库<code>libMacQQRevoke.dylib</code>。</p>
+<h3 id="动态库注入"><a href="#动态库注入" class="headerlink" title="动态库注入"></a>动态库注入</h3><p>动态库注入可以通过<code>DYLD_INSERT_LIBRARIES</code>注入，也可以直接注入到可执行文件的<code>Load Command</code>。</p>
+<p>这里为了方便就直接通过环境变量注入了。</p>
+<p>点击<code>Build Phases</code>左上角的<code>+</code>，然后点击<code>New Run Script Phase</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496284722475.png" alt="image"></p>
+<p>写入脚本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $&#123;TARGET_BUILD_DIR&#125;</div><div class="line">export DYLD_INSERT_LIBRARIES=./libMacQQRevoke.dylib &amp;&amp; /Applications/QQ.app/Contents/MacOS/QQ</div></pre></td></tr></table></figure>
+<p><code>Command + B</code>， 注入动态库，运行QQ。</p>
+<p>然后撤回消息，发现消息还在，并且控制台有如下输出。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496285419802.png" alt="image"></p>
+<p>也就是Hook生效了，但是重启QQ后，那条消息还是变成了撤回状态。</p>
+<p>这个时候需要继续往上层调用去探索。</p>
+<h3 id="符号还原-Xcode调试"><a href="#符号还原-Xcode调试" class="headerlink" title="符号还原+Xcode调试"></a>符号还原+Xcode调试</h3><p>为了能看到<code>revokeMessages:</code>被调用的堆栈，先使用<a href="https://github.com/tobefuturer/restore-symbol" target="_blank" rel="external">restore-symbol</a>还原符号，然后再使用<a href="https://github.com/steakknife/unsign" target="_blank" rel="external">unsign</a>去掉签名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./restore-symbol QQ -o QQ_symbol</div><div class="line">mv QQ_symbol QQ</div><div class="line">./unsign QQ</div><div class="line">mv QQ.unsigned QQ</div></pre></td></tr></table></figure>
+<p>替换原可执行文件之后，在<code>new_MQAIOChatViewController_revokeMessages</code>断点，<code>Command + B</code>重新运行。</p>
+<p>然后选择<code>Debug -&gt; Attach to Process</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287517422.png" alt="image"></p>
+<p>附加到QQ进程。</p>
+<p>撤回消息，Xcode便断在了<code>new_MQAIOChatViewController_revokeMessages</code>。</p>
+<p>查看堆栈如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287617990.png" alt="image"></p>
+<p>因为block的符号没恢复，所以看来是block里面调用过来的。</p>
+<p>找到block内存地址<code>0x103a69663</code>减去加载基地址<code>0x0000000003757000</code>,对应到文件偏移<code>0x0000000100312663</code>。</p>
+<p><code>Hopper</code>加载文件按<code>g</code>跳转到指定地址:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288222865.png" alt="image"></p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288264564.png" alt="image"></p>
+<p>所以可以找到是从:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-[BHMessageChatModel revokeMessageModel:]</div><div class="line">-[MQAIOChatViewController chatMessageModel]</div></pre></td></tr></table></figure>
+<p>调过来的。<br>在<code>revokeMessageModel</code>下断点<code>b -[BHMessageChatModel revokeMessageModel:]</code>，再撤回，可以看到调用堆栈。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288458933.png" alt="image"></p>
+<p>这下应该就比较清楚了。</p>
+<p>那么就在比较上层的调用中去处理，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-[RecallProcessor solveRecallNotify:isOnline:]</div><div class="line">-[QQMessageRevokeEngine handleRecallNotify:isOnline:]</div></pre></td></tr></table></figure>
+<p>测试直接hook<code>-[QQMessageRevokeEngine handleRecallNotify:isOnline:]</code>是不会再本地删除的。</p>
+<p>关于hook中的参数类型可以使用<a href="https://github.com/nygard/class-dump" target="_blank" rel="external">class-dump</a> dump出头文件，从头文件可以看到第一个参数是<code>struct RecallModel</code>类型。</p>
+<h3 id="lldb-1"><a href="#lldb-1" class="headerlink" title="lldb"></a>lldb</h3><p>补充一下上面说的lldb跟踪程序，有了符号直接可以直接通过符号断点来跟踪程序。比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">rb \[MQAIOChatViewController *\]</div><div class="line">br com add 1</div><div class="line">po $rdi</div><div class="line">x/s $rsi</div><div class="line">c</div><div class="line">DONE</div></pre></td></tr></table></figure>
+<p>撤回消息即可看到打印结果如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa1f89e: &quot;revokeMessages:&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa1f973: &quot;scheduleRecognitionLogic&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10f9e881c: &quot;isSimplestModel&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div></pre></td></tr></table></figure>
+<p>在x64汇编中，传递参数依次通过以下寄存器传递。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rdi, rsi, rdx, rcx, r8, r9</div></pre></td></tr></table></figure>
+<p>在很多动态分析的过程中可以借助lldb调试来帮助分析解决问题。</p>
+<h3 id="MachO注入"><a href="#MachO注入" class="headerlink" title="MachO注入"></a>MachO注入</h3><p>为了避免每次从环境变量注入，还可以直接使用<a href="https://github.com/Tyilo/insert_dylib" target="_blank" rel="external">insert_dylib</a>注入可执行文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./insert_dylib --weak /path/to/dylib QQ QQ_patch</div><div class="line">mv QQ_patch QQ</div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总的来说，Mac上的逆向和iOS逆向差不太多，反而Mac上面操作更方便一些，不用连着手机，还有像<code>Dtrace</code>这样的神器。</p>
+<p>这篇文章主要还是领大家走进Mac逆向的世界，其它靠自己慢慢去探索~</p>
+]]></content>
+    
+    <summary type="html">
+    
+      除了iOS上面的逆向，其实Mac上面的逆向原理都差不多，这篇文章就带大家来试一把Mac上面的逆向。
+    
+    </summary>
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/categories/%E9%80%86%E5%90%91/"/>
+    
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>关于反调试&amp;反反调试那些事</title>
@@ -1280,56 +1436,6 @@
       &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;iOS&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&quot;认识copy关键字&quot;&gt;&lt;a href=&quot;#认识copy关键字&quot; class=&quot;headerlink&quot; title=&quot;认识copy关键字&quot;&gt;
-    
-    </summary>
-    
-      <category term="weekly" scheme="http://www.alonemonkey.com/categories/weekly/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>第九期 Coder群周报</title>
-    <link href="http://www.alonemonkey.com/2016/10/16/weekly/"/>
-    <id>http://www.alonemonkey.com/2016/10/16/weekly/</id>
-    <published>2016-10-15T16:00:00.000Z</published>
-    <updated>2016-12-21T02:13:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>iOS</p>
-</blockquote>
-<h3 id="React-Native通信机制详解"><a href="#React-Native通信机制详解" class="headerlink" title="React Native通信机制详解"></a><a href="http://blog.cnbang.net/tech/2698/" target="_blank" rel="external">React Native通信机制详解</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。</p>
-<h3 id="Masonry介绍与使用实践：快速上手Autolayout"><a href="#Masonry介绍与使用实践：快速上手Autolayout" class="headerlink" title="Masonry介绍与使用实践：快速上手Autolayout"></a><a href="http://www.cocoachina.com/ios/20141219/10702.html" target="_blank" rel="external">Masonry介绍与使用实践：快速上手Autolayout</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：Masonry是一个轻量级的布局框架 拥有自己的描述语法 采用更优雅的链式语法封装自动布局 简洁明了 并具有高可读性 而且同时支持 iOS 和 Max OS X。</p>
-<a id="more"></a>
-<h3 id="黑科技：把第三方-iOS-应用转成动态库"><a href="#黑科技：把第三方-iOS-应用转成动态库" class="headerlink" title="黑科技：把第三方 iOS 应用转成动态库"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5NTIyNTUyMQ==&amp;mid=2709545228&amp;idx=1&amp;sn=7a47a0de32e06f9c465319e8db8ca13f" target="_blank" rel="external">黑科技：把第三方 iOS 应用转成动态库</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：把第三方 iOS 应用转成动态库，并加载到自己的 App 中。</p>
-<h3 id="史上最详细的iOS之事件的传递和响应机制-原理篇"><a href="#史上最详细的iOS之事件的传递和响应机制-原理篇" class="headerlink" title="史上最详细的iOS之事件的传递和响应机制-原理篇"></a><a href="http://www.jianshu.com/p/2e074db792ba" target="_blank" rel="external">史上最详细的iOS之事件的传递和响应机制-原理篇</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：事件的产生和传递（事件如何从父控件传递到子控件并寻找到最合适的view、寻找最合适的view的底层实现、拦截事件的处理）-&gt;找到最合适的view后事件的处理（touches方法的重写，也就是事件的响应）.</p>
-<h3 id="iOS-App组件化开发实践"><a href="#iOS-App组件化开发实践" class="headerlink" title="iOS App组件化开发实践"></a><a href="http://www.yiqixiabigao.com/yin-ke-kong-gu-iosman-man-zu-jian-hua-kai-fa-zhi-lu/" target="_blank" rel="external">iOS App组件化开发实践</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：去尝试解决组件化开发当中的一些问题。</p>
-<p><br><br><blockquote class="blockquote-center"><p>Android</p>
-</blockquote></p>
-<h3 id="谈谈App混合开发"><a href="#谈谈App混合开发" class="headerlink" title="谈谈App混合开发"></a><a href="http://bxbxbai.github.io/2015/08/16/talk-about-bybird-app/" target="_blank" rel="external">谈谈App混合开发</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：混合开发的App（Hybrid App）就是在一个App中内嵌一个轻量级的浏览器，一部分原生的功能改为Html 5来开发，这部分功能不仅能够在不升级App的情况下动态更新，而且可以在Android或iOS的App上同时运行，让用户的体验更好又可以节省开发的资源。</p>
-<h3 id="反调试方法一-读取进程status文件"><a href="#反调试方法一-读取进程status文件" class="headerlink" title="反调试方法一 - 读取进程status文件"></a><a href="http://kiya.space/2015/12/14/android-anti-debug-read-status/" target="_blank" rel="external">反调试方法一 - 读取进程status文件</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：用fopen打开<code>/proc/&lt;pid&gt;/status</code>文件读取其中的TracerPid值来检测自己的进程是否被attach，TracerPid如果为0说明没有别的进程在调试这个进程，如果不为0说明有程序在调试。</p>
-<h3 id="反调试方法二-抢占ptrace"><a href="#反调试方法二-抢占ptrace" class="headerlink" title="反调试方法二 - 抢占ptrace"></a><a href="http://kiya.space/2015/12/18/ptrace-basis/" target="_blank" rel="external">反调试方法二 - 抢占ptrace</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：ptrace可以让一个进程监视和控制另一个进程的执行,并且修改被监视进程的内存、寄存器等,主要应用于断点调试和系统调用跟踪.</p>
-<p><br><br><blockquote class="blockquote-center"><p>大会</p>
-</blockquote></p>
-<h3 id="云栖大会"><a href="#云栖大会" class="headerlink" title="云栖大会"></a><a href="https://yunqi.aliyun.com/" target="_blank" rel="external">云栖大会</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：云计算盛会。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;iOS&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;React-Native通信机制详解&quot;&gt;&lt;a href=&quot;#React-Native通信机制详解&quot; class=&quot;headerlink&quot; title=&quot;React Native通信机制详解&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://blog.cnbang.net/tech/2698/&quot;&gt;React Native通信机制详解&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.blogfshare.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。&lt;/p&gt;
-&lt;h3 id=&quot;Masonry介绍与使用实践：快速上手Autolayout&quot;&gt;&lt;a href=&quot;#Masonry介绍与使用实践：快速上手Autolayout&quot; class=&quot;headerlink&quot; title=&quot;Masonry介绍与使用实践：快速上手Autolayout&quot;&gt;&lt;/a&gt;&lt;a href=&quot;http://www.cocoachina.com/ios/20141219/10702.html&quot;&gt;Masonry介绍与使用实践：快速上手Autolayout&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;分享人：&lt;a href=&quot;http://www.blogfshare.com&quot;&gt;AloneMonkey&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;介绍：Masonry是一个轻量级的布局框架 拥有自己的描述语法 采用更优雅的链式语法封装自动布局 简洁明了 并具有高可读性 而且同时支持 iOS 和 Max OS X。&lt;/p&gt;
     
     </summary>
     
