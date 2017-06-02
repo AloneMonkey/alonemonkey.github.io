@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-06-02T06:16:47.000Z</updated>
+  <updated>2017-06-02T06:17:25.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.alonemonkey.com/2017/06/02/ios-book-pr/"/>
     <id>http://www.alonemonkey.com/2017/06/02/ios-book-pr/</id>
     <published>2017-06-01T16:00:00.000Z</published>
-    <updated>2017-06-02T06:16:47.000Z</updated>
+    <updated>2017-06-02T06:17:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>经过 3 个月的筹备 iOS 成长之路第二期和大家见面啦。经历了第一期的蹒跚发布后，终于在盛夏迎来了更好的第二期。这一期相比第一期更有料了，从第一期的 8 篇文章增加到 12 篇文章。</p>
 <p>这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。</p>
@@ -85,7 +85,7 @@
       <category term="逆向" scheme="http://www.alonemonkey.com/categories/%E9%80%86%E5%90%91/"/>
     
     
-      <category term="逆向" scheme="http://www.alonemonkey.com/tags/%E9%80%86%E5%90%91/"/>
+      <category term="iOS" scheme="http://www.alonemonkey.com/tags/iOS/"/>
     
   </entry>
   
