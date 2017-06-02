@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288222865.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288264564.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288458933.png">
-<meta property="og:updated_time" content="2017-06-01T08:10:45.000Z">
+<meta property="og:updated_time" content="2017-06-02T01:57:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一篇文章走进Mac逆向的世界">
 <meta name="twitter:description" content="除了iOS上面的逆向，其实Mac上面的逆向原理都差不多，这篇文章就带大家来试一把Mac上面的逆向。">
@@ -371,7 +371,7 @@
 <p>继续找到<code>action</code>为<code>-[SMEnterLicenseViewController register:]</code>。</p>
 <p>里面会调用<code>[r14 enterLicenseViewControllerDidSelectRegister:r15 withLicenseName:r12 code:rbx];</code></p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203184764.png" alt="image"></p>
-<p>这里通过<code>[SMLicenseManager registerLicenseWithName:code:]</code>验证的。</p>
+<p>这里通过<code>[SMLicenseManager verifyLicenseWithName:code:]</code>验证的。</p>
 <p>那直接修改代码返回<code>YES</code>。</p>
 <p><code>Modify -&gt; Assemble Instruction...</code></p>
 <p>输入:</p>
