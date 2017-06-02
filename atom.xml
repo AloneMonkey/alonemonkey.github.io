@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-06-02T01:57:09.000Z</updated>
+  <updated>2017-06-02T01:59:57.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.alonemonkey.com/2017/05/31/get-start-with-mac-reverse/"/>
     <id>http://www.alonemonkey.com/2017/05/31/get-start-with-mac-reverse/</id>
     <published>2017-05-30T16:00:00.000Z</published>
-    <updated>2017-06-02T01:57:09.000Z</updated>
+    <updated>2017-06-02T01:59:57.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在玩了iOS逆向之后，看到Mac上面的应用莫名有了一种想要搞事情的冲动。其实在思想上iOS逆向和Mac逆向是差不多的，原理都差不多，走的流程可能不太一样，这篇文章的目的主要是让大家了解一下Mac上面玩逆向的大致流程和分析方法，所以在本文中去实现什么样的功能并不是重点，重点是让大家懂得怎么去分析找到实现。</p>
 <h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>既然是逆向分析，总的有个目的，有目的才有动力，那么就以QQ撤回这个功能为例吧，网上也有很多文章讲解应该hook哪个函数，具体的分析过程却不是那么清晰，所以这里还是着重分析的过程，最终的实现大家自由发挥。</p>
@@ -38,7 +38,7 @@
 <p>继续找到<code>action</code>为<code>-[SMEnterLicenseViewController register:]</code>。</p>
 <p>里面会调用<code>[r14 enterLicenseViewControllerDidSelectRegister:r15 withLicenseName:r12 code:rbx];</code></p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203184764.png" alt="image"></p>
-<p>这里通过<code>[SMLicenseManager verifyLicenseWithName:code:]</code>验证的。</p>
+<p>这里<code>registerLicenseWithName:code:</code>里面是通过<code>[SMLicenseManager verifyLicenseWithName:code:]</code>验证的。</p>
 <p>那直接修改代码返回<code>YES</code>。</p>
 <p><code>Modify -&gt; Assemble Instruction...</code></p>
 <p>输入:</p>
