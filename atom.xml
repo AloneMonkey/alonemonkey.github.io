@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-06-02T06:17:34.000Z</updated>
+  <updated>2017-06-16T06:38:45.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,100 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>0x01 编写一个LLVM Pass</title>
+    <link href="http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/"/>
+    <id>http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/</id>
+    <published>2017-06-01T16:00:00.000Z</published>
+    <updated>2017-06-16T06:38:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前写过一篇《关于LLVM，这些东西你必须知道！》，先已收录在《iOS成长之路》。<br>其中讲解了编译器的编译过程，以及通过LLVM可以做哪些有意思的事情，今天继续来跟着官方的文档继续了解Pass。</p>
+<p>获取代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git clone http://llvm.org/git/llvm.git</div><div class="line">git clone http://llvm.org/git/clang.git llvm/tools/clang</div><div class="line">git clone http://llvm.org/git/clang-tools-extra.git llvm/tools/clang/tools/extra</div><div class="line">git clone http://llvm.org/git/compiler-rt.git llvm/projects/compiler-rt</div></pre></td></tr></table></figure>
+<p>编译成<code>Xcode项目</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir build</div><div class="line">cd build</div><div class="line">cmake -G Xcode CMAKE_BUILD_TYPE=&quot;Debug&quot; ../llvm</div><div class="line"></div><div class="line">open LLVM.xcodeproj</div></pre></td></tr></table></figure>
+<p>然后运行<code>clang</code>，准备工作做好后，继续Pass的学习。</p>
+<h3 id="什么是Pass？"><a href="#什么是Pass？" class="headerlink" title="什么是Pass？"></a>什么是Pass？</h3><p>LLVM Pass是LLVM系统中非常重要和有趣的一个模块，Pass处理编译过程中代码的转换以及优化工作。</p>
+<p>所有的Pass都是<a href="http://llvm.org/doxygen/classllvm_1_1Pass.html" target="_blank" rel="external">Pass</a>的子类，不同的Pass实现不同的作用可以继承<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-modulepass" target="_blank" rel="external">ModulePass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-callgraphsccpass" target="_blank" rel="external">CallGraphSCCPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-functionpass" target="_blank" rel="external">FunctionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-looppass" target="_blank" rel="external">LoopPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-regionpass" target="_blank" rel="external">RegionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-basicblockpass" target="_blank" rel="external">BasicBlockPass</a>等类。</p>
+<p>接下来开始介绍如何编写一个Pass，编译，加载以及运行的过程。</p>
+<h3 id="编写hello-world"><a href="#编写hello-world" class="headerlink" title="编写hello world"></a>编写hello world</h3><p>先编写一个“Hello” Pass，只是简单的输出程序中每个非外部方法的方法名，不会修改程序本身的功能。官方Demo的源代码存在<code>lib/Transforms/Hello</code>文件夹。</p>
+<h4 id="配置编译环境"><a href="#配置编译环境" class="headerlink" title="配置编译环境"></a>配置编译环境</h4><p>首先来看看环境的配置，如果你想编译一个新的Pass，你可以在<code>lib/Transforms/</code>下新建一个文件夹，这里我自己创建的是<code>PassDemo</code>，然后配置编译脚本去编译你的源代码。 在新建的目录下创建文件<code>CMakeLists.txt</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">add_llvm_loadable_module(LLVMPassDemo</div><div class="line">    Hello.cpp</div><div class="line"></div><div class="line">    PLUGIN_TOOL</div><div class="line">    opt</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>然后增加下面一行代码到<code>lib/Transforms/CMakeLists.txt</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">add_subdirectory(PassDemo)</div></pre></td></tr></table></figure>
+<p>编译脚本指定了编译源文件<code>Hello.cpp</code>去编译生成动态库<code>$(LEVEL)/lib/LLVMPassDemo.dylib</code>。该文件可以被<code>opt</code>通过<code>-load</code>参数动态加载。如果不是Mac平台生成的后缀会不一样，比如<code>Linux</code>下是<code>so</code>。</p>
+<p>配置好编译脚本后，打开<code>Xcode</code>项目，按<code>command + B</code>编译，然后在项目里面就可以看到刚刚增加的<code>Target</code>，打开<code>Hello.cpp</code>文件就可以编写代码了。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496846680486.png" alt="image"></p>
+<h4 id="基础代码"><a href="#基础代码" class="headerlink" title="基础代码"></a>基础代码</h4><p>首先编辑<code>Hello.cpp</code>文件，导入头文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#include &quot;llvm/Pass.h&quot;</div><div class="line">#include &quot;llvm/IR/Function.h&quot;</div><div class="line">#include &quot;llvm/Support/raw_ostream.h&quot;</div></pre></td></tr></table></figure>
+<p>因为需要编一个<code>Pass</code>然后操作<code>Function</code>, 还可能输出一些东西。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">using namespace llvm;</div></pre></td></tr></table></figure>
+<p>由于导入文件里面的方法是属于<code>llvm</code>命名空间的，所以先指定使用的命名空间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">namespace &#123;</div></pre></td></tr></table></figure>
+<p>编写一个匿名的命名空间，<code>C++</code>中的匿名命名空间和<code>C</code>语言里面的<code>static</code>关键词一样，定义在匿名空间中的变量仅仅对当前文件可见。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">struct Hello : public FunctionPass&#123;</div></pre></td></tr></table></figure>
+<p>定义<code>Hello</code>类继承<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-functionpass" target="_blank" rel="external">FunctionPass</a>，后面会讲到不同用处的Pass会继承不同的父类，现在只需要知道，继承自<code>FunctionPass</code>可以操作程序中的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">static char ID;</div><div class="line">Hello() : FunctionPass(ID)&#123;&#125;</div></pre></td></tr></table></figure>
+<p>定义可供LLVM标示的Pass ID。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">        bool runOnFunction(Function &amp;F) override&#123;</div><div class="line">            errs() &lt;&lt; &quot;Hello: &quot;;</div><div class="line">            errs().write_escaped(F.getName()) &lt;&lt; &quot;\n&quot;;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里定义了一个<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-runonfunction" target="_blank" rel="external">runOnFunction</a>，重载继承自父类的抽象虚函数。在这个函数里面可以做针对于函数的特殊处理，这里只是打印出每个方法的名字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">char Hello::ID = 0;</div></pre></td></tr></table></figure>
+<p>初始化Pass ID，LLVM使用ID的地址去识别一个Pass，所以初始化的值不重要。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static RegisterPass&lt;Hello&gt; X(&quot;hello&quot;, &quot;Hello World Pass&quot;, false/* Only looks at CFG */, false/* Analysis Pass */);</div></pre></td></tr></table></figure>
+<p>最后，<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-registration" target="_blank" rel="external">注册我们的class</a> Hello， 指定命令行参数为<code>hello</code>，名字说明<code>Hello World Pass</code>。</p>
+<p>整个<code>Hello.cpp</code>文件如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">#include &quot;llvm/Pass.h&quot;</div><div class="line">#include &quot;llvm/IR/Function.h&quot;</div><div class="line">#include &quot;llvm/Support/raw_ostream.h&quot;</div><div class="line"></div><div class="line">using namespace llvm;</div><div class="line"></div><div class="line">namespace &#123;</div><div class="line">    struct Hello : public FunctionPass&#123;</div><div class="line">        static char ID;</div><div class="line">        </div><div class="line">        Hello() : FunctionPass(ID)&#123;&#125;</div><div class="line">        </div><div class="line">        bool runOnFunction(Function &amp;F) override&#123;</div><div class="line">            errs() &lt;&lt; &quot;Hello: &quot;;</div><div class="line">            errs().write_escaped(F.getName()) &lt;&lt; &quot;\n&quot;;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">char Hello::ID = 0;</div><div class="line">static RegisterPass&lt;Hello&gt; X(&quot;hello&quot;, &quot;Hello World Pass&quot;, false/* Only looks at CFG */, false/* Analysis Pass */);</div></pre></td></tr></table></figure>
+<p>选中<code>Target</code> <code>LLVMPassDemo</code> 按 <code>command + B</code>编译，编译完后会生成文件<code>build/Debug/lib/LLVMPassDemo.dylib</code>。</p>
+<h4 id="使用opt加载"><a href="#使用opt加载" class="headerlink" title="使用opt加载"></a>使用<code>opt</code>加载</h4><p>上面在代码中通过<code>RegisterPass</code>注册了Pass，所以可以通过<code>opt -load</code>去加载动态库并指定参数<code>hello</code>。</p>
+<p>准备源文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">int add(int x, int y) &#123;</div><div class="line">    return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()&#123;</div><div class="line">    printf(&quot;%d&quot;,add(3,4));</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译源文件生成<code>bitcode</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">path/to/build/Debug/bin/clang -emit-llvm -c test.mm -o test.bc</div></pre></td></tr></table></figure>
+<p>然后编译启动参数, 选择<code>opt</code>target， 点击<code>Edit Scheme</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847664836.png" alt="image"></p>
+<p>填入启动参数:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847745200.png" alt="image"></p>
+<p><code>command + R</code>运行。</p>
+<p>输出如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hello: _Z3addii</div><div class="line">Hello: main</div></pre></td></tr></table></figure>
+<p>当然还可以断点调试啦~ </p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847849551.png" alt="image"></p>
+<p>通过<code>-help</code>可以看到注册的pass参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">opt -load lib/LLVMPassDemo.dylib -help</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">  Optimizations available:</div><div class="line">    -hello                                          - Hello World Pass</div><div class="line">......</div></pre></td></tr></table></figure>
+<p><a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-passmanager" target="_blank" rel="external">PassManager</a>还提供<code>--time-passes</code>参数输出你的Pass和其它Pass执行时间的对比。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">opt -load lib/LLVMPassDemo.dylib -hello -time-passes -disable-output test.bc</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Hello: _Z3addii</div><div class="line">Hello: main</div><div class="line">===-------------------------------------------------------------------------===</div><div class="line">                      ... Pass execution timing report ...</div><div class="line">===-------------------------------------------------------------------------===</div><div class="line">  Total Execution Time: 0.0003 seconds (0.0003 wall clock)</div><div class="line"></div><div class="line">   ---User Time---   --System Time--   --User+System--   ---Wall Time---  --- Name ---</div><div class="line">   0.0002 ( 75.3%)   0.0000 ( 27.9%)   0.0002 ( 62.1%)   0.0002 ( 62.7%)  Module Verifier</div><div class="line">   0.0001 ( 24.7%)   0.0001 ( 72.1%)   0.0001 ( 37.9%)   0.0001 ( 37.3%)  Hello World Pass</div><div class="line">   0.0002 (100.0%)   0.0001 (100.0%)   0.0003 (100.0%)   0.0003 (100.0%)  Total</div><div class="line"></div><div class="line">===-------------------------------------------------------------------------===</div></pre></td></tr></table></figure>
+<p>tips:<br>为了在执行<code>opt</code>时能自动检测<code>LLVMPassDemo</code>模块有没有被修改，如果修改了，重新编译<code>LLVMPassDemo</code>模块，我们把<code>LLVMPassDemo</code>模块加到<code>opt</code>的依赖里面。</p>
+<p>编辑<code>tools/opt/CMakeLists.txt</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">add_llvm_tool(opt</div><div class="line">  AnalysisWrappers.cpp</div><div class="line">  BreakpointPrinter.cpp</div><div class="line">  GraphPrinters.cpp</div><div class="line">  NewPMDriver.cpp</div><div class="line">  PassPrinters.cpp</div><div class="line">  PrintSCC.cpp</div><div class="line">  opt.cpp</div><div class="line"></div><div class="line">  DEPENDS</div><div class="line">  intrinsics_gen</div><div class="line">  LLVMPassDemo</div><div class="line">  )</div></pre></td></tr></table></figure>
+<h3 id="更多Pass类"><a href="#更多Pass类" class="headerlink" title="更多Pass类"></a>更多Pass类</h3><p>当你写一个新的Pass的时候，你需要根据需要去选择需要继承的父类，根据不同的作用有 <code>ImmutablePass</code>、<code>ModulePass</code>、<code>CallGraphSCCPass</code>、<code>FunctionPass</code>、<code>LoopPass</code>、<code>RegionPass</code>、<code>BasicBlockPass</code>、<code>MachineFunctionPass</code>。具体可以参考<a href="http://llvm.org/docs/WritingAnLLVMPass.html" target="_blank" rel="external">官方文档</a>。</p>
+<h3 id="调用其它Pass"><a href="#调用其它Pass" class="headerlink" title="调用其它Pass"></a>调用其它Pass</h3><p>如果在编写的Pass中需要使用到其它Pass提供的函数功能，需要在:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virtual void getAnalysisUsage(AnalysisUsage &amp;AU) const;</div></pre></td></tr></table></figure>
+<p>说明，比如像要获取程序中存在循环的信息，可以在该函数里面申请需要依赖的Pass。</p>
+<p>以上面的Pass为例，导入头文件<code>#include &quot;llvm/Analysis/LoopInfo.h&quot;</code>，在<code>getAnalysisUsage</code>中调用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">AU.addRequired&lt;LoopInfoWrapperPass&gt;();</div><div class="line">AU.setPreservesAll();</div></pre></td></tr></table></figure>
+<p>然后就可以通过它提供接口获取存在循环的个数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">LoopInfo &amp;LI = getAnalysis&lt;LoopInfoWrapperPass&gt;().getLoopInfo();</div><div class="line">int loopCounter = 0;</div><div class="line">for (LoopInfo::iterator i = LI.begin(), e = LI.end(); i != e; ++i) &#123;</div><div class="line">    loopCounter++;</div><div class="line">&#125;</div><div class="line">errs() &lt;&lt; &quot;loop num:&quot; &lt;&lt; loopCounter &lt;&lt; &quot;\n&quot;;</div></pre></td></tr></table></figure>
+<p>测试程序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">int add(int x, int y) &#123;</div><div class="line">    for (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        printf(&quot;%d\n&quot;,i);</div><div class="line">    &#125;</div><div class="line">    return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()&#123;</div><div class="line">    printf(&quot;%d&quot;,add(3,4));</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Hello: _Z3addii</div><div class="line">loop num:1</div><div class="line">Hello: main</div><div class="line">loop num:0</div><div class="line">Program ended with exit code: 0</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      基于官方文档Hello Pass通过Xcode编译和调试。
+    
+    </summary>
+    
+      <category term="llvm" scheme="http://www.alonemonkey.com/categories/llvm/"/>
+    
+    
+      <category term="llvm" scheme="http://www.alonemonkey.com/tags/llvm/"/>
+    
+  </entry>
   
   <entry>
     <title>iOS成长之路开售！</title>
@@ -1435,42 +1529,6 @@
     
     
       <category term="RxSwift" scheme="http://www.alonemonkey.com/tags/RxSwift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>第十一期 Coder群周报</title>
-    <link href="http://www.alonemonkey.com/2016/12/22/weekly/"/>
-    <id>http://www.alonemonkey.com/2016/12/22/weekly/</id>
-    <published>2016-12-21T16:00:00.000Z</published>
-    <updated>2017-03-05T09:11:30.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>LLVM</p>
-</blockquote>
-<h3 id="LLVM-官方文档"><a href="#LLVM-官方文档" class="headerlink" title="LLVM 官方文档"></a><a href="http://clang.llvm.org/docs/index.html" target="_blank" rel="external">LLVM 官方文档</a></h3><p>介绍: LLVM的官方文档，你想知道的都可以在这里找到。</p>
-<h3 id="LLVM-PROJECT-BLOG"><a href="#LLVM-PROJECT-BLOG" class="headerlink" title="LLVM PROJECT BLOG"></a><a href="http://blog.llvm.org/" target="_blank" rel="external">LLVM PROJECT BLOG</a></h3><p>介绍: LLVM Project News and Details from the Trenches</p>
-<h3 id="The-Compiler"><a href="#The-Compiler" class="headerlink" title="The Compiler"></a><a href="https://www.objc.io/issues/6-build-tools/compiler/" target="_blank" rel="external">The Compiler</a></h3><p>介绍: 介绍了编译器的工作流程以及Clang工具。</p>
-<h3 id="LLVM-Tutorial"><a href="#LLVM-Tutorial" class="headerlink" title="LLVM Tutorial"></a><a href="http://llvm.org/docs/tutorial/index.html" target="_blank" rel="external">LLVM Tutorial</a></h3><p>介绍: 动手搞事情。</p>
-<h3 id="Clang-tutorial"><a href="#Clang-tutorial" class="headerlink" title="Clang-tutorial"></a><a href="https://github.com/loarabia/Clang-tutorial" target="_blank" rel="external">Clang-tutorial</a></h3><p>介绍: A collection of code samples showing usage of clang and llvm as a library</p>
-<h3 id="GETTING-STARTED-WITH-LLVM-CLANG-ON-OS-X"><a href="#GETTING-STARTED-WITH-LLVM-CLANG-ON-OS-X" class="headerlink" title="GETTING STARTED WITH LLVM/CLANG ON OS X"></a><a href="http://lowlevelbits.org/getting-started-with-llvm/clang-on-os-x/" target="_blank" rel="external">GETTING STARTED WITH LLVM/CLANG ON OS X</a></h3><p>介绍: This article is a guide how to set up development environment for Clang on OS X. The following topics are covered:1.getting sources 2.setting up IDE/compiling 3.debugging</p>
-<h3 id="Clang-Tutorial"><a href="#Clang-Tutorial" class="headerlink" title="Clang Tutorial"></a><a href="https://kevinaboos.wordpress.com/2013/07/23/clang-tutorial-part-i-introduction/" target="_blank" rel="external">Clang Tutorial</a></h3><p>介绍: 老司机带你上路。</p>
-<h3 id="Implementing-a-code-generator-with-libclang"><a href="#Implementing-a-code-generator-with-libclang" class="headerlink" title="Implementing a code generator with libclang"></a><a href="http://szelei.me/code-generator/" target="_blank" rel="external">Implementing a code generator with libclang</a></h3><p>介绍: RT</p>
-<h3 id="基于LLVM的代码混淆"><a href="#基于LLVM的代码混淆" class="headerlink" title="基于LLVM的代码混淆"></a><a href="http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/" target="_blank" rel="external">基于LLVM的代码混淆</a></h3><p>介绍: 从LLVM编译，Pass到集成NDK。</p>
-<h3 id="Implementing-a-JIT-Compiled-Language-with-Haskell-and-LLVM"><a href="#Implementing-a-JIT-Compiled-Language-with-Haskell-and-LLVM" class="headerlink" title="Implementing a JIT Compiled Language with Haskell and LLVM"></a><a href="http://www.stephendiehl.com/llvm/" target="_blank" rel="external">Implementing a JIT Compiled Language with Haskell and LLVM</a></h3><h3 id="Let’s-Write-an-LLVM-Specializer-for-Python"><a href="#Let’s-Write-an-LLVM-Specializer-for-Python" class="headerlink" title="Let’s Write an LLVM Specializer for Python!"></a><a href="http://dev.stephendiehl.com/numpile/" target="_blank" rel="external">Let’s Write an LLVM Specializer for Python!</a></h3><p>介绍: 直接搞语言了，高端。</p>
-<h3 id="Clang-Tutorial-翻译"><a href="#Clang-Tutorial-翻译" class="headerlink" title="Clang Tutorial 翻译"></a><a href="http://jszhujun2010.farbox.com/archive" target="_blank" rel="external">Clang Tutorial 翻译</a></h3><h3 id="CLANG技术分享系列"><a href="#CLANG技术分享系列" class="headerlink" title="CLANG技术分享系列"></a><a href="https://kangwang1988.github.io/tech/2016/10/31/write-your-first-clang-plugin.html" target="_blank" rel="external">CLANG技术分享系列</a></h3><h3 id="JSPatch-Convertor-实现原理详解"><a href="#JSPatch-Convertor-实现原理详解" class="headerlink" title="JSPatch Convertor 实现原理详解"></a><a href="http://blog.cnbang.net/tech/2915/#more-2915" target="_blank" rel="external">JSPatch Convertor 实现原理详解</a></h3><h3 id="基于clang插件的一种iOS包大小瘦身方案"><a href="#基于clang插件的一种iOS包大小瘦身方案" class="headerlink" title="基于clang插件的一种iOS包大小瘦身方案"></a><a href="https://www.zybuluo.com/pockry/note/566013" target="_blank" rel="external">基于clang插件的一种iOS包大小瘦身方案</a></h3><h3 id="obfuscator-llvm"><a href="#obfuscator-llvm" class="headerlink" title="obfuscator-llvm"></a><a href="https://github.com/obfuscator-llvm/obfuscator" target="_blank" rel="external">obfuscator-llvm</a></h3><h3 id="LLVM二三事"><a href="#LLVM二三事" class="headerlink" title="LLVM二三事"></a><a href="http://feimengspirit.com/llvm" target="_blank" rel="external">LLVM二三事</a></h3><p><br><br><blockquote class="blockquote-center"><p>LLVM 书籍</p>
-</blockquote></p>
-<h3 id="Getting-Started-with-LLVM-Core-Libraries"><a href="#Getting-Started-with-LLVM-Core-Libraries" class="headerlink" title="Getting Started with LLVM Core Libraries"></a>Getting Started with LLVM Core Libraries</h3><h3 id="LLVM-Cookbook"><a href="#LLVM-Cookbook" class="headerlink" title="LLVM Cookbook"></a>LLVM Cookbook</h3>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;LLVM&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;LLVM-官方文档&quot;&gt;&lt;a href=&quot;#LLVM-官方文档&quot; class=&quot;headerlink&quot; title=&quot;LLVM 官方文档&quot;
-    
-    </summary>
-    
-      <category term="weekly" scheme="http://www.alonemonkey.com/categories/weekly/"/>
-    
     
   </entry>
   

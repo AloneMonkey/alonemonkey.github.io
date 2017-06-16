@@ -1,0 +1,843 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="llvm," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="基于官方文档Hello Pass通过Xcode编译和调试。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0x01 编写一个LLVM Pass">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="基于官方文档Hello Pass通过Xcode编译和调试。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496846680486.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847664836.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847745200.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847849551.png">
+<meta property="og:updated_time" content="2017-06-16T06:38:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="0x01 编写一个LLVM Pass">
+<meta name="twitter:description" content="基于官方文档Hello Pass通过Xcode编译和调试。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496846680486.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 0x01 编写一个LLVM Pass | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                0x01 编写一个LLVM Pass
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-02T00:00:00+08:00" content="2017-06-02">
+              2017-06-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/llvm/" itemprop="url" rel="index">
+                    <span itemprop="name">llvm</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前写过一篇《关于LLVM，这些东西你必须知道！》，先已收录在《iOS成长之路》。<br>其中讲解了编译器的编译过程，以及通过LLVM可以做哪些有意思的事情，今天继续来跟着官方的文档继续了解Pass。</p>
+<p>获取代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git clone http://llvm.org/git/llvm.git</div><div class="line">git clone http://llvm.org/git/clang.git llvm/tools/clang</div><div class="line">git clone http://llvm.org/git/clang-tools-extra.git llvm/tools/clang/tools/extra</div><div class="line">git clone http://llvm.org/git/compiler-rt.git llvm/projects/compiler-rt</div></pre></td></tr></table></figure>
+<p>编译成<code>Xcode项目</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir build</div><div class="line">cd build</div><div class="line">cmake -G Xcode CMAKE_BUILD_TYPE=&quot;Debug&quot; ../llvm</div><div class="line"></div><div class="line">open LLVM.xcodeproj</div></pre></td></tr></table></figure>
+<p>然后运行<code>clang</code>，准备工作做好后，继续Pass的学习。</p>
+<h3 id="什么是Pass？"><a href="#什么是Pass？" class="headerlink" title="什么是Pass？"></a>什么是Pass？</h3><p>LLVM Pass是LLVM系统中非常重要和有趣的一个模块，Pass处理编译过程中代码的转换以及优化工作。</p>
+<p>所有的Pass都是<a href="http://llvm.org/doxygen/classllvm_1_1Pass.html" target="_blank" rel="external">Pass</a>的子类，不同的Pass实现不同的作用可以继承<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-modulepass" target="_blank" rel="external">ModulePass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-callgraphsccpass" target="_blank" rel="external">CallGraphSCCPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-functionpass" target="_blank" rel="external">FunctionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-looppass" target="_blank" rel="external">LoopPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-regionpass" target="_blank" rel="external">RegionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-basicblockpass" target="_blank" rel="external">BasicBlockPass</a>等类。</p>
+<p>接下来开始介绍如何编写一个Pass，编译，加载以及运行的过程。</p>
+<h3 id="编写hello-world"><a href="#编写hello-world" class="headerlink" title="编写hello world"></a>编写hello world</h3><p>先编写一个“Hello” Pass，只是简单的输出程序中每个非外部方法的方法名，不会修改程序本身的功能。官方Demo的源代码存在<code>lib/Transforms/Hello</code>文件夹。</p>
+<h4 id="配置编译环境"><a href="#配置编译环境" class="headerlink" title="配置编译环境"></a>配置编译环境</h4><p>首先来看看环境的配置，如果你想编译一个新的Pass，你可以在<code>lib/Transforms/</code>下新建一个文件夹，这里我自己创建的是<code>PassDemo</code>，然后配置编译脚本去编译你的源代码。 在新建的目录下创建文件<code>CMakeLists.txt</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">add_llvm_loadable_module(LLVMPassDemo</div><div class="line">    Hello.cpp</div><div class="line"></div><div class="line">    PLUGIN_TOOL</div><div class="line">    opt</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>然后增加下面一行代码到<code>lib/Transforms/CMakeLists.txt</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">add_subdirectory(PassDemo)</div></pre></td></tr></table></figure>
+<p>编译脚本指定了编译源文件<code>Hello.cpp</code>去编译生成动态库<code>$(LEVEL)/lib/LLVMPassDemo.dylib</code>。该文件可以被<code>opt</code>通过<code>-load</code>参数动态加载。如果不是Mac平台生成的后缀会不一样，比如<code>Linux</code>下是<code>so</code>。</p>
+<p>配置好编译脚本后，打开<code>Xcode</code>项目，按<code>command + B</code>编译，然后在项目里面就可以看到刚刚增加的<code>Target</code>，打开<code>Hello.cpp</code>文件就可以编写代码了。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496846680486.png" alt="image"></p>
+<h4 id="基础代码"><a href="#基础代码" class="headerlink" title="基础代码"></a>基础代码</h4><p>首先编辑<code>Hello.cpp</code>文件，导入头文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#include &quot;llvm/Pass.h&quot;</div><div class="line">#include &quot;llvm/IR/Function.h&quot;</div><div class="line">#include &quot;llvm/Support/raw_ostream.h&quot;</div></pre></td></tr></table></figure>
+<p>因为需要编一个<code>Pass</code>然后操作<code>Function</code>, 还可能输出一些东西。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">using namespace llvm;</div></pre></td></tr></table></figure>
+<p>由于导入文件里面的方法是属于<code>llvm</code>命名空间的，所以先指定使用的命名空间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">namespace &#123;</div></pre></td></tr></table></figure>
+<p>编写一个匿名的命名空间，<code>C++</code>中的匿名命名空间和<code>C</code>语言里面的<code>static</code>关键词一样，定义在匿名空间中的变量仅仅对当前文件可见。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">struct Hello : public FunctionPass&#123;</div></pre></td></tr></table></figure>
+<p>定义<code>Hello</code>类继承<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-functionpass" target="_blank" rel="external">FunctionPass</a>，后面会讲到不同用处的Pass会继承不同的父类，现在只需要知道，继承自<code>FunctionPass</code>可以操作程序中的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">static char ID;</div><div class="line">Hello() : FunctionPass(ID)&#123;&#125;</div></pre></td></tr></table></figure>
+<p>定义可供LLVM标示的Pass ID。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">        bool runOnFunction(Function &amp;F) override&#123;</div><div class="line">            errs() &lt;&lt; &quot;Hello: &quot;;</div><div class="line">            errs().write_escaped(F.getName()) &lt;&lt; &quot;\n&quot;;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里定义了一个<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-runonfunction" target="_blank" rel="external">runOnFunction</a>，重载继承自父类的抽象虚函数。在这个函数里面可以做针对于函数的特殊处理，这里只是打印出每个方法的名字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">char Hello::ID = 0;</div></pre></td></tr></table></figure>
+<p>初始化Pass ID，LLVM使用ID的地址去识别一个Pass，所以初始化的值不重要。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static RegisterPass&lt;Hello&gt; X(&quot;hello&quot;, &quot;Hello World Pass&quot;, false/* Only looks at CFG */, false/* Analysis Pass */);</div></pre></td></tr></table></figure>
+<p>最后，<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-registration" target="_blank" rel="external">注册我们的class</a> Hello， 指定命令行参数为<code>hello</code>，名字说明<code>Hello World Pass</code>。</p>
+<p>整个<code>Hello.cpp</code>文件如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">#include &quot;llvm/Pass.h&quot;</div><div class="line">#include &quot;llvm/IR/Function.h&quot;</div><div class="line">#include &quot;llvm/Support/raw_ostream.h&quot;</div><div class="line"></div><div class="line">using namespace llvm;</div><div class="line"></div><div class="line">namespace &#123;</div><div class="line">    struct Hello : public FunctionPass&#123;</div><div class="line">        static char ID;</div><div class="line">        </div><div class="line">        Hello() : FunctionPass(ID)&#123;&#125;</div><div class="line">        </div><div class="line">        bool runOnFunction(Function &amp;F) override&#123;</div><div class="line">            errs() &lt;&lt; &quot;Hello: &quot;;</div><div class="line">            errs().write_escaped(F.getName()) &lt;&lt; &quot;\n&quot;;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">char Hello::ID = 0;</div><div class="line">static RegisterPass&lt;Hello&gt; X(&quot;hello&quot;, &quot;Hello World Pass&quot;, false/* Only looks at CFG */, false/* Analysis Pass */);</div></pre></td></tr></table></figure>
+<p>选中<code>Target</code> <code>LLVMPassDemo</code> 按 <code>command + B</code>编译，编译完后会生成文件<code>build/Debug/lib/LLVMPassDemo.dylib</code>。</p>
+<h4 id="使用opt加载"><a href="#使用opt加载" class="headerlink" title="使用opt加载"></a>使用<code>opt</code>加载</h4><p>上面在代码中通过<code>RegisterPass</code>注册了Pass，所以可以通过<code>opt -load</code>去加载动态库并指定参数<code>hello</code>。</p>
+<p>准备源文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">int add(int x, int y) &#123;</div><div class="line">    return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()&#123;</div><div class="line">    printf(&quot;%d&quot;,add(3,4));</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译源文件生成<code>bitcode</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">path/to/build/Debug/bin/clang -emit-llvm -c test.mm -o test.bc</div></pre></td></tr></table></figure>
+<p>然后编译启动参数, 选择<code>opt</code>target， 点击<code>Edit Scheme</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847664836.png" alt="image"></p>
+<p>填入启动参数:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847745200.png" alt="image"></p>
+<p><code>command + R</code>运行。</p>
+<p>输出如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Hello: _Z3addii</div><div class="line">Hello: main</div></pre></td></tr></table></figure>
+<p>当然还可以断点调试啦~ </p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496847849551.png" alt="image"></p>
+<p>通过<code>-help</code>可以看到注册的pass参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">opt -load lib/LLVMPassDemo.dylib -help</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">  Optimizations available:</div><div class="line">    -hello                                          - Hello World Pass</div><div class="line">......</div></pre></td></tr></table></figure>
+<p><a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-passmanager" target="_blank" rel="external">PassManager</a>还提供<code>--time-passes</code>参数输出你的Pass和其它Pass执行时间的对比。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">opt -load lib/LLVMPassDemo.dylib -hello -time-passes -disable-output test.bc</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Hello: _Z3addii</div><div class="line">Hello: main</div><div class="line">===-------------------------------------------------------------------------===</div><div class="line">                      ... Pass execution timing report ...</div><div class="line">===-------------------------------------------------------------------------===</div><div class="line">  Total Execution Time: 0.0003 seconds (0.0003 wall clock)</div><div class="line"></div><div class="line">   ---User Time---   --System Time--   --User+System--   ---Wall Time---  --- Name ---</div><div class="line">   0.0002 ( 75.3%)   0.0000 ( 27.9%)   0.0002 ( 62.1%)   0.0002 ( 62.7%)  Module Verifier</div><div class="line">   0.0001 ( 24.7%)   0.0001 ( 72.1%)   0.0001 ( 37.9%)   0.0001 ( 37.3%)  Hello World Pass</div><div class="line">   0.0002 (100.0%)   0.0001 (100.0%)   0.0003 (100.0%)   0.0003 (100.0%)  Total</div><div class="line"></div><div class="line">===-------------------------------------------------------------------------===</div></pre></td></tr></table></figure>
+<p>tips:<br>为了在执行<code>opt</code>时能自动检测<code>LLVMPassDemo</code>模块有没有被修改，如果修改了，重新编译<code>LLVMPassDemo</code>模块，我们把<code>LLVMPassDemo</code>模块加到<code>opt</code>的依赖里面。</p>
+<p>编辑<code>tools/opt/CMakeLists.txt</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">add_llvm_tool(opt</div><div class="line">  AnalysisWrappers.cpp</div><div class="line">  BreakpointPrinter.cpp</div><div class="line">  GraphPrinters.cpp</div><div class="line">  NewPMDriver.cpp</div><div class="line">  PassPrinters.cpp</div><div class="line">  PrintSCC.cpp</div><div class="line">  opt.cpp</div><div class="line"></div><div class="line">  DEPENDS</div><div class="line">  intrinsics_gen</div><div class="line">  LLVMPassDemo</div><div class="line">  )</div></pre></td></tr></table></figure>
+<h3 id="更多Pass类"><a href="#更多Pass类" class="headerlink" title="更多Pass类"></a>更多Pass类</h3><p>当你写一个新的Pass的时候，你需要根据需要去选择需要继承的父类，根据不同的作用有 <code>ImmutablePass</code>、<code>ModulePass</code>、<code>CallGraphSCCPass</code>、<code>FunctionPass</code>、<code>LoopPass</code>、<code>RegionPass</code>、<code>BasicBlockPass</code>、<code>MachineFunctionPass</code>。具体可以参考<a href="http://llvm.org/docs/WritingAnLLVMPass.html" target="_blank" rel="external">官方文档</a>。</p>
+<h3 id="调用其它Pass"><a href="#调用其它Pass" class="headerlink" title="调用其它Pass"></a>调用其它Pass</h3><p>如果在编写的Pass中需要使用到其它Pass提供的函数功能，需要在:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virtual void getAnalysisUsage(AnalysisUsage &amp;AU) const;</div></pre></td></tr></table></figure>
+<p>说明，比如像要获取程序中存在循环的信息，可以在该函数里面申请需要依赖的Pass。</p>
+<p>以上面的Pass为例，导入头文件<code>#include &quot;llvm/Analysis/LoopInfo.h&quot;</code>，在<code>getAnalysisUsage</code>中调用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">AU.addRequired&lt;LoopInfoWrapperPass&gt;();</div><div class="line">AU.setPreservesAll();</div></pre></td></tr></table></figure>
+<p>然后就可以通过它提供接口获取存在循环的个数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">LoopInfo &amp;LI = getAnalysis&lt;LoopInfoWrapperPass&gt;().getLoopInfo();</div><div class="line">int loopCounter = 0;</div><div class="line">for (LoopInfo::iterator i = LI.begin(), e = LI.end(); i != e; ++i) &#123;</div><div class="line">    loopCounter++;</div><div class="line">&#125;</div><div class="line">errs() &lt;&lt; &quot;loop num:&quot; &lt;&lt; loopCounter &lt;&lt; &quot;\n&quot;;</div></pre></td></tr></table></figure>
+<p>测试程序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">int add(int x, int y) &#123;</div><div class="line">    for (int i = 0; i &lt; 10; i++) &#123;</div><div class="line">        printf(&quot;%d\n&quot;,i);</div><div class="line">    &#125;</div><div class="line">    return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()&#123;</div><div class="line">    printf(&quot;%d&quot;,add(3,4));</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Hello: _Z3addii</div><div class="line">loop num:1</div><div class="line">Hello: main</div><div class="line">loop num:0</div><div class="line">Program ended with exit code: 0</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llvm/" rel="tag">#llvm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/02/ios-book-pr/" rel="next" title="iOS成长之路开售！">
+                <i class="fa fa-chevron-left"></i> iOS成长之路开售！
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+      <script>
+        var cloudTieConfig = {
+          url: document.location.href, 
+          sourceId: "",
+          productKey: "68a777ea87db47d58ee038a1efc863df",
+          target: "cloud-tie-wrapper"
+        };
+      </script>
+      <script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Pass？"><span class="nav-number">2.</span> <span class="nav-text">什么是Pass？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写hello-world"><span class="nav-number">3.</span> <span class="nav-text">编写hello world</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置编译环境"><span class="nav-number">3.1.</span> <span class="nav-text">配置编译环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基础代码"><span class="nav-number">3.2.</span> <span class="nav-text">基础代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用opt加载"><span class="nav-number">3.3.</span> <span class="nav-text">使用opt加载</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多Pass类"><span class="nav-number">4.</span> <span class="nav-text">更多Pass类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用其它Pass"><span class="nav-number">5.</span> <span class="nav-text">调用其它Pass</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
