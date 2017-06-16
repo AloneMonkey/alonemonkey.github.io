@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-06-16T06:40:22.000Z</updated>
+  <updated>2017-06-16T06:45:59.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>0x01 编写调试一个LLVM Pass</title>
+    <title>0x01 Xcode调试一个LLVM Pass</title>
     <link href="http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/"/>
     <id>http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/</id>
     <published>2017-06-01T16:00:00.000Z</published>
-    <updated>2017-06-16T06:40:22.000Z</updated>
+    <updated>2017-06-16T06:45:59.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前写过一篇《关于LLVM，这些东西你必须知道！》，先已收录在《iOS成长之路》。<br>其中讲解了编译器的编译过程，以及通过LLVM可以做哪些有意思的事情，今天继续来跟着官方的文档继续了解Pass。</p>
 <p>获取代码：</p>
