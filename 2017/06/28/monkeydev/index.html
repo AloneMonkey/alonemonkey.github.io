@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Coder,安全,iOS,Android,逆向,越狱开发,正方,课表" />
+  <meta name="keywords" content="逆向," />
 
 
 
@@ -94,28 +94,19 @@
 
 
 
-<meta name="description" content="iOS
-
-React Native通信机制详解分享人：AloneMonkey
-介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。
-Masonry介绍">
+<meta name="description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第九期 Coder群周报">
-<meta property="og:url" content="http://www.alonemonkey.com/2016/10/16/weekly/index.html">
+<meta property="og:title" content="iOSOpenDev修改版MonkeyDev">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/06/28/monkeydev/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="iOS
-
-React Native通信机制详解分享人：AloneMonkey
-介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。
-Masonry介绍">
-<meta property="og:updated_time" content="2016-12-21T02:13:19.000Z">
+<meta property="og:description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636121610.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636483087.png">
+<meta property="og:updated_time" content="2017-06-28T07:59:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第九期 Coder群周报">
-<meta name="twitter:description" content="iOS
-
-React Native通信机制详解分享人：AloneMonkey
-介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。
-Masonry介绍">
+<meta name="twitter:title" content="iOSOpenDev修改版MonkeyDev">
+<meta name="twitter:description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636121610.png">
 
 
 
@@ -133,7 +124,7 @@ Masonry介绍">
   };
 </script>
 
-  <title> 第九期 Coder群周报 | AloneMonkey </title>
+  <title> iOSOpenDev修改版MonkeyDev | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -293,7 +284,7 @@ Masonry介绍">
             
             
               
-                第九期 Coder群周报
+                iOSOpenDev修改版MonkeyDev
               
             
           </h1>
@@ -305,8 +296,8 @@ Masonry介绍">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-16T00:00:00+08:00" content="2016-10-16">
-              2016-10-16
+            <time itemprop="dateCreated" datetime="2017-06-28T00:00:00+08:00" content="2017-06-28">
+              2017-06-28
             </time>
           </span>
 
@@ -319,8 +310,8 @@ Masonry介绍">
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/weekly/" itemprop="url" rel="index">
-                    <span itemprop="name">weekly</span>
+                  <a href="/categories/逆向/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向</span>
                   </a>
                 </span>
 
@@ -352,31 +343,39 @@ Masonry介绍">
       
 
       
-        <blockquote class="blockquote-center"><p>iOS</p>
-</blockquote>
-<h3 id="React-Native通信机制详解"><a href="#React-Native通信机制详解" class="headerlink" title="React Native通信机制详解"></a><a href="http://blog.cnbang.net/tech/2698/" target="_blank" rel="external">React Native通信机制详解</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：React Native是facebook刚开源的框架，可以用javascript直接开发原生APP，先不说这个框架后续是否能得到大众认可，单从源码来说，这个框架源码里有非常多的设计思想和实现方式值得学习，本篇先来看看它最基础的JavaScript-ObjectC通信机制(以下简称JS/OC)。</p>
-<h3 id="Masonry介绍与使用实践：快速上手Autolayout"><a href="#Masonry介绍与使用实践：快速上手Autolayout" class="headerlink" title="Masonry介绍与使用实践：快速上手Autolayout"></a><a href="http://www.cocoachina.com/ios/20141219/10702.html" target="_blank" rel="external">Masonry介绍与使用实践：快速上手Autolayout</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：Masonry是一个轻量级的布局框架 拥有自己的描述语法 采用更优雅的链式语法封装自动布局 简洁明了 并具有高可读性 而且同时支持 iOS 和 Max OS X。</p>
-<a id="more"></a>
-<h3 id="黑科技：把第三方-iOS-应用转成动态库"><a href="#黑科技：把第三方-iOS-应用转成动态库" class="headerlink" title="黑科技：把第三方 iOS 应用转成动态库"></a><a href="http://mp.weixin.qq.com/s?__biz=MjM5NTIyNTUyMQ==&amp;mid=2709545228&amp;idx=1&amp;sn=7a47a0de32e06f9c465319e8db8ca13f" target="_blank" rel="external">黑科技：把第三方 iOS 应用转成动态库</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：把第三方 iOS 应用转成动态库，并加载到自己的 App 中。</p>
-<h3 id="史上最详细的iOS之事件的传递和响应机制-原理篇"><a href="#史上最详细的iOS之事件的传递和响应机制-原理篇" class="headerlink" title="史上最详细的iOS之事件的传递和响应机制-原理篇"></a><a href="http://www.jianshu.com/p/2e074db792ba" target="_blank" rel="external">史上最详细的iOS之事件的传递和响应机制-原理篇</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：事件的产生和传递（事件如何从父控件传递到子控件并寻找到最合适的view、寻找最合适的view的底层实现、拦截事件的处理）-&gt;找到最合适的view后事件的处理（touches方法的重写，也就是事件的响应）.</p>
-<h3 id="iOS-App组件化开发实践"><a href="#iOS-App组件化开发实践" class="headerlink" title="iOS App组件化开发实践"></a><a href="http://www.yiqixiabigao.com/yin-ke-kong-gu-iosman-man-zu-jian-hua-kai-fa-zhi-lu/" target="_blank" rel="external">iOS App组件化开发实践</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：去尝试解决组件化开发当中的一些问题。</p>
-<p><br><br><blockquote class="blockquote-center"><p>Android</p>
-</blockquote></p>
-<h3 id="谈谈App混合开发"><a href="#谈谈App混合开发" class="headerlink" title="谈谈App混合开发"></a><a href="http://bxbxbai.github.io/2015/08/16/talk-about-bybird-app/" target="_blank" rel="external">谈谈App混合开发</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：混合开发的App（Hybrid App）就是在一个App中内嵌一个轻量级的浏览器，一部分原生的功能改为Html 5来开发，这部分功能不仅能够在不升级App的情况下动态更新，而且可以在Android或iOS的App上同时运行，让用户的体验更好又可以节省开发的资源。</p>
-<h3 id="反调试方法一-读取进程status文件"><a href="#反调试方法一-读取进程status文件" class="headerlink" title="反调试方法一 - 读取进程status文件"></a><a href="http://kiya.space/2015/12/14/android-anti-debug-read-status/" target="_blank" rel="external">反调试方法一 - 读取进程status文件</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：用fopen打开<code>/proc/&lt;pid&gt;/status</code>文件读取其中的TracerPid值来检测自己的进程是否被attach，TracerPid如果为0说明没有别的进程在调试这个进程，如果不为0说明有程序在调试。</p>
-<h3 id="反调试方法二-抢占ptrace"><a href="#反调试方法二-抢占ptrace" class="headerlink" title="反调试方法二 - 抢占ptrace"></a><a href="http://kiya.space/2015/12/18/ptrace-basis/" target="_blank" rel="external">反调试方法二 - 抢占ptrace</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：ptrace可以让一个进程监视和控制另一个进程的执行,并且修改被监视进程的内存、寄存器等,主要应用于断点调试和系统调用跟踪.</p>
-<p><br><br><blockquote class="blockquote-center"><p>大会</p>
-</blockquote></p>
-<h3 id="云栖大会"><a href="#云栖大会" class="headerlink" title="云栖大会"></a><a href="https://yunqi.aliyun.com/" target="_blank" rel="external">云栖大会</a></h3><p>分享人：<a href="http://www.blogfshare.com" target="_blank" rel="external">AloneMonkey</a></p>
-<p>介绍：云计算盛会。</p>
+        <h3 id="iOSOpenDev"><a href="#iOSOpenDev" class="headerlink" title="iOSOpenDev"></a>iOSOpenDev</h3><p>首先<code>iOSOpenDev</code>是啥？ 他是个直接通过<code>Xcode</code>新建<code>Hook</code>的工程模板，然后编译生成安装deb。</p>
+<p>网站:<a href="http://www.iosopendev.com/" target="_blank" rel="external">http://www.iosopendev.com/</a></p>
+<p>可惜作者13年就不更新了，最新的还是<code>1.6-2</code>的版本。</p>
+<p>这个版本在新版<code>Xcode</code>和<code>theos</code>都存在很多问题。</p>
+<p>比如因为新版<code>Xcode</code>找不到某些文件导致安装出错，新版<code>theos</code>的修改导致新建出来的工程编译报错找不到<code>HBLogDebug</code>，以及很多问题。</p>
+<p>对于习惯用<code>Xcode</code>来写代码的人，还是有点不能忍的。</p>
+<p>所以就把<code>iOSOpenDev</code>的脚本和项目模板拿过来改了改。</p>
+<p>暂只支持<code>CaptainHook Tweak</code>和<code>Logos Tweak</code>。</p>
+<p>使用起来方面很多。</p>
+<h3 id="MonkeyDev"><a href="#MonkeyDev" class="headerlink" title="MonkeyDev"></a>MonkeyDev</h3><p>这是我的修改版本。</p>
+<p>安装很简单:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/AloneMonkey/MonkeyDev.git</div><div class="line">sudo ./md-install</div></pre></td></tr></table></figure>
+<p>卸载:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-uninstall</div></pre></td></tr></table></figure>
+<p>然后新建项目就会出现了:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636121610.png" alt="image"></p>
+<p>和<code>iOSOpenDev</code>共存。</p>
+<p>当然使用前，你要安装最新版本的<code>theos</code>:</p>
+<p><a href="https://github.com/theos/theos/" target="_blank" rel="external">https://github.com/theos/theos/</a></p>
+<p>包括</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install ldid</div></pre></td></tr></table></figure>
+<p>然后设备免密码登录:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -P &apos;&apos;</div><div class="line">ssh-copy-id -i /Users/用户名/.ssh/id_rsa root@IP</div></pre></td></tr></table></figure>
+<p><code>Commonand + B</code> 编译，不安装，设置<code>MonkeyDevInstallOnAnyBuild</code>为<code>YES</code>。</p>
+<p>会自动打包安装到设备。</p>
+<p><code>Command + Shift + i</code> 编译安装，但是这种方式是<code>Release</code>模式。看不到log输出。</p>
+<p>在编译设置中可以自定义设备ip和ssh的端口:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636483087.png" alt="image"></p>
+<p>不设置的话，ip默认为127.0.0.1，port默认为2222</p>
+<p>当然你也可以在<code>~/.zshrc</code>或其它profile里面设置<code>MonkeyDevDevice</code>和<code>MonkeyDevPort</code>。</p>
+<p>查看log的会可以使用<code>idevicesyslog</code>查看，毕竟带颜色。。。。</p>
+<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><p>后续会慢慢去完善这个工具，在使用中有什么问题也可以提出来，还是有很多东西需要去改进的。</p>
+<p>恩，就这样。。。</p>
 
       
     </div>
@@ -476,22 +475,24 @@ Masonry介绍">
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag">#逆向</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/25/weekly/" rel="next" title="第八期 Coder群周报">
-                <i class="fa fa-chevron-left"></i> 第八期 Coder群周报
+              <a href="/2017/06/02/ios-book-pr/" rel="next" title="iOS成长之路开售！">
+                <i class="fa fa-chevron-left"></i> iOS成长之路开售！
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/12/21/weekly/" rel="prev" title="第十期 Coder群周报">
-                第十期 Coder群周报 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -666,7 +667,7 @@ Masonry介绍">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#React-Native通信机制详解"><span class="nav-number">1.</span> <span class="nav-text">React Native通信机制详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Masonry介绍与使用实践：快速上手Autolayout"><span class="nav-number">2.</span> <span class="nav-text">Masonry介绍与使用实践：快速上手Autolayout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#黑科技：把第三方-iOS-应用转成动态库"><span class="nav-number">3.</span> <span class="nav-text">黑科技：把第三方 iOS 应用转成动态库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#史上最详细的iOS之事件的传递和响应机制-原理篇"><span class="nav-number">4.</span> <span class="nav-text">史上最详细的iOS之事件的传递和响应机制-原理篇</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS-App组件化开发实践"><span class="nav-number">5.</span> <span class="nav-text">iOS App组件化开发实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谈谈App混合开发"><span class="nav-number">6.</span> <span class="nav-text">谈谈App混合开发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反调试方法一-读取进程status文件"><span class="nav-number">7.</span> <span class="nav-text">反调试方法一 - 读取进程status文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反调试方法二-抢占ptrace"><span class="nav-number">8.</span> <span class="nav-text">反调试方法二 - 抢占ptrace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#云栖大会"><span class="nav-number">9.</span> <span class="nav-text">云栖大会</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#iOSOpenDev"><span class="nav-number">1.</span> <span class="nav-text">iOSOpenDev</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MonkeyDev"><span class="nav-number">2.</span> <span class="nav-text">MonkeyDev</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续"><span class="nav-number">3.</span> <span class="nav-text">后续</span></a></li></ol></div>
             
           </div>
         </section>
