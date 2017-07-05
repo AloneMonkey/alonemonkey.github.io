@@ -100,13 +100,13 @@
 <meta property="og:url" content="http://www.alonemonkey.com/2017/06/28/monkeydev/index.html">
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636121610.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636483087.png">
-<meta property="og:updated_time" content="2017-06-28T09:06:41.000Z">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260426855.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260498922.png">
+<meta property="og:updated_time" content="2017-07-05T13:15:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOSOpenDev修改版MonkeyDev">
 <meta name="twitter:description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636121610.png">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260426855.png">
 
 
 
@@ -343,34 +343,37 @@
       
 
       
-        <h3 id="iOSOpenDev"><a href="#iOSOpenDev" class="headerlink" title="iOSOpenDev"></a>iOSOpenDev</h3><p>首先<code>iOSOpenDev</code>是啥？ 他是个直接通过<code>Xcode</code>新建<code>Hook</code>的工程模板，然后编译生成安装deb。</p>
+        <h3 id="iOSOpenDev"><a href="#iOSOpenDev" class="headerlink" title="iOSOpenDev"></a>iOSOpenDev</h3><p>首先<code>iOSOpenDev</code>是啥？他是个直接通过<code>Xcode</code>新建<code>Hook</code>的工程模板，然后编译生成安装deb。</p>
 <p>网站:<a href="http://www.iosopendev.com/" target="_blank" rel="external">http://www.iosopendev.com/</a></p>
 <p>可惜作者13年就不更新了，最新的还是<code>1.6-2</code>的版本。</p>
 <p>这个版本在新版<code>Xcode</code>和<code>theos</code>都存在很多问题。</p>
 <p>比如因为新版<code>Xcode</code>找不到某些文件导致安装出错，新版<code>theos</code>的修改导致新建出来的工程编译报错找不到<code>HBLogDebug</code>，以及很多问题。</p>
 <p>对于习惯用<code>Xcode</code>来写代码的人，还是有点不能忍的。</p>
 <p>所以就把<code>iOSOpenDev</code>的脚本和项目模板拿过来改了改。</p>
-<p>暂只支持<code>CaptainHook Tweak</code>和<code>Logos Tweak</code>。</p>
-<p>使用起来方面很多。</p>
+<p>已支持<code>CaptainHook Tweak</code>、<code>Logos Tweak</code>和<code>Command-line Tool</code>，使用起来方面很多。</p>
+<p>目前已在最新thoes和Xcode 9测试通过。</p>
 <h3 id="MonkeyDev"><a href="#MonkeyDev" class="headerlink" title="MonkeyDev"></a>MonkeyDev</h3><p>这是我的修改版本。</p>
-<p>安装很简单:</p>
+<p>安装很简单，可以选择指定的Xcode安装:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo xcode-select -s /Applications/Xcode-beta.app</div></pre></td></tr></table></figure>
+<p>如果不指定的话，默认就是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xcode-select -p</div></pre></td></tr></table></figure>
+<p>然后安装:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/AloneMonkey/MonkeyDev.git</div><div class="line">cd MonkeyDev/bin</div><div class="line">sudo ./md-install</div></pre></td></tr></table></figure>
 <p>如果不用，运行下面的命令卸载:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-uninstall</div></pre></td></tr></table></figure>
 <p>然后新建项目就会出现了:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636121610.png" alt="image"></p>
-<p>和<code>iOSOpenDev</code>共存。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260426855.png" alt="image"></p>
+<p>该工具和<code>iOSOpenDev</code>共存。</p>
 <p>当然使用前，你要安装最新版本的<code>theos</code>:</p>
 <p><a href="https://github.com/theos/theos/" target="_blank" rel="external">https://github.com/theos/theos/</a></p>
 <p>包括</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install ldid</div></pre></td></tr></table></figure>
 <p>然后设备免密码登录:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -P &apos;&apos;</div><div class="line">ssh-copy-id -i /Users/用户名/.ssh/id_rsa root@IP</div></pre></td></tr></table></figure>
-<p><code>Commonand + B</code> 编译，不安装，设置<code>MonkeyDevInstallOnAnyBuild</code>为<code>YES</code>。</p>
-<p>会自动打包安装到设备。</p>
+<p><code>Commonand + B</code> 编译，不安装，设置<code>MonkeyDevInstallOnAnyBuild</code>为<code>YES</code>，会自动打包安装到设备。</p>
 <p><code>Command + Shift + i</code> 编译安装，但是这种方式是<code>Release</code>模式。看不到log输出。</p>
 <p>在编译设置中可以自定义设备ip和ssh的端口:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1498636483087.png" alt="image"></p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260498922.png" alt="image"></p>
 <p>不设置的话，ip默认为<code>localhost</code>，port默认为<code>2222</code></p>
 <p>当然你也可以在<code>~/.zshrc</code>或其它profile里面设置<code>MonkeyDevDevice</code>和<code>MonkeyDevPort</code>。</p>
 <p>查看log的会可以使用<code>idevicesyslog</code>查看，毕竟带颜色。。。。</p>
