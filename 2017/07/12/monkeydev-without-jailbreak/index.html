@@ -106,10 +106,11 @@
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874017189.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874140165.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874354169.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499876622854.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874626958.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874870474.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874870474.png">
-<meta property="og:updated_time" content="2017-07-12T16:12:31.000Z">
+<meta property="og:updated_time" content="2017-07-12T16:23:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="无须越狱、自动集成、只需要一个砸壳的应用---MonkeyDev">
 <meta name="twitter:description" content="MonkeyDev现已实现CaptainHook Tweak、Logos Tweak and Command-line Tool工具创建，无须越狱一步集成Reveal和Cycript。">
@@ -374,7 +375,9 @@
 <p><code>Cycript</code>查看界面也没有问题:</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874354169.png" alt="image"></p>
 <p>这里Cycript默认端口是<code>6666</code>。</p>
-<h3 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h3><h4 id="Demo-App"><a href="#Demo-App" class="headerlink" title="Demo App"></a>Demo App</h4><p><code>MonkeyApp</code>不拖入App或者ipa的情况下，会有一个默认的App，以供读者自己测试，样子大概是这个样子····</p>
+<h3 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h3><h4 id="动态库调试"><a href="#动态库调试" class="headerlink" title="动态库调试"></a>动态库调试</h4><p>在<code>MonkeyAppDylib.m</code>文件中写了自己的代码之后就可以直接下断点调试，效果如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499876622854.png" alt="image"></p>
+<h4 id="Demo-App"><a href="#Demo-App" class="headerlink" title="Demo App"></a>Demo App</h4><p><code>MonkeyApp</code>不拖入App或者ipa的情况下，会有一个默认的App，以供读者自己测试，样子大概是这个样子····</p>
 <p>对了，运行前，你要把<code>AntiAntiDebug.m</code>这个文件的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rebind_symbols((struct rebinding[1])&#123;&#123;&quot;sysctl&quot;, my_sysctl, (void*)&amp;orig_sysctl&#125;&#125;,1);</div></pre></td></tr></table></figure>
 <p>这行代码注释去掉，因为Demo应用有反调试，但是hook<code>sysctl</code>这个在某些应用里会导致<code>_dyld_debugger_notification</code>这样的崩溃。</p>
@@ -683,7 +686,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装MonkeyDev"><span class="nav-number">2.</span> <span class="nav-text">安装MonkeyDev</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-一步到位"><span class="nav-number">3.</span> <span class="nav-text">使用:一步到位</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备好砸壳的ipa或者app"><span class="nav-number">3.1.</span> <span class="nav-text">准备好砸壳的ipa或者app</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建MonkeyApp项目"><span class="nav-number">3.2.</span> <span class="nav-text">创建MonkeyApp项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拖入编译"><span class="nav-number">3.3.</span> <span class="nav-text">拖入编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多功能"><span class="nav-number">4.</span> <span class="nav-text">更多功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Demo-App"><span class="nav-number">4.1.</span> <span class="nav-text">Demo App</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#默认集成的库"><span class="nav-number">4.2.</span> <span class="nav-text">默认集成的库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#增加自己的库"><span class="nav-number">4.3.</span> <span class="nav-text">增加自己的库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续TODO"><span class="nav-number">5.</span> <span class="nav-text">后续TODO</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装MonkeyDev"><span class="nav-number">2.</span> <span class="nav-text">安装MonkeyDev</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-一步到位"><span class="nav-number">3.</span> <span class="nav-text">使用:一步到位</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备好砸壳的ipa或者app"><span class="nav-number">3.1.</span> <span class="nav-text">准备好砸壳的ipa或者app</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建MonkeyApp项目"><span class="nav-number">3.2.</span> <span class="nav-text">创建MonkeyApp项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拖入编译"><span class="nav-number">3.3.</span> <span class="nav-text">拖入编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多功能"><span class="nav-number">4.</span> <span class="nav-text">更多功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态库调试"><span class="nav-number">4.1.</span> <span class="nav-text">动态库调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Demo-App"><span class="nav-number">4.2.</span> <span class="nav-text">Demo App</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#默认集成的库"><span class="nav-number">4.3.</span> <span class="nav-text">默认集成的库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#增加自己的库"><span class="nav-number">4.4.</span> <span class="nav-text">增加自己的库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续TODO"><span class="nav-number">5.</span> <span class="nav-text">后续TODO</span></a></li></ol></div>
             
           </div>
         </section>
