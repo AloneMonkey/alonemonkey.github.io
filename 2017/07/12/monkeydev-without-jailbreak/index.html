@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874626958.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874870474.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874870474.png">
-<meta property="og:updated_time" content="2017-07-12T16:08:19.000Z">
+<meta property="og:updated_time" content="2017-07-12T16:12:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="无须越狱、自动集成、只需要一个砸壳的应用---MonkeyDev">
 <meta name="twitter:description" content="MonkeyDev现已实现CaptainHook Tweak、Logos Tweak and Command-line Tool工具创建，无须越狱一步集成Reveal和Cycript。">
@@ -377,7 +377,7 @@
 <h3 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h3><h4 id="Demo-App"><a href="#Demo-App" class="headerlink" title="Demo App"></a>Demo App</h4><p><code>MonkeyApp</code>不拖入App或者ipa的情况下，会有一个默认的App，以供读者自己测试，样子大概是这个样子····</p>
 <p>对了，运行前，你要把<code>AntiAntiDebug.m</code>这个文件的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rebind_symbols((struct rebinding[1])&#123;&#123;&quot;sysctl&quot;, my_sysctl, (void*)&amp;orig_sysctl&#125;&#125;,1);</div></pre></td></tr></table></figure>
-<p>这行代码注释掉，因为Demo应用有反调试，但是hook<code>sysctl</code>这个在某些应用里会导致<code>_dyld_debugger_notification</code>这样的崩溃。</p>
+<p>这行代码注释去掉，因为Demo应用有反调试，但是hook<code>sysctl</code>这个在某些应用里会导致<code>_dyld_debugger_notification</code>这样的崩溃。</p>
 <p>em……   Demo就是这个样子:</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499874626958.png" alt="image"></p>
 <p>你可以自己修改<code>MonkeyAppDylib.m</code>里面的代码，这个是笔者针对Demo写的例子啦。。。。</p>
