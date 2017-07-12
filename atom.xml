@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-07-05T13:15:07.000Z</updated>
+  <updated>2017-07-12T16:05:09.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://www.alonemonkey.com/2017/07/12/monkeydev-without-jailbreak/"/>
+    <id>http://www.alonemonkey.com/2017/07/12/monkeydev-without-jailbreak/</id>
+    <published>2017-07-11T16:00:00.000Z</published>
+    <updated>2017-07-12T16:05:09.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>iOSOpenDev修改版MonkeyDev</title>
@@ -70,80 +84,6 @@
     
     
       <category term="逆向" scheme="http://www.alonemonkey.com/tags/%E9%80%86%E5%90%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS成长之路开售！</title>
-    <link href="http://www.alonemonkey.com/2017/06/02/ios-book-pr/"/>
-    <id>http://www.alonemonkey.com/2017/06/02/ios-book-pr/</id>
-    <published>2017-06-01T16:00:00.000Z</published>
-    <updated>2017-06-02T06:17:34.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>经过 3 个月的筹备 iOS 成长之路第二期和大家见面啦。经历了第一期的蹒跚发布后，终于在盛夏迎来了更好的第二期。这一期相比第一期更有料了，从第一期的 8 篇文章增加到 12 篇文章。</p>
-<p>这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。</p>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><p>Chris Lattner 访谈录(下)</p>
-<p>译者：@故胤道长，亚马逊 iOS 工程师，曾就职于 Uber。</p>
-<p>博客：<a href="http://www.jianshu.com/u/8d5b91490ca5" target="_blank" rel="external">http://www.jianshu.com/u/8d5b91490ca5</a></p>
-</li>
-<li><p>动手玩 LLVM</p>
-<p>作者：戴铭，滴滴出行技术专家。最近正在研究 iOS 编译相关底层技术，用来解决工程优化问题。</p>
-<p>博客：<a href="https://ming1016.github.io/" target="_blank" rel="external">https://ming1016.github.io/</a></p>
-</li>
-<li><p>Swift 性能分析</p>
-<p>作者：唐巧，小猿搜题产品技术负责人，6 年 iOS 开发经验，《iOS开发进阶》作者。</p>
-<p>博客：<a href="http://blog.devtang.com/about/" target="_blank" rel="external">http://blog.devtang.com/about/</a></p>
-</li>
-<li><p>监控SDK的架构设计实践(<strong>6月5号上线</strong>)</p>
-<p>作者：王朝成， @圣迪 , 饿了么移动架构师。耕耘移动基础设施的建设，致力于移动大数据与人工智能的结合</p>
-<p>博客：<a href="http://www.jianshu.com/u/a774b58c9b89" target="_blank" rel="external">http://www.jianshu.com/u/a774b58c9b89</a></p>
-</li>
-<li><p>初识 LLVM</p>
-<p>作者：@Alone_Monkey， 网易 iOS 工程师</p>
-<p>博客：<a href="http://www.blogfshare.com" target="_blank" rel="external">www.blogfshare.com</a></p>
-</li>
-<li><p>TCP / IP 漫游</p>
-<p>作者：@mrriddler，蚂蚁金服 iOS 工程师。</p>
-<p>博客：<a href="http://blog.mrriddler.com" target="_blank" rel="external">blog.mrriddler.com</a></p>
-</li>
-<li><p>复用的精妙 - UITableView 复用技术原理分析</p>
-<p>作者：冬瓜，微博：@冬瓜争做全栈瓜，爱奇艺 iOS 工程师。</p>
-<p>博客：<a href="http://www.desgard.com" target="_blank" rel="external">http://www.desgard.com</a></p>
-</li>
-<li><p>试图取代 TCP 的 QUIC 协议到底是什么</p>
-<p>作者：张星宇，@bestswifter，百度 iOS 工程师，喜欢探索问题的本质，讨厌一切不说人话的描述。正在学习前端，励志成为一名大前端全栈工程师。</p>
-<p>博客：<a href="https://bestswifter.com/" target="_blank" rel="external">https://bestswifter.com/</a></p>
-</li>
-<li><p>AFNetworking 源码分析</p>
-<p>作者： @涂耀辉 ，今日头条 iOS 工程师</p>
-<p>博客：<a href="http://www.jianshu.com/u/14431e509ae8" target="_blank" rel="external">http://www.jianshu.com/u/14431e509ae8</a></p>
-</li>
-<li><p>SpriteKit 入门与实践</p>
-<p>作者：郭鹏，丁香园资深 iOS 工程师</p>
-</li>
-<li><p>基于 Rx 的网络层实践</p>
-<p>作者：李富强，@李富强Jason，美团外卖 iOS 架构师<br>博客：<a href="http://blog.csdn.net/colorapp" target="_blank" rel="external">http://blog.csdn.net/colorapp</a></p>
-</li>
-<li><p>iOS 组件化 —— 路由设计思路分析</p>
-<p>作者： @一缕殇流化隐半边冰霜，饿了么 iOS 工程师，微博 @halfrost</p>
-<p>博客：<a href="http://www.jianshu.com/u/12201cdd5d7a" target="_blank" rel="external">http://www.jianshu.com/u/12201cdd5d7a</a></p>
-</li>
-</ul>
-<h2 id="淘宝购买地址"><a href="#淘宝购买地址" class="headerlink" title="淘宝购买地址"></a>淘宝购买地址</h2><p><a href="https://item.taobao.com/item.htm?id=552290531953" target="_blank" rel="external">https://item.taobao.com/item.htm?id=552290531953</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/225849-9d5cec83919493f9.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://www.alonemonkey.com/categories/iOS/"/>
-    
-    
-      <category term="iOS" scheme="http://www.alonemonkey.com/tags/iOS/"/>
     
   </entry>
   
@@ -238,6 +178,80 @@
     
     
       <category term="llvm" scheme="http://www.alonemonkey.com/tags/llvm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS成长之路开售！</title>
+    <link href="http://www.alonemonkey.com/2017/06/02/ios-book-pr/"/>
+    <id>http://www.alonemonkey.com/2017/06/02/ios-book-pr/</id>
+    <published>2017-06-01T16:00:00.000Z</published>
+    <updated>2017-06-02T06:17:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>经过 3 个月的筹备 iOS 成长之路第二期和大家见面啦。经历了第一期的蹒跚发布后，终于在盛夏迎来了更好的第二期。这一期相比第一期更有料了，从第一期的 8 篇文章增加到 12 篇文章。</p>
+<p>这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><p>Chris Lattner 访谈录(下)</p>
+<p>译者：@故胤道长，亚马逊 iOS 工程师，曾就职于 Uber。</p>
+<p>博客：<a href="http://www.jianshu.com/u/8d5b91490ca5" target="_blank" rel="external">http://www.jianshu.com/u/8d5b91490ca5</a></p>
+</li>
+<li><p>动手玩 LLVM</p>
+<p>作者：戴铭，滴滴出行技术专家。最近正在研究 iOS 编译相关底层技术，用来解决工程优化问题。</p>
+<p>博客：<a href="https://ming1016.github.io/" target="_blank" rel="external">https://ming1016.github.io/</a></p>
+</li>
+<li><p>Swift 性能分析</p>
+<p>作者：唐巧，小猿搜题产品技术负责人，6 年 iOS 开发经验，《iOS开发进阶》作者。</p>
+<p>博客：<a href="http://blog.devtang.com/about/" target="_blank" rel="external">http://blog.devtang.com/about/</a></p>
+</li>
+<li><p>监控SDK的架构设计实践(<strong>6月5号上线</strong>)</p>
+<p>作者：王朝成， @圣迪 , 饿了么移动架构师。耕耘移动基础设施的建设，致力于移动大数据与人工智能的结合</p>
+<p>博客：<a href="http://www.jianshu.com/u/a774b58c9b89" target="_blank" rel="external">http://www.jianshu.com/u/a774b58c9b89</a></p>
+</li>
+<li><p>初识 LLVM</p>
+<p>作者：@Alone_Monkey， 网易 iOS 工程师</p>
+<p>博客：<a href="http://www.blogfshare.com" target="_blank" rel="external">www.blogfshare.com</a></p>
+</li>
+<li><p>TCP / IP 漫游</p>
+<p>作者：@mrriddler，蚂蚁金服 iOS 工程师。</p>
+<p>博客：<a href="http://blog.mrriddler.com" target="_blank" rel="external">blog.mrriddler.com</a></p>
+</li>
+<li><p>复用的精妙 - UITableView 复用技术原理分析</p>
+<p>作者：冬瓜，微博：@冬瓜争做全栈瓜，爱奇艺 iOS 工程师。</p>
+<p>博客：<a href="http://www.desgard.com" target="_blank" rel="external">http://www.desgard.com</a></p>
+</li>
+<li><p>试图取代 TCP 的 QUIC 协议到底是什么</p>
+<p>作者：张星宇，@bestswifter，百度 iOS 工程师，喜欢探索问题的本质，讨厌一切不说人话的描述。正在学习前端，励志成为一名大前端全栈工程师。</p>
+<p>博客：<a href="https://bestswifter.com/" target="_blank" rel="external">https://bestswifter.com/</a></p>
+</li>
+<li><p>AFNetworking 源码分析</p>
+<p>作者： @涂耀辉 ，今日头条 iOS 工程师</p>
+<p>博客：<a href="http://www.jianshu.com/u/14431e509ae8" target="_blank" rel="external">http://www.jianshu.com/u/14431e509ae8</a></p>
+</li>
+<li><p>SpriteKit 入门与实践</p>
+<p>作者：郭鹏，丁香园资深 iOS 工程师</p>
+</li>
+<li><p>基于 Rx 的网络层实践</p>
+<p>作者：李富强，@李富强Jason，美团外卖 iOS 架构师<br>博客：<a href="http://blog.csdn.net/colorapp" target="_blank" rel="external">http://blog.csdn.net/colorapp</a></p>
+</li>
+<li><p>iOS 组件化 —— 路由设计思路分析</p>
+<p>作者： @一缕殇流化隐半边冰霜，饿了么 iOS 工程师，微博 @halfrost</p>
+<p>博客：<a href="http://www.jianshu.com/u/12201cdd5d7a" target="_blank" rel="external">http://www.jianshu.com/u/12201cdd5d7a</a></p>
+</li>
+</ul>
+<h2 id="淘宝购买地址"><a href="#淘宝购买地址" class="headerlink" title="淘宝购买地址"></a>淘宝购买地址</h2><p><a href="https://item.taobao.com/item.htm?id=552290531953" target="_blank" rel="external">https://item.taobao.com/item.htm?id=552290531953</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/225849-9d5cec83919493f9.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.alonemonkey.com/categories/iOS/"/>
+    
+    
+      <category term="iOS" scheme="http://www.alonemonkey.com/tags/iOS/"/>
     
   </entry>
   
@@ -1410,91 +1424,6 @@
     <summary type="html">
     
       创建了一个序列后，可以针对这个序列进行组合、变换、过滤等等操作
-    
-    </summary>
-    
-      <category term="rxswift" scheme="http://www.alonemonkey.com/categories/rxswift/"/>
-    
-    
-      <category term="RxSwift" scheme="http://www.alonemonkey.com/tags/RxSwift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RxSwift学习之旅 - 被观察者和订阅者</title>
-    <link href="http://www.alonemonkey.com/2017/03/23/rxswift-part-two/"/>
-    <id>http://www.alonemonkey.com/2017/03/23/rxswift-part-two/</id>
-    <published>2017-03-22T16:00:00.000Z</published>
-    <updated>2017-03-23T07:56:49.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>在开发中经常会遇到和处理的业务场景有: 利用<code>@IBAction</code>或<code>Target-action</code>响应用户的操作事件；设置Notification监听键盘的位置变化；使用closure异步处理网络请求返回的数据；使用KVO监听属性的变化，以做出相应操作等。</p>
-<p>上面的场景都对应一个被观察的对象，当这个对象发生某种变化时，我们根据不同的变化事件去处理不同的业务逻辑。这无疑构成一个观察者模式，<code>RxSwift</code>中，被观察者和订阅者是其中两大重要角色。</p>
-<h3 id="Observable-被观察者"><a href="#Observable-被观察者" class="headerlink" title="Observable(被观察者)"></a>Observable(被观察者)</h3><p>RxSwift中的Observable 是观察者模式中被观察的对象，相当于一个事件序列 (GeneratorType) ，会主动向订阅者发送新产生的事件信息。事件类型分为以下三种：</p>
-<ul>
-<li>.onNext(element)    表示新的事件数据。</li>
-<li>.onError(error)         表示事件序列因异常而完结。</li>
-<li>.onCompleted()       表示事件序列完结。</li>
-</ul>
-<h3 id="Subscribe-订阅者"><a href="#Subscribe-订阅者" class="headerlink" title="Subscribe(订阅者)"></a>Subscribe(订阅者)</h3><p>如果只有一个<code>Observable</code>被创建，而没有被任何的订阅者所订阅的话，那么什么事情都不会发生。所以我们需要创建一个订阅者，来响应事件的触发。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">_ = Observable&lt;String&gt;.create &#123; observerOfString in</div><div class="line">        print(&quot;Observable created&quot;)</div><div class="line">        observerOfString.on(.next(&quot;😉&quot;))</div><div class="line">        observerOfString.on(.completed)</div><div class="line">        return Disposables.create()</div><div class="line">    &#125;</div><div class="line">    .subscribe &#123; event in</div><div class="line">        print(event)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>通过<code>subscribe</code>订阅之后，会受到两个消息，<code>.onNext(element)</code>和<code>.onCompleted()</code>，打印出:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">next(😉)</div><div class="line">completed</div></pre></td></tr></table></figure>
-<h3 id="创建并订阅"><a href="#创建并订阅" class="headerlink" title="创建并订阅"></a>创建并订阅</h3><p><code>RxSwift</code>本身提供了多种方式来创建和订阅一个被观察者，下面来一一介绍，以下的代码可以<code>git clone https://github.com/ReactiveX/RxSwift.git</code>，然后打开<code>Rx.playground</code>，新建一个<code>page</code>，import<code>RxSwift</code>即可。</p>
-<h4 id="create"><a href="#create" class="headerlink" title="create"></a>create</h4><p>常见的两种方式来创建一个<code>Observable</code>对象，一种是通过引入<code>RxCocoa</code>(RxCocoa是对cocoa进行的Rx扩展)，它已经包含了我们常用到的<code>Observable</code>流，比如<code>button</code>的<code>tap</code>事件。一般做iOS开发的要使用到RxSwift都要用到RxCocoa的，这两个是相辅相成的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let observable = loginButton.rx.tap.asObservable()</div></pre></td></tr></table></figure></p>
-<p>也可以使用提供的<code>create</code>函数来创建一个<code>Observable</code>对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">let observable = Observable&lt;String&gt;.create &#123; observerOfString -&gt; Disposable in</div><div class="line">        observerOfString.on(.next(&quot;😬&quot;))</div><div class="line">        observerOfString.on(.completed)</div><div class="line">        return Disposables.create()</div><div class="line">&#125;</div><div class="line">observable.subscribe &#123; print($0) &#125;</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">output:</div><div class="line">next(😬)</div><div class="line">completed</div></pre></td></tr></table></figure>
-<h4 id="never"><a href="#never" class="headerlink" title="never"></a>never</h4><p>创建一个序列，不会终止也不会发出任何事件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">let neverSequence = Observable&lt;String&gt;.never()</div><div class="line"></div><div class="line">let neverSequenceSubscription = neverSequence</div><div class="line">    .subscribe &#123; _ in</div><div class="line">        print(&quot;This will never be printed&quot;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">neverSequenceSubscription.disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<h4 id="empty"><a href="#empty" class="headerlink" title="empty"></a>empty</h4><p>创建一个空的序列，只会发出一个完成事件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable&lt;Int&gt;.empty()</div><div class="line">        .subscribe &#123; event in</div><div class="line">            print(event)</div><div class="line">        &#125;</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">output:    </div><div class="line">completed</div></pre></td></tr></table></figure>
-<h4 id="just"><a href="#just" class="headerlink" title="just"></a>just</h4><p>创建一个单个元素的序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable.just(&quot;🔴&quot;)</div><div class="line">        .subscribe &#123; event in</div><div class="line">            print(event)</div><div class="line">        &#125;</div><div class="line">        .disposed(by: disposeBag)</div><div class="line"></div><div class="line">output:    </div><div class="line">next(🔴)</div><div class="line">completed</div></pre></td></tr></table></figure>
-<h4 id="of"><a href="#of" class="headerlink" title="of"></a>of</h4><p>使用固定数量的元素创建一个序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable.of(&quot;🐶&quot;, &quot;🐱&quot;, &quot;🐭&quot;, &quot;🐹&quot;)</div><div class="line">        .subscribe(onNext: &#123; element in</div><div class="line">            print(element)</div><div class="line">        &#125;)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">output:</div><div class="line">🐶</div><div class="line">🐱</div><div class="line">🐭</div><div class="line">🐹</div></pre></td></tr></table></figure>
-<p>这里使用了<code>subscribe(onNext:)</code>而不是<code>subscribe(_:)</code>，可以通过前面一种方式来订阅某个事件，所以有如下的写法:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">someObservable.subscribe(</div><div class="line">    onNext: &#123; print(&quot;Element:&quot;, $0) &#125;,</div><div class="line">    onError: &#123; print(&quot;Error:&quot;, $0) &#125;,</div><div class="line">    onCompleted: &#123; print(&quot;Completed&quot;) &#125;,</div><div class="line">    onDisposed: &#123; print(&quot;Disposed&quot;) &#125;</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>可以只订阅其中某个，而不用全部订阅。</p>
-<h4 id="from"><a href="#from" class="headerlink" title="from"></a>from</h4><p>从一个序列创建一个可被观察的序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable.from([&quot;🐶&quot;, &quot;🐱&quot;, &quot;🐭&quot;, &quot;🐹&quot;])</div><div class="line">        .subscribe(onNext: &#123; print($0) &#125;)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line"></div><div class="line">output:</div><div class="line">🐶</div><div class="line">🐱</div><div class="line">🐭</div><div class="line">🐹</div></pre></td></tr></table></figure>
-<p>这里使用<code>$0</code>表示默认的第一个参数</p>
-<h4 id="range"><a href="#range" class="headerlink" title="range"></a>range</h4><p>创建一个发出一系列顺序整数然后终止的序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable.range(start: 1, count: 10)</div><div class="line">        .subscribe &#123; print($0) &#125;</div><div class="line">        .disposed(by: disposeBag)</div><div class="line"></div><div class="line">output:</div><div class="line">next(1)</div><div class="line">next(2)</div><div class="line">next(3)</div><div class="line">next(4)</div><div class="line">next(5)</div><div class="line">next(6)</div><div class="line">next(7)</div><div class="line">next(8)</div><div class="line">next(9)</div><div class="line">next(10)</div><div class="line">completed</div></pre></td></tr></table></figure>
-<h4 id="repeatElement"><a href="#repeatElement" class="headerlink" title="repeatElement"></a>repeatElement</h4><p>创建一个给予元素的无限序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable.repeatElement(&quot;🔴&quot;)</div><div class="line">        .take(3)</div><div class="line">        .subscribe(onNext: &#123; print($0) &#125;)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line"></div><div class="line">output:</div><div class="line">🔴</div><div class="line">🔴</div><div class="line">🔴</div></pre></td></tr></table></figure>
-<p>这里的<code>take(3)</code>表示只取前3个元素。</p>
-<h4 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h4><p>创建一个满足条件的序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable.generate(</div><div class="line">            initialState: 0,</div><div class="line">            condition: &#123; $0 &lt; 3 &#125;,</div><div class="line">            iterate: &#123; $0 + 1 &#125;</div><div class="line">        )</div><div class="line">        .subscribe(onNext: &#123; print($0) &#125;)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">output:</div><div class="line">0</div><div class="line">1</div><div class="line">2</div></pre></td></tr></table></figure>
-<h4 id="deferred"><a href="#deferred" class="headerlink" title="deferred"></a>deferred</h4><p>只有当有订阅者订阅的时候才会去创建序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    var count = 1</div><div class="line">    </div><div class="line">    let deferredSequence = Observable&lt;String&gt;.deferred &#123;</div><div class="line">        print(&quot;Creating \(count)&quot;)</div><div class="line">        count += 1</div><div class="line">        </div><div class="line">        return Observable.create &#123; observer in</div><div class="line">            print(&quot;Emitting...&quot;)</div><div class="line">            observer.onNext(&quot;🐶&quot;)</div><div class="line">            observer.onNext(&quot;🐱&quot;)</div><div class="line">            observer.onNext(&quot;🐵&quot;)</div><div class="line">            return Disposables.create()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    deferredSequence</div><div class="line">        .subscribe(onNext: &#123; print($0) &#125;)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">    </div><div class="line">    deferredSequence</div><div class="line">        .subscribe(onNext: &#123; print($0) &#125;)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">output:</div><div class="line">Creating 1</div><div class="line">Emitting...</div><div class="line">🐶</div><div class="line">🐱</div><div class="line">🐵</div><div class="line">Creating 2</div><div class="line">Emitting...</div><div class="line">🐶</div><div class="line">🐱</div><div class="line">🐵</div></pre></td></tr></table></figure>
-<p>如果把后面两个订阅去掉的话，是不会有<code>Creating</code>输出的。</p>
-<h4 id="error"><a href="#error" class="headerlink" title="error"></a>error</h4><p>创建一个没有元素并以错误终止的序列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public enum TestError : Error &#123;</div><div class="line">    case test</div><div class="line">&#125;</div><div class="line"></div><div class="line">let disposeBag = DisposeBag()</div><div class="line">    Observable&lt;Int&gt;.error(TestError.test)</div><div class="line">        .subscribe &#123; print($0) &#125;</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">output:</div><div class="line">error(test)</div></pre></td></tr></table></figure>
-<h4 id="doOn"><a href="#doOn" class="headerlink" title="doOn"></a>doOn</h4><p>在每个事情发出之后，可以调用其它处理，然后返回原事件，相当于一个拦截器，但是只能拦截不能修改。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">    </div><div class="line">    Observable.of(&quot;🍎&quot;, &quot;🍐&quot;, &quot;🍊&quot;, &quot;🍋&quot;)</div><div class="line">        .do(onNext: &#123; print(&quot;Intercepted:&quot;, $0) &#125;, onError: &#123; print(&quot;Intercepted error:&quot;, $0) &#125;, onCompleted: &#123; print(&quot;Completed&quot;)  &#125;)</div><div class="line">        .subscribe(onNext: &#123; print($0) &#125;)</div><div class="line">        .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">output:</div><div class="line">Intercepted: 🍎</div><div class="line">🍎</div><div class="line">Intercepted: 🍐</div><div class="line">🍐</div><div class="line">Intercepted: 🍊</div><div class="line">🍊</div><div class="line">Intercepted: 🍋</div><div class="line">🍋</div><div class="line">Completed</div></pre></td></tr></table></figure>
-<p>同样可以针对不同的事件类型单独拦截。</p>
-<h3 id="Subject"><a href="#Subject" class="headerlink" title="Subject"></a>Subject</h3><p><code>Subject</code>就相当于一个桥梁或者代理，它既可以作为一个<code>observer</code>也可以作为一个<code>Observable</code>。</p>
-<p>下面来看几种不同的<code>Subject</code>:</p>
-<h4 id="PublishSubject"><a href="#PublishSubject" class="headerlink" title="PublishSubject"></a>PublishSubject</h4><p><code>PublishSubject</code>只会发送给订阅者订阅之后的事件，之前发生的事件将不会发送。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">let subject = PublishSubject&lt;String&gt;()</div><div class="line"></div><div class="line">subject.addObserver(&quot;1&quot;).disposed(by: disposeBag)</div><div class="line">subject.onNext(&quot;🐶&quot;)</div><div class="line">subject.onNext(&quot;🐱&quot;)</div><div class="line"></div><div class="line">subject.addObserver(&quot;2&quot;).disposed(by: disposeBag)</div><div class="line">subject.onNext(&quot;🅰️&quot;)</div><div class="line">subject.onNext(&quot;🅱️&quot;)</div><div class="line">    </div><div class="line">output:</div><div class="line">Subscription: 1 Event: next(🐶)</div><div class="line">Subscription: 1 Event: next(🐱)</div><div class="line">Subscription: 1 Event: next(🅰️)</div><div class="line">Subscription: 2 Event: next(🅰️)</div><div class="line">Subscription: 1 Event: next(🅱️)</div><div class="line">Subscription: 2 Event: next(🅱️)</div></pre></td></tr></table></figure>
-<p>订阅者2只能收到订阅后传过来的事件，如图:<br><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490251409393.png" alt="image"></p>
-<p>如果要保证所有事件都能被订阅到，可以使用<code>Create</code>主动创建或使用<code>ReplaySubject</code>。<br>如果被观察者因为错误被终止，<code>PublishSubject</code>只会发出一个错误的通知。</p>
-<h4 id="ReplaySubject"><a href="#ReplaySubject" class="headerlink" title="ReplaySubject"></a>ReplaySubject</h4><p>不管订阅者什么时候订阅的都<code>可以</code>把所有发生过的事件发送给订阅者。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">let subject = ReplaySubject&lt;String&gt;.createUnbounded()</div><div class="line"></div><div class="line">subject.addObserver(&quot;1&quot;).disposed(by: disposeBag)</div><div class="line">subject.onNext(&quot;🐶&quot;)</div><div class="line">subject.onNext(&quot;🐱&quot;)</div><div class="line"></div><div class="line">subject.addObserver(&quot;2&quot;).disposed(by: disposeBag)</div><div class="line">subject.onNext(&quot;🅰️&quot;)</div><div class="line">subject.onNext(&quot;🅱️&quot;)</div><div class="line"></div><div class="line">output:</div><div class="line">Subscription: 1 Event: next(🐶)</div><div class="line">Subscription: 1 Event: next(🐱)</div><div class="line">Subscription: 2 Event: next(🐶)</div><div class="line">Subscription: 2 Event: next(🐱)</div><div class="line">Subscription: 1 Event: next(🅰️)</div><div class="line">Subscription: 2 Event: next(🅰️)</div><div class="line">Subscription: 1 Event: next(🅱️)</div><div class="line">Subscription: 2 Event: next(🅱️)</div></pre></td></tr></table></figure>
-<p>当然你也指定重发事件的缓冲区大小，比如上面的例子如果这样创建：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let subject = ReplaySubject&lt;String&gt;.create(bufferSize: 1)</div></pre></td></tr></table></figure>
-<p>指定缓冲区大小为1，那么订阅者2就不会收到<code>🐶</code>了。<br><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490252744268.png" alt="image"></p>
-<h4 id="BehaviorSubject"><a href="#BehaviorSubject" class="headerlink" title="BehaviorSubject"></a>BehaviorSubject</h4><p>广播所有事件给订阅者，对于新的订阅者，广播最近的一个事件或者默认值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">let subject = BehaviorSubject(value: &quot;🔴&quot;)</div><div class="line"></div><div class="line">subject.addObserver(&quot;1&quot;).disposed(by: disposeBag)</div><div class="line">subject.onNext(&quot;🐶&quot;)</div><div class="line">subject.onNext(&quot;🐱&quot;)</div><div class="line"></div><div class="line">subject.addObserver(&quot;2&quot;).disposed(by: disposeBag)</div><div class="line">subject.onNext(&quot;🅰️&quot;)</div><div class="line">subject.onNext(&quot;🅱️&quot;)</div><div class="line"></div><div class="line">subject.addObserver(&quot;3&quot;).disposed(by: disposeBag)</div><div class="line">subject.onNext(&quot;🍐&quot;)</div><div class="line">subject.onNext(&quot;🍊&quot;)</div><div class="line"></div><div class="line">output:</div><div class="line">Subscription: 1 Event: next(🔴)</div><div class="line">Subscription: 1 Event: next(🐶)</div><div class="line">Subscription: 1 Event: next(🐱)</div><div class="line">Subscription: 2 Event: next(🐱)</div><div class="line">Subscription: 1 Event: next(🅰️)</div><div class="line">Subscription: 2 Event: next(🅰️)</div><div class="line">Subscription: 1 Event: next(🅱️)</div><div class="line">Subscription: 2 Event: next(🅱️)</div><div class="line">Subscription: 3 Event: next(🅱️)</div><div class="line">Subscription: 1 Event: next(🍐)</div><div class="line">Subscription: 2 Event: next(🍐)</div><div class="line">Subscription: 3 Event: next(🍐)</div><div class="line">Subscription: 1 Event: next(🍊)</div><div class="line">Subscription: 2 Event: next(🍊)</div><div class="line">Subscription: 3 Event: next(🍊)</div></pre></td></tr></table></figure></p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490254112871.png" alt="image"></p>
-<p><code>PublishSubject</code>, <code>ReplaySubject</code>, and <code>BehaviorSubject</code>不会自动发送完成事件当他们被回收时。</p>
-<h4 id="Variable"><a href="#Variable" class="headerlink" title="Variable"></a>Variable</h4><p><code>Variable</code>是<code>BehaviorSubject</code>的封装，它和<code>BehaviorSubject</code>不同之处在于，不能向<code>Variable</code>发送<code>.Complete</code>和<code>.Error</code>，它会在生命周期结束被释放的时候自动发送<code>.Complete</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">let disposeBag = DisposeBag()</div><div class="line">let variable = Variable(&quot;🔴&quot;)</div><div class="line"></div><div class="line">variable.asObservable().addObserver(&quot;1&quot;).disposed(by: disposeBag)</div><div class="line">variable.value = &quot;🐶&quot;</div><div class="line">variable.value = &quot;🐱&quot;</div><div class="line"></div><div class="line">variable.asObservable().addObserver(&quot;2&quot;).disposed(by: disposeBag)</div><div class="line">variable.value = &quot;🅰️&quot;</div><div class="line">variable.value = &quot;🅱️&quot;</div><div class="line"></div><div class="line">output:</div><div class="line">Subscription: 1 Event: next(🔴)</div><div class="line">Subscription: 1 Event: next(🐶)</div><div class="line">Subscription: 1 Event: next(🐱)</div><div class="line">Subscription: 2 Event: next(🐱)</div><div class="line">Subscription: 1 Event: next(🅰️)</div><div class="line">Subscription: 2 Event: next(🅰️)</div><div class="line">Subscription: 1 Event: next(🅱️)</div><div class="line">Subscription: 2 Event: next(🅱️)</div><div class="line">Subscription: 1 Event: completed</div><div class="line">Subscription: 2 Event: completed</div></pre></td></tr></table></figure>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://github.com/ReactiveX/RxSwift" target="_blank" rel="external">RxSwift</a></p>
-<p><a href="http://reactivex.io/documentation/observable.html" target="_blank" rel="external">Document</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      RxSwift中有两个很重要的概念就是被观察者和订阅者，被观察者可以发出一系列事件信号，订阅号可以收到这些信号并进行相应的处理。 
     
     </summary>
     
