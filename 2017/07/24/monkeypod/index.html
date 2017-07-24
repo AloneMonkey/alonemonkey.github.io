@@ -94,20 +94,20 @@
 
 
 
-<meta name="description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
+<meta name="description" content="前段时间写了MonkeyDev支持非越狱自动集成，收到了广大网友的喜爱，今天试了试MonkeyDev能和CocoaPod擦除什么样的火花？ 我感觉开辟了一个新的世界。">
 <meta name="keywords" content="逆向">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOSOpenDev修改版MonkeyDev">
-<meta property="og:url" content="http://www.alonemonkey.com/2017/06/28/monkeydev/index.html">
+<meta property="og:title" content="MonkeyDev + CocoaPod 擦除的火花">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/07/24/monkeypod/index.html">
 <meta property="og:site_name" content="AloneMonkey">
-<meta property="og:description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260426855.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260498922.png">
-<meta property="og:updated_time" content="2017-07-05T13:15:07.000Z">
+<meta property="og:description" content="前段时间写了MonkeyDev支持非越狱自动集成，收到了广大网友的喜爱，今天试了试MonkeyDev能和CocoaPod擦除什么样的火花？ 我感觉开辟了一个新的世界。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909652281.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909967471.png">
+<meta property="og:updated_time" content="2017-07-24T15:28:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOSOpenDev修改版MonkeyDev">
-<meta name="twitter:description" content="由于iOSOpenDev的作者已经好久不更新了，安装会报错，新版的theos也会报错，使用起来很不爽，便拿它自己改了改，使用起来更加方便。">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260426855.png">
+<meta name="twitter:title" content="MonkeyDev + CocoaPod 擦除的火花">
+<meta name="twitter:description" content="前段时间写了MonkeyDev支持非越狱自动集成，收到了广大网友的喜爱，今天试了试MonkeyDev能和CocoaPod擦除什么样的火花？ 我感觉开辟了一个新的世界。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909652281.png">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title> iOSOpenDev修改版MonkeyDev | AloneMonkey </title>
+  <title> MonkeyDev + CocoaPod 擦除的火花 | AloneMonkey </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -285,7 +285,7 @@
             
             
               
-                iOSOpenDev修改版MonkeyDev
+                MonkeyDev + CocoaPod 擦除的火花
               
             
           </h1>
@@ -297,8 +297,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-06-28T00:00:00+08:00" content="2017-06-28">
-              2017-06-28
+            <time itemprop="dateCreated" datetime="2017-07-24T00:00:00+08:00" content="2017-07-24">
+              2017-07-24
             </time>
           </span>
 
@@ -327,8 +327,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/06/28/monkeydev/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/28/monkeydev/" itemprop="commentsCount"></span>
+                <a href="/2017/07/24/monkeypod/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/07/24/monkeypod/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -351,42 +351,28 @@
       
 
       
-        <h3 id="iOSOpenDev"><a href="#iOSOpenDev" class="headerlink" title="iOSOpenDev"></a>iOSOpenDev</h3><p>首先<code>iOSOpenDev</code>是啥？他是个直接通过<code>Xcode</code>新建<code>Hook</code>的工程模板，然后编译生成安装deb。</p>
-<p>网站:<a href="http://www.iosopendev.com/" target="_blank" rel="external">http://www.iosopendev.com/</a></p>
-<p>可惜作者13年就不更新了，最新的还是<code>1.6-2</code>的版本。</p>
-<p>这个版本在新版<code>Xcode</code>和<code>theos</code>都存在很多问题。</p>
-<p>比如因为新版<code>Xcode</code>找不到某些文件导致安装出错，新版<code>theos</code>的修改导致新建出来的工程编译报错找不到<code>HBLogDebug</code>，以及很多问题。</p>
-<p>对于习惯用<code>Xcode</code>来写代码的人，还是有点不能忍的。</p>
-<p>所以就把<code>iOSOpenDev</code>的脚本和项目模板拿过来改了改。</p>
-<p>已支持<code>CaptainHook Tweak</code>、<code>Logos Tweak</code>和<code>Command-line Tool</code>，使用起来方面很多。</p>
-<p>目前已在最新thoes和Xcode 9测试通过。</p>
-<h3 id="MonkeyDev"><a href="#MonkeyDev" class="headerlink" title="MonkeyDev"></a>MonkeyDev</h3><p>这是我的修改版本。</p>
-<p>安装很简单，可以选择指定的Xcode安装:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo xcode-select -s /Applications/Xcode-beta.app</div></pre></td></tr></table></figure>
-<p>如果不指定的话，默认就是:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xcode-select -p</div></pre></td></tr></table></figure>
-<p>然后安装:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/AloneMonkey/MonkeyDev.git</div><div class="line">cd MonkeyDev/bin</div><div class="line">sudo ./md-install</div></pre></td></tr></table></figure>
-<p>如果不用，运行下面的命令卸载:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-uninstall</div></pre></td></tr></table></figure>
-<p>然后新建项目就会出现了:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260426855.png" alt="image"></p>
-<p>该工具和<code>iOSOpenDev</code>共存。</p>
-<p>当然使用前，你要安装最新版本的<code>theos</code>:</p>
-<p><a href="https://github.com/theos/theos/" target="_blank" rel="external">https://github.com/theos/theos/</a></p>
-<p>包括</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install ldid</div></pre></td></tr></table></figure>
-<p>然后设备免密码登录:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -P &apos;&apos;</div><div class="line">ssh-copy-id -i /Users/用户名/.ssh/id_rsa root@IP</div></pre></td></tr></table></figure>
-<p><code>Commonand + B</code> 编译，不安装，设置<code>MonkeyDevInstallOnAnyBuild</code>为<code>YES</code>，会自动打包安装到设备。</p>
-<p><code>Command + Shift + i</code> 编译安装，但是这种方式是<code>Release</code>模式。看不到log输出。</p>
-<p>在编译设置中可以自定义设备ip和ssh的端口:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499260498922.png" alt="image"></p>
-<p>不设置的话，ip默认为<code>localhost</code>，port默认为<code>2222</code></p>
-<p>当然你也可以在<code>~/.zshrc</code>或其它profile里面设置<code>MonkeyDevDevice</code>和<code>MonkeyDevPort</code>。</p>
-<p>查看log的会可以使用<code>idevicesyslog</code>查看，毕竟带颜色。。。。</p>
-<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><p>后续会慢慢去完善这个工具，在使用中有什么问题也可以提出来，还是有很多东西需要去改进的。</p>
-<p>恩，就这样。。。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>既然是Xcode工程，那是不是可以支持CocoaPod？ 在我开发MonkeyDev的时候就想到过这个问题，几天突然兴起测试了一下，然后发现……</p>
+<h3 id="MonkeyDev-CocoaPod"><a href="#MonkeyDev-CocoaPod" class="headerlink" title="MonkeyDev + CocoaPod"></a>MonkeyDev + CocoaPod</h3><p><a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="external">MonkeyDev</a>我就不说了，知道的人肯定会觉得这是神器，不知道的人先看Wiki吧，用上后你会喜欢上它的。</p>
+<p>安装后之后，创建一个MonkeyApp类型的工程就叫MonkeyPod。</p>
+<p>然后新建Podfile文件，内容如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MonkeyPodDylib&apos; do</div><div class="line">	pod &apos;FLEX&apos;, &apos;~&gt; 2.0&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>然后执行<code>pod install</code>。</p>
+<p>完了之后打开<code>MonkeyPod.xcworkspace</code>。</p>
+<p>然后打开文件<code>MonkeyPodDylib.m</code>导入头文件<code>#import &lt;FLEX/FLEXManager.h&gt;</code>，如下函数中加入初始化代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) &#123;</div><div class="line">    [[FLEXManager sharedManager] showExplorer];</div><div class="line">    CYListenServer(6666);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>直接编译，enmm…… 当然是会出错的。</p>
+<p>点击Pods，将所有Target的<code>Build Active Architecture Only</code>改成<code>No</code>，如下图:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909652281.png" alt="image"></p>
+<p>然后编译，没有错误！直接运行！</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909967471.png" alt="image"></p>
+<p>集成成功！</p>
+<p>是不是感觉踏入了一个新的世界。。。</p>
+<h3 id="待填的坑"><a href="#待填的坑" class="headerlink" title="待填的坑"></a>待填的坑</h3><ol>
+<li>所有第三方库都必须设置<code>Build Active Architecture Only</code>改成<code>No</code></li>
+<li>暂时只支持静态库</li>
+</ol>
+<p>不过嘛，，，，也只是突然试一下，说明这条道路还是挺光明的。</p>
+<p>em，，，，有坑慢慢填，希望大家持续关注！！！</p>
 
       
     </div>
@@ -497,17 +483,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/02/writing-an-llvm-pass/" rel="next" title="0x01 Xcode调试一个LLVM Pass">
-                <i class="fa fa-chevron-left"></i> 0x01 Xcode调试一个LLVM Pass
+              <a href="/2017/07/12/monkeydev-without-jailbreak/" rel="next" title="无须越狱、自动集成、只需要一个砸壳的应用---MonkeyDev">
+                <i class="fa fa-chevron-left"></i> 无须越狱、自动集成、只需要一个砸壳的应用---MonkeyDev
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/12/monkeydev-without-jailbreak/" rel="prev" title="无须越狱、自动集成、只需要一个砸壳的应用---MonkeyDev">
-                无须越狱、自动集成、只需要一个砸壳的应用---MonkeyDev <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -678,7 +660,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#iOSOpenDev"><span class="nav-number">1.</span> <span class="nav-text">iOSOpenDev</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MonkeyDev"><span class="nav-number">2.</span> <span class="nav-text">MonkeyDev</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续"><span class="nav-number">3.</span> <span class="nav-text">后续</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MonkeyDev-CocoaPod"><span class="nav-number">2.</span> <span class="nav-text">MonkeyDev + CocoaPod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#待填的坑"><span class="nav-number">3.</span> <span class="nav-text">待填的坑</span></a></li></ol></div>
             
           </div>
         </section>
@@ -802,9 +784,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'alonemonkey';
-      var disqus_identifier = '2017/06/28/monkeydev/';
-      var disqus_title = 'iOSOpenDev修改版MonkeyDev';
-      var disqus_url = 'http://www.alonemonkey.com/2017/06/28/monkeydev/';
+      var disqus_identifier = '2017/07/24/monkeypod/';
+      var disqus_title = 'MonkeyDev + CocoaPod 擦除的火花';
+      var disqus_url = 'http://www.alonemonkey.com/2017/07/24/monkeypod/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
