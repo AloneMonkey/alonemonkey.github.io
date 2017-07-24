@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-07-24T15:28:57.000Z</updated>
+  <updated>2017-07-24T15:35:06.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -16,14 +16,14 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>MonkeyDev + CocoaPod 擦除的火花</title>
+    <title>MonkeyDev + CocoaPods 擦除的火花</title>
     <link href="http://www.alonemonkey.com/2017/07/24/monkeypod/"/>
     <id>http://www.alonemonkey.com/2017/07/24/monkeypod/</id>
     <published>2017-07-23T16:00:00.000Z</published>
-    <updated>2017-07-24T15:28:57.000Z</updated>
+    <updated>2017-07-24T15:35:06.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>既然是Xcode工程，那是不是可以支持CocoaPod？ 在我开发MonkeyDev的时候就想到过这个问题，几天突然兴起测试了一下，然后发现……</p>
-<h3 id="MonkeyDev-CocoaPod"><a href="#MonkeyDev-CocoaPod" class="headerlink" title="MonkeyDev + CocoaPod"></a>MonkeyDev + CocoaPod</h3><p><a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="external">MonkeyDev</a>我就不说了，知道的人肯定会觉得这是神器，不知道的人先看Wiki吧，用上后你会喜欢上它的。</p>
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>既然是Xcode工程，那是不是可以支持CocoaPods？ 在我开发MonkeyDev的时候就想到过这个问题，几天突然兴起测试了一下，然后发现……</p>
+<h3 id="MonkeyDev-CocoaPods"><a href="#MonkeyDev-CocoaPods" class="headerlink" title="MonkeyDev + CocoaPods"></a>MonkeyDev + CocoaPods</h3><p><a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="external">MonkeyDev</a>我就不说了，知道的人肯定会觉得这是神器，不知道的人先看Wiki吧，用上后你会喜欢上它的。</p>
 <p>安装后之后，创建一个MonkeyApp类型的工程就叫MonkeyPod。</p>
 <p>然后新建Podfile文件，内容如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MonkeyPodDylib&apos; do</div><div class="line">	pod &apos;FLEX&apos;, &apos;~&gt; 2.0&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
@@ -48,7 +48,7 @@
     
     <summary type="html">
     
-      前段时间写了MonkeyDev支持非越狱自动集成，收到了广大网友的喜爱，今天试了试MonkeyDev能和CocoaPod擦除什么样的火花？ 我感觉开辟了一个新的世界。
+      前段时间写了MonkeyDev支持非越狱自动集成，收到了广大网友的喜爱，今天试了试MonkeyDev能和CocoaPods擦除什么样的火花？ 我感觉开辟了一个新的世界。
     
     </summary>
     
