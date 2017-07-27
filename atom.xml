@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-07-24T15:36:46.000Z</updated>
+  <updated>2017-07-26T14:38:55.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,144 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 CocoaPods 给微信集成 SDK 打印收发消息</title>
+    <link href="http://www.alonemonkey.com/2017/07/26/cocoapods-wechat-message/"/>
+    <id>http://www.alonemonkey.com/2017/07/26/cocoapods-wechat-message/</id>
+    <published>2017-07-25T16:00:00.000Z</published>
+    <updated>2017-07-26T14:38:55.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>笔者本身是一个iOS逆向的爱好者，曾在使用iOSOpenDev在Xcode开发越狱插件的时候，由于工具已经好几年没有更新，安装和使用起来都会诸多问题，所以最初笔者只是想改良iOSOpenDev的兼容问题，后面在开发中不断冒出新的idea，并在工具中实现了这些想法，所以就有了本文将要给大家强烈推荐的工具<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>。</p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>在使用之前，大家关心的都是它的功能，可以做什么。那么MonkeyDev这个工具可以做什么呢？总结来说可以做如下这些事情:</p>
+<ul>
+<li>可以使用Xcode开发CaptainHook Tweak、Logos Tweak 和 Command-line Tool，在越狱机器开发插件，这是原来iOSOpenDev功能的迁移和改进。</li>
+<li>只需拖入一个砸壳应用，自动集成Reveal、Cycript和注入的动态库并重签名安装到非越狱机器。</li>
+<li>支持调试自己编写的动态库和第三方App</li>
+<li>支持通过CocoaPods第三方应用集成SDK以及非越狱插件，简单来说就是通过CocoaPods搭建了一个非越狱插件商店。</li>
+</ul>
+<p>大概了解了之后下面就通过具体的实际应用来体会它的强大之处吧。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>在使用之前首先是环境的配置，如果配置不对的话，可能会出一些奇怪的问题，你也可以结合<a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="external">Wiki</a>来操作。</p>
+<ul>
+<li>安装最新的theos</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone --recursive https://github.com/theos/theos.git /opt/theos</div></pre></td></tr></table></figure>
+<ul>
+<li>安装ldid</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install ldid</div></pre></td></tr></table></figure>
+<ul>
+<li>如果是用于越狱开发，需要配置免密码登录越狱设备，如果没有越狱机器可以跳过这步。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -P &apos;&apos;</div><div class="line">ssh-copy-id -i /Users/username/.ssh/id_rsa root@ip</div></pre></td></tr></table></figure>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>你可以通过如下命令选择指定的Xcode进行安装，也可以默认安装。</p>
+<ul>
+<li>指定Xcode安装:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo xcode-select -s /Applications/Xcode-xxx.app</div></pre></td></tr></table></figure>
+<ul>
+<li>默认安装的Xcode:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xcode-select -p</div></pre></td></tr></table></figure>
+<ul>
+<li>执行安装命令:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/AloneMonkey/MonkeyDev.git</div><div class="line">cd MonkeyDev/bin</div><div class="line">sudo ./md-install</div></pre></td></tr></table></figure>
+<ul>
+<li>如需卸载，执行卸载命令:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-uninstall</div></pre></td></tr></table></figure>
+<ul>
+<li>如需更新，执行更新命令:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-update</div></pre></td></tr></table></figure>
+<h3 id="模块介绍"><a href="#模块介绍" class="headerlink" title="模块介绍"></a>模块介绍</h3><p>安装完成之后，打开Xcode，点击<code>File - New - Project...</code>，选择iOS滑动到最下方可以看到MonkeyDev提供的模块:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170713-185817.png" alt="image"></p>
+<p>介绍下这几个模块的用途:</p>
+<h4 id="越狱模块"><a href="#越狱模块" class="headerlink" title="越狱模块"></a>越狱模块</h4><ul>
+<li>CaptainHook Tweak</li>
+</ul>
+<p>使用<a href="https://github.com/rpetrich/CaptainHook/" target="_blank" rel="external">CaptainHook</a>提供的头文件进行OC函数的Hook，以及属性的获取。</p>
+<ul>
+<li>Logos Tweak</li>
+</ul>
+<p>使用<a href="https://github.com/theos/theos/wiki/Installation" target="_blank" rel="external">theos</a>提供的logify.pl工具将<em>.xm文件转成</em>.mm文件进行编译，默认集成CydiaSubstrate，可以使用<code>MSHookMessageEx</code>和<code>MSHookFunction</code>来Hook OC函数和指定地址。</p>
+<ul>
+<li>Command-line Tool</li>
+</ul>
+<p>可以直接创建运行于越狱设备的命令行工具</p>
+<h4 id="非越狱模块"><a href="#非越狱模块" class="headerlink" title="非越狱模块"></a>非越狱模块</h4><ul>
+<li>MonkeyApp</li>
+</ul>
+<p>这是自动给第三方应用集成Reveal、Cycript和注入dylib的模块，支持调试dylib和第三方应用，支持Pod给第三放应用集成SDK，只需要准备一个砸壳后的ipa或者app文件即可。</p>
+<h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>关于CaptainHook Tweak、Logos Tweak 和 Command-line Tool的使用这里不再介绍，有问题可以查看项目<a href="https://github.com/AloneMonkey/MonkeyDev/wiki/" target="_blank" rel="external">Wiki</a></p>
+<p>下面主要介绍MonkeyApp的使用，开启你的非越狱插件开发之旅~ </p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>在开始使用前，需要准备一个砸壳后的应用，可以使用越狱手机砸壳，然后获取ipa或app，没有越狱手机直接从某助手下载越狱应用即可。</p>
+<h4 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h4><p>点击<code>File - New - Project...</code>创建iOS项目，选择<code>MonkeyApp</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-141833.png" alt="image"></p>
+<p>创建完成之后，你会得到一个这样的工程:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499873471085.png" alt=""></p>
+<p>这里我创建的项目名字就是<code>MonkeyApp</code>，所以下面对应的都是<code>MonkeyApp</code>，你自己创建的由你的项目名字而定! 另外Xcode 8需要另外在App里面增加动态库的依赖，如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-142910.png" alt=""></p>
+<p><code>MonkeyAppDylib</code>这个是将被注入目标App的动态库，你自己要hook的代码可以在<code>MonkeyAppDylib.m</code>文件里面写，我在里面写了一些Demo代码，直接运行即可看到效果，支持OC runtime的HOOK，C函数的fishhook。</p>
+<p><code>AntiAntiDebug</code>这个里面是反反调试的代码。</p>
+<p><code>fishhook</code>这个是自动集成的fishhook模块。</p>
+<p>下面Framewroks已经自动集成了<code>Reveal.framework</code>和<code>Cycript.framework</code>。</p>
+<h4 id="拖入砸壳应用编译"><a href="#拖入砸壳应用编译" class="headerlink" title="拖入砸壳应用编译"></a>拖入砸壳应用编译</h4><p>打开某助手选择应用游戏里面的越狱应用，下载一个应用就是已经砸壳了的。</p>
+<p>然后打开TargetApp目录，拷贝ipa文件到当前目录下面，如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-143653.png" alt=""></p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-143738.png" alt=""></p>
+<p>然后点击运行即可，运行后可以从控制台看到动态库已经注入成功，Reveal已经成功加载！当然手机上面也运行起来了！</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-144848.png" alt=""></p>
+<p>打开Mac上的Reveal即可查看应用的界面结构啦！如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/6911501055198_.pic_hd.jpg" alt=""></p>
+<p>默认还集成了Cycript，从<a href="http://www.cycript.org/" target="_blank" rel="external">Cycript</a>下载SDK，然后进去SDK目录运行如下命令即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./cycript -r iphoneip:6666</div></pre></td></tr></table></figure>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-155633.png" alt=""></p>
+<h3 id="获取微信消息"><a href="#获取微信消息" class="headerlink" title="获取微信消息"></a>获取微信消息</h3><p>下面以一个简单获取微信收到的消息为例，来进一步介绍它的使用，首先打开<code>MonkeyAppDylib.m</code>文件，在最下面写入如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">@interface CMessageWrap</div><div class="line">@property (nonatomic, strong) NSString* m_nsContent;</div><div class="line">@property (nonatomic, assign) NSInteger m_uiMessageType;</div><div class="line">@end</div><div class="line">CHDeclareClass(CMessageMgr)</div><div class="line"></div><div class="line">CHMethod2(void, CMessageMgr, AsyncOnAddMsg, NSString*, msg, MsgWrap, CMessageWrap*, msgWrap)&#123;</div><div class="line">    NSString* content = [msgWrap m_nsContent];</div><div class="line">    if([msgWrap m_uiMessageType] == 1)&#123;</div><div class="line">        NSLog(@&quot;收到消息: %@&quot;, content);</div><div class="line">    &#125;</div><div class="line">    CHSuper2(CMessageMgr, AsyncOnAddMsg, msg, MsgWrap, msgWrap);</div><div class="line">&#125;</div><div class="line"></div><div class="line">CHConstructor&#123;</div><div class="line">    CHLoadLateClass(CMessageMgr);</div><div class="line">    CHClassHook2(CMessageMgr, AsyncOnAddMsg, MsgWrap);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后重新运行就能看到效果了:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163128.png" alt=""></p>
+<p>然后就可以愉快的开发非越狱插件了，还可以直接调试!</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163443.png" alt=""></p>
+<h3 id="使用CocoaPods集成SDK"><a href="#使用CocoaPods集成SDK" class="headerlink" title="使用CocoaPods集成SDK"></a>使用CocoaPods集成SDK</h3><p>MonkeyDev还支持CocoaPods给第三方应用集成SDK，新建Podfile，写入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MonkeyAppDylib&apos; do</div><div class="line">     pod &apos;FLEX&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这里的Target要设置为动态库而不是App，然后执行Pod install。然后将如下选项改回Yes。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-164324.png" alt=""></p>
+<p>在<code>MonkeyAppDylib.m</code>文件中加入SDK初始化代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;FLEX/FLEXManager.h&gt;</div><div class="line"></div><div class="line">void initCycriptServer()&#123;</div><div class="line">    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) &#123;</div><div class="line">        [[FLEXManager sharedManager] showExplorer];</div><div class="line">        CYListenServer(6666);</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行效果如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/201501058944_.jpg" alt=""></p>
+<h3 id="非越狱插件商店"><a href="#非越狱插件商店" class="headerlink" title="非越狱插件商店"></a>非越狱插件商店</h3><p>既然可以支持CocoaPods了，那么完全可以将自己写的非越狱插件传到CocoaPods，然后通过pod一键安装！</p>
+<p>下面就将上面写的获取微信消息插件放到CocoaPods，新建<code>Cocoa Touch Framework</code>项目，然后增加头文件<code>CaptainHook.h</code>和自己的源文件<code>PrintWXMessage.m</code>，并将上面的代码拷贝过来，如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-170518.png" alt=""></p>
+<p>然后生成framework弄成zip包(zip包需要包含模拟器和真机的架构才能通过本地验证)，编辑<code>PrintWXMessage.podspec</code>文件内容如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Pod::Spec.new do |spec|</div><div class="line">  spec.name             = &quot;PrintWXMessage&quot;</div><div class="line">  spec.version          = &quot;1.0.0&quot;</div><div class="line">  spec.summary          = &quot;Print WX Message for MonkeyDev&quot;</div><div class="line">  spec.description      = &lt;&lt;-DESC</div><div class="line">                          - Print WX Message for MonkeyDev</div><div class="line">                        DESC</div><div class="line"></div><div class="line">  spec.homepage         = &quot;https://github.com/AloneMonkey/MonkeyDev&quot;</div><div class="line"></div><div class="line">  spec.license          = &#123; :type =&gt; &quot;BSD&quot;, :file =&gt; &quot;LICENSE&quot; &#125;</div><div class="line">  spec.author           = &#123; &quot;AloneMonkey&quot; =&gt; &quot;liupeiqing1993@163.com&quot; &#125;</div><div class="line">  spec.social_media_url = &quot;http://weibo.com/xiaoqing28&quot;</div><div class="line">  spec.platform         = :ios, &quot;8.0&quot;</div><div class="line">  spec.source           = &#123; :http =&gt; &quot;https://github.com/AloneMonkey/MonkeyDevPod/raw/master/PrintWXMessage/LatestBuild/PrintWXMessage.zip&quot;&#125;</div><div class="line">  spec.vendored_frameworks = &quot;PrintWXMessage.framework&quot;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这里source直接写的是zip包的地址，里面就是笔者生成的framework动态库。</p>
+<p>增加私有CocosPods:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod repo add MonkeyDevSpecs https://github.com/AloneMonkey/MonkeyDevSpecs.git</div></pre></td></tr></table></figure>
+<p>将PrintWXMessage包发布到私有Pod:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod repo push MonkeyDevSpecs PrintWXMessage.podspec</div></pre></td></tr></table></figure>
+<p>修改Podfile文件内容如下，然后pod install安装，并且把原来写在<code>MonkeyAppDylib.m</code>的打印微信消息的代码删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">source &apos;https://github.com/AloneMonkey/MonkeyDevSpecs.git&apos;</div><div class="line"></div><div class="line">target &apos;MonkeyAppDylib&apos; do</div><div class="line">     pod &apos;PrintWXMessage&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">~ MonkeyApp pod install</div><div class="line">Cloning spec repo `alonemonkey` from `https://github.com/AloneMonkey/MonkeyDevSpecs.git`</div><div class="line">Analyzing dependencies</div><div class="line">Downloading dependencies</div><div class="line">Installing PrintWXMessage (1.0.0)</div><div class="line">Generating Pods project</div><div class="line">Integrating client project</div><div class="line"></div><div class="line">[!] Please close any current Xcode sessions and use `MonkeyPod.xcworkspace` for this project from now on.</div><div class="line">Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.</div></pre></td></tr></table></figure>
+<p>运行即可看到插件已经完美集成成功！！！</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-184350.png" alt=""></p>
+<p>MonkeyDev项目地址请点击阅读原文查看。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      本文介绍的是一套逆向工具，可以在非越狱手机上给任意应用增加插件。在文末的示例中，作者拿微信举例，展示出在微信中打印收发消息的功能。
+    
+    </summary>
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/categories/%E9%80%86%E5%90%91/"/>
+    
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>MonkeyDev + CocoaPods 擦出的火花</title>
@@ -1288,78 +1426,6 @@
     <summary type="html">
     
       本文以最常见的用户注册界面为例，学习RxSwift在实践中的更多应用。
-    
-    </summary>
-    
-      <category term="rxswift" scheme="http://www.alonemonkey.com/categories/rxswift/"/>
-    
-    
-      <category term="RxSwift" scheme="http://www.alonemonkey.com/tags/RxSwift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RxSwift学习之旅 - 加法运算</title>
-    <link href="http://www.alonemonkey.com/2017/03/25/rxswift-part-four/"/>
-    <id>http://www.alonemonkey.com/2017/03/25/rxswift-part-four/</id>
-    <published>2017-03-24T16:00:00.000Z</published>
-    <updated>2017-03-25T10:41:38.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>通过前面几篇文章了解了很多<code>RxSwift</code>中的概念和序列操作。下面从一个最基础的例子来看看实际开发中的被观察者和订阅者。</p>
-<p>这里要实现的仅仅是输入三个整数并实时把三个整数相加的结果显示出来。</p>
-<h3 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h3><p>这里没有界面设计就是拖了几个<code>UITextField</code>。</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490431861515.png" alt="image"></p>
-<p>当每次上面的三个输入框输入改变了的话，就把三个值相加显示出来。</p>
-<h3 id="项目准备"><a href="#项目准备" class="headerlink" title="项目准备"></a>项目准备</h3><p>首先创建一个<code>Swift</code>的项目<code>RxSwiftCalculator</code>，<code>Podfile</code>内容如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">use_frameworks!</div><div class="line"></div><div class="line">target &apos;RxSwiftCalculator&apos; do</div><div class="line"></div><div class="line">pod &apos;RxSwift&apos;</div><div class="line">pod &apos;RxCocoa&apos;</div><div class="line"></div><div class="line">end</div></pre></td></tr></table></figure>
-<p>因为需要用到UI控件里面的Rx扩展，所有引入了<code>RxCocoa</code>。</p>
-<p><code>pod install</code>后打开<code>RxSwiftCalculator.xcworkspace</code>。</p>
-<p>把界面拖一下, 然后关联到属性。</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490434019587.png" alt="image"></p>
-<h3 id="UITextField-rx-text"><a href="#UITextField-rx-text" class="headerlink" title="UITextField.rx.text"></a>UITextField.rx.text</h3><p>在这个项目里面我们要监听<code>UITextField</code>的事件，然后把里面的数字取出来相加，最后显示到<code>result</code>这个<code>Label</code>上面。</p>
-<p>所以本例中<code>UITextField</code>就是一个被观察者。</p>
-<p>在<code>RxCocoa</code>里面已经对<code>UITextField</code>进行了扩展，把的里面的文本变成一个可被观察的对象<code>text</code>，源码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">extension Reactive where Base: UITextField &#123;</div><div class="line">    /// Reactive wrapper for `text` property.</div><div class="line">    public var text: ControlProperty&lt;String?&gt; &#123;</div><div class="line">        return value</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    /// Reactive wrapper for `text` property.</div><div class="line">    public var value: ControlProperty&lt;String?&gt; &#123;</div><div class="line">        return UIControl.rx.value(</div><div class="line">            base,</div><div class="line">            getter: &#123; textField in</div><div class="line">                textField.text</div><div class="line">            &#125;, setter: &#123; textField, value in</div><div class="line">                // This check is important because setting text value always clears control state</div><div class="line">                // including marked text selection which is imporant for proper input </div><div class="line">                // when IME input method is used.</div><div class="line">                if textField.text != value &#123;</div><div class="line">                    textField.text = value</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        )</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里返回的是一个<code>ControlProperty</code>类型的字符串，而<code>ControlProperty</code>实现了协议<code>ControlPropertyType</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public struct ControlProperty&lt;PropertyType&gt; : ControlPropertyType &#123;</div><div class="line">    //.....</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>跟进<code>ControlPropertyType</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/// Protocol that enables extension of `ControlProperty`.</div><div class="line">public protocol ControlPropertyType : ObservableType, ObserverType &#123;</div><div class="line"></div><div class="line">    /// - returns: `ControlProperty` interface</div><div class="line">    func asControlProperty() -&gt; ControlProperty&lt;E&gt;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>可以看到<code>ControlPropertyType</code>实现了两个协议<code>ObservableType</code>和<code>ObserverType</code>。所以它即可是一个可被观察的对象，同时也可以作为观察者。</p>
-<p>同时，我们看到这里返回了一个<code>UIControl.rx.value</code>生成的对象，跟进去看一下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">static func value&lt;C: UIControl, T&gt;(_ control: C, getter: @escaping (C) -&gt; T, setter: @escaping (C, T) -&gt; Void) -&gt; ControlProperty&lt;T&gt; &#123;</div><div class="line">    let source: Observable&lt;T&gt; = Observable.create &#123; [weak weakControl = control] observer in</div><div class="line">            guard let control = weakControl else &#123;</div><div class="line">                observer.on(.completed)</div><div class="line">                return Disposables.create()</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            observer.on(.next(getter(control)))</div><div class="line"></div><div class="line">            let controlTarget = ControlTarget(control: control, controlEvents: [.allEditingEvents, .valueChanged]) &#123; _ in</div><div class="line">                if let control = weakControl &#123;</div><div class="line">                    observer.on(.next(getter(control)))</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            return Disposables.create(with: controlTarget.dispose)</div><div class="line">        &#125;</div><div class="line">        .takeUntil((control as NSObject).rx.deallocated)</div><div class="line"></div><div class="line">    let bindingObserver = UIBindingObserver(UIElement: control, binding: setter)</div><div class="line"></div><div class="line">    return ControlProperty&lt;T&gt;(values: source, valueSink: bindingObserver)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里创建了一个可被观察者，那么发射的值是什么时候发射的呢？ 跟进<code>ControlTarget</code>的<code>init</code>方法:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">init(control: Control, controlEvents: UIControlEvents, callback: @escaping Callback) &#123;</div><div class="line">    MainScheduler.ensureExecutingOnScheduler()</div><div class="line"></div><div class="line">    self.control = control</div><div class="line">    self.controlEvents = controlEvents</div><div class="line">    self.callback = callback</div><div class="line"></div><div class="line">    super.init()</div><div class="line"></div><div class="line">    control.addTarget(self, action: selector, for: controlEvents)</div><div class="line"></div><div class="line">    let method = self.method(for: selector)</div><div class="line">    if method == nil &#123;</div><div class="line">        rxFatalError(&quot;Can&apos;t find method&quot;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里的<code>control</code>就传进来的<code>UITextField</code>对象，然后把它的<code>controlEvents</code>事件绑定到了<code>selector</code>,这个<code>selector</code>是:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let selector: Selector = #selector(ControlTarget.eventHandler(_:))</div></pre></td></tr></table></figure>
-<p>然后这个方法里面会调用初始化传进来的<code>callback</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func eventHandler(_ sender: Control!) &#123;</div><div class="line">    if let callback = self.callback, let control = self.control &#123;</div><div class="line">        callback(control)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后<code>callback</code>里面调用:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">observer.on(.next(getter(control)))</div></pre></td></tr></table></figure>
-<p>发射一个值，调用<code>getter</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">getter: &#123; textField in</div><div class="line">                textField.text</div><div class="line">            &#125;</div></pre></td></tr></table></figure>
-<p>也就是发射了一个<code>textField.text</code>。</p>
-<p>这个时候应该明白是怎么回事了吧。</p>
-<h3 id="监听UITextField"><a href="#监听UITextField" class="headerlink" title="监听UITextField"></a>监听UITextField</h3><p>这里测试一下监听<code>UITextField</code>的事件触发发射出来的<code>text</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">numberOne.rx.text.asObservable().subscribe&#123;</div><div class="line">            print($0)</div><div class="line">        &#125;.disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>把它变成一个可被观察者，然后订阅它。</p>
-<p>程序启动会发射一个<code>Optional(&quot;&quot;)</code>, 获得焦点或也会发射一个<code>Optional(&quot;&quot;)</code>，然后每次输入都会把当前的文本发射出来:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">next(Optional(&quot;&quot;))</div><div class="line">next(Optional(&quot;&quot;))</div><div class="line">next(Optional(&quot;1&quot;))</div><div class="line">next(Optional(&quot;12&quot;))</div><div class="line">next(Optional(&quot;123&quot;))</div><div class="line">next(Optional(&quot;1234&quot;))</div></pre></td></tr></table></figure>
-<p>这里发现它是一个<code>Optional</code>的值，可以通过<code>orEmpty</code>可以把<code>String?</code>转成<code>String</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">numberOne.rx.text.orEmpty.asObservable().subscribe&#123;</div><div class="line">            print($0)</div><div class="line">        &#125;.disposed(by: disposeBag)</div><div class="line"></div><div class="line">output:</div><div class="line">next()</div><div class="line">next()</div><div class="line">next(1)</div><div class="line">next(12)</div><div class="line">next(123)</div><div class="line">next(1234)</div></pre></td></tr></table></figure>
-<p>我们再想把空字符串过滤掉，可以使用<code>filter</code>，就不会订阅到<code>next()</code>了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">numberOne.rx.text.orEmpty.asObservable()</div><div class="line">            .filter&#123;</div><div class="line">                return $0 != &quot;&quot;</div><div class="line">            &#125;</div><div class="line">            .subscribe&#123;</div><div class="line">            print($0)</div><div class="line">        &#125;.disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<h3 id="combineLatest"><a href="#combineLatest" class="headerlink" title="combineLatest"></a>combineLatest</h3><p>还记得我们的目的是获取最新的<code>text</code>然后相加再显示到<code>result</code>吧，那么这里我们可以使用<code>combineLatest</code>来获取最新序列的组合。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Observable.combineLatest(numberOne.rx.text.orEmpty,numberTwo.rx.text.orEmpty,numberThree.rx.text.orEmpty) &#123; (numberOneText, numberTwoText, numberThreeText) -&gt; Int in</div><div class="line">                return (Int(numberOneText) ?? 0) + (Int(numberTwoText) ?? 0) + (Int(numberThreeText) ?? 0)</div><div class="line">            &#125;.map&#123;</div><div class="line">                $0.description</div><div class="line">            &#125;.bindTo(result.rx.text)</div><div class="line">            .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>首先获取最新输入的字符串，然后转成<code>Int</code>， 因为字母会转换失败，所以返回的是一个<code>Optional</code>，如果转换失败就默认0，然后相加返回，再转成字符串绑定到<code>result.rx.text</code>。</p>
-<p>这里的<code>bindTo</code>其实就是订阅序列，然后更新<code>result.rx.text</code>的值。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然这个例子比较简单，但是相信大家能够体会到前面的一大堆概念在开发的应用以及带给我们的便利了，后续会继续学习复杂一点的例子。</p>
-<p>本文代码地址: </p>
-<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftCalculator</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      通过一个简单加法运算的Demo来了解实现中的被观察者和订阅者
     
     </summary>
     

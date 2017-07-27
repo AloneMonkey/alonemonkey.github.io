@@ -1,0 +1,927 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="逆向," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文介绍的是一套逆向工具，可以在非越狱手机上给任意应用增加插件。在文末的示例中，作者拿微信举例，展示出在微信中打印收发消息的功能。">
+<meta name="keywords" content="逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 CocoaPods 给微信集成 SDK 打印收发消息">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/07/26/cocoapods-wechat-message/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="本文介绍的是一套逆向工具，可以在非越狱手机上给任意应用增加插件。在文末的示例中，作者拿微信举例，展示出在微信中打印收发消息的功能。">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170713-185817.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-141833.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499873471085.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-142910.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-143653.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-143738.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-144848.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/6911501055198_.pic_hd.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-155633.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163128.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163443.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-164324.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/201501058944_.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-170518.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-184350.png">
+<meta property="og:updated_time" content="2017-07-26T14:38:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 CocoaPods 给微信集成 SDK 打印收发消息">
+<meta name="twitter:description" content="本文介绍的是一套逆向工具，可以在非越狱手机上给任意应用增加插件。在文末的示例中，作者拿微信举例，展示出在微信中打印收发消息的功能。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170713-185817.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 使用 CocoaPods 给微信集成 SDK 打印收发消息 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用 CocoaPods 给微信集成 SDK 打印收发消息
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-07-26T00:00:00+08:00" content="2017-07-26">
+              2017-07-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/逆向/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/26/cocoapods-wechat-message/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/07/26/cocoapods-wechat-message/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>笔者本身是一个iOS逆向的爱好者，曾在使用iOSOpenDev在Xcode开发越狱插件的时候，由于工具已经好几年没有更新，安装和使用起来都会诸多问题，所以最初笔者只是想改良iOSOpenDev的兼容问题，后面在开发中不断冒出新的idea，并在工具中实现了这些想法，所以就有了本文将要给大家强烈推荐的工具<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>。</p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>在使用之前，大家关心的都是它的功能，可以做什么。那么MonkeyDev这个工具可以做什么呢？总结来说可以做如下这些事情:</p>
+<ul>
+<li>可以使用Xcode开发CaptainHook Tweak、Logos Tweak 和 Command-line Tool，在越狱机器开发插件，这是原来iOSOpenDev功能的迁移和改进。</li>
+<li>只需拖入一个砸壳应用，自动集成Reveal、Cycript和注入的动态库并重签名安装到非越狱机器。</li>
+<li>支持调试自己编写的动态库和第三方App</li>
+<li>支持通过CocoaPods第三方应用集成SDK以及非越狱插件，简单来说就是通过CocoaPods搭建了一个非越狱插件商店。</li>
+</ul>
+<p>大概了解了之后下面就通过具体的实际应用来体会它的强大之处吧。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>在使用之前首先是环境的配置，如果配置不对的话，可能会出一些奇怪的问题，你也可以结合<a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="external">Wiki</a>来操作。</p>
+<ul>
+<li>安装最新的theos</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone --recursive https://github.com/theos/theos.git /opt/theos</div></pre></td></tr></table></figure>
+<ul>
+<li>安装ldid</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install ldid</div></pre></td></tr></table></figure>
+<ul>
+<li>如果是用于越狱开发，需要配置免密码登录越狱设备，如果没有越狱机器可以跳过这步。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -P &apos;&apos;</div><div class="line">ssh-copy-id -i /Users/username/.ssh/id_rsa root@ip</div></pre></td></tr></table></figure>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>你可以通过如下命令选择指定的Xcode进行安装，也可以默认安装。</p>
+<ul>
+<li>指定Xcode安装:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo xcode-select -s /Applications/Xcode-xxx.app</div></pre></td></tr></table></figure>
+<ul>
+<li>默认安装的Xcode:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xcode-select -p</div></pre></td></tr></table></figure>
+<ul>
+<li>执行安装命令:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/AloneMonkey/MonkeyDev.git</div><div class="line">cd MonkeyDev/bin</div><div class="line">sudo ./md-install</div></pre></td></tr></table></figure>
+<ul>
+<li>如需卸载，执行卸载命令:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-uninstall</div></pre></td></tr></table></figure>
+<ul>
+<li>如需更新，执行更新命令:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-update</div></pre></td></tr></table></figure>
+<h3 id="模块介绍"><a href="#模块介绍" class="headerlink" title="模块介绍"></a>模块介绍</h3><p>安装完成之后，打开Xcode，点击<code>File - New - Project...</code>，选择iOS滑动到最下方可以看到MonkeyDev提供的模块:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170713-185817.png" alt="image"></p>
+<p>介绍下这几个模块的用途:</p>
+<h4 id="越狱模块"><a href="#越狱模块" class="headerlink" title="越狱模块"></a>越狱模块</h4><ul>
+<li>CaptainHook Tweak</li>
+</ul>
+<p>使用<a href="https://github.com/rpetrich/CaptainHook/" target="_blank" rel="external">CaptainHook</a>提供的头文件进行OC函数的Hook，以及属性的获取。</p>
+<ul>
+<li>Logos Tweak</li>
+</ul>
+<p>使用<a href="https://github.com/theos/theos/wiki/Installation" target="_blank" rel="external">theos</a>提供的logify.pl工具将<em>.xm文件转成</em>.mm文件进行编译，默认集成CydiaSubstrate，可以使用<code>MSHookMessageEx</code>和<code>MSHookFunction</code>来Hook OC函数和指定地址。</p>
+<ul>
+<li>Command-line Tool</li>
+</ul>
+<p>可以直接创建运行于越狱设备的命令行工具</p>
+<h4 id="非越狱模块"><a href="#非越狱模块" class="headerlink" title="非越狱模块"></a>非越狱模块</h4><ul>
+<li>MonkeyApp</li>
+</ul>
+<p>这是自动给第三方应用集成Reveal、Cycript和注入dylib的模块，支持调试dylib和第三方应用，支持Pod给第三放应用集成SDK，只需要准备一个砸壳后的ipa或者app文件即可。</p>
+<h3 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h3><p>关于CaptainHook Tweak、Logos Tweak 和 Command-line Tool的使用这里不再介绍，有问题可以查看项目<a href="https://github.com/AloneMonkey/MonkeyDev/wiki/" target="_blank" rel="external">Wiki</a></p>
+<p>下面主要介绍MonkeyApp的使用，开启你的非越狱插件开发之旅~ </p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>在开始使用前，需要准备一个砸壳后的应用，可以使用越狱手机砸壳，然后获取ipa或app，没有越狱手机直接从某助手下载越狱应用即可。</p>
+<h4 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h4><p>点击<code>File - New - Project...</code>创建iOS项目，选择<code>MonkeyApp</code>。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-141833.png" alt="image"></p>
+<p>创建完成之后，你会得到一个这样的工程:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1499873471085.png" alt=""></p>
+<p>这里我创建的项目名字就是<code>MonkeyApp</code>，所以下面对应的都是<code>MonkeyApp</code>，你自己创建的由你的项目名字而定! 另外Xcode 8需要另外在App里面增加动态库的依赖，如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-142910.png" alt=""></p>
+<p><code>MonkeyAppDylib</code>这个是将被注入目标App的动态库，你自己要hook的代码可以在<code>MonkeyAppDylib.m</code>文件里面写，我在里面写了一些Demo代码，直接运行即可看到效果，支持OC runtime的HOOK，C函数的fishhook。</p>
+<p><code>AntiAntiDebug</code>这个里面是反反调试的代码。</p>
+<p><code>fishhook</code>这个是自动集成的fishhook模块。</p>
+<p>下面Framewroks已经自动集成了<code>Reveal.framework</code>和<code>Cycript.framework</code>。</p>
+<h4 id="拖入砸壳应用编译"><a href="#拖入砸壳应用编译" class="headerlink" title="拖入砸壳应用编译"></a>拖入砸壳应用编译</h4><p>打开某助手选择应用游戏里面的越狱应用，下载一个应用就是已经砸壳了的。</p>
+<p>然后打开TargetApp目录，拷贝ipa文件到当前目录下面，如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-143653.png" alt=""></p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-143738.png" alt=""></p>
+<p>然后点击运行即可，运行后可以从控制台看到动态库已经注入成功，Reveal已经成功加载！当然手机上面也运行起来了！</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-144848.png" alt=""></p>
+<p>打开Mac上的Reveal即可查看应用的界面结构啦！如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/6911501055198_.pic_hd.jpg" alt=""></p>
+<p>默认还集成了Cycript，从<a href="http://www.cycript.org/" target="_blank" rel="external">Cycript</a>下载SDK，然后进去SDK目录运行如下命令即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./cycript -r iphoneip:6666</div></pre></td></tr></table></figure>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-155633.png" alt=""></p>
+<h3 id="获取微信消息"><a href="#获取微信消息" class="headerlink" title="获取微信消息"></a>获取微信消息</h3><p>下面以一个简单获取微信收到的消息为例，来进一步介绍它的使用，首先打开<code>MonkeyAppDylib.m</code>文件，在最下面写入如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">@interface CMessageWrap</div><div class="line">@property (nonatomic, strong) NSString* m_nsContent;</div><div class="line">@property (nonatomic, assign) NSInteger m_uiMessageType;</div><div class="line">@end</div><div class="line">CHDeclareClass(CMessageMgr)</div><div class="line"></div><div class="line">CHMethod2(void, CMessageMgr, AsyncOnAddMsg, NSString*, msg, MsgWrap, CMessageWrap*, msgWrap)&#123;</div><div class="line">    NSString* content = [msgWrap m_nsContent];</div><div class="line">    if([msgWrap m_uiMessageType] == 1)&#123;</div><div class="line">        NSLog(@&quot;收到消息: %@&quot;, content);</div><div class="line">    &#125;</div><div class="line">    CHSuper2(CMessageMgr, AsyncOnAddMsg, msg, MsgWrap, msgWrap);</div><div class="line">&#125;</div><div class="line"></div><div class="line">CHConstructor&#123;</div><div class="line">    CHLoadLateClass(CMessageMgr);</div><div class="line">    CHClassHook2(CMessageMgr, AsyncOnAddMsg, MsgWrap);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后重新运行就能看到效果了:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163128.png" alt=""></p>
+<p>然后就可以愉快的开发非越狱插件了，还可以直接调试!</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163443.png" alt=""></p>
+<h3 id="使用CocoaPods集成SDK"><a href="#使用CocoaPods集成SDK" class="headerlink" title="使用CocoaPods集成SDK"></a>使用CocoaPods集成SDK</h3><p>MonkeyDev还支持CocoaPods给第三方应用集成SDK，新建Podfile，写入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MonkeyAppDylib&apos; do</div><div class="line">     pod &apos;FLEX&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这里的Target要设置为动态库而不是App，然后执行Pod install。然后将如下选项改回Yes。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-164324.png" alt=""></p>
+<p>在<code>MonkeyAppDylib.m</code>文件中加入SDK初始化代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;FLEX/FLEXManager.h&gt;</div><div class="line"></div><div class="line">void initCycriptServer()&#123;</div><div class="line">    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) &#123;</div><div class="line">        [[FLEXManager sharedManager] showExplorer];</div><div class="line">        CYListenServer(6666);</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行效果如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/201501058944_.jpg" alt=""></p>
+<h3 id="非越狱插件商店"><a href="#非越狱插件商店" class="headerlink" title="非越狱插件商店"></a>非越狱插件商店</h3><p>既然可以支持CocoaPods了，那么完全可以将自己写的非越狱插件传到CocoaPods，然后通过pod一键安装！</p>
+<p>下面就将上面写的获取微信消息插件放到CocoaPods，新建<code>Cocoa Touch Framework</code>项目，然后增加头文件<code>CaptainHook.h</code>和自己的源文件<code>PrintWXMessage.m</code>，并将上面的代码拷贝过来，如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-170518.png" alt=""></p>
+<p>然后生成framework弄成zip包(zip包需要包含模拟器和真机的架构才能通过本地验证)，编辑<code>PrintWXMessage.podspec</code>文件内容如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Pod::Spec.new do |spec|</div><div class="line">  spec.name             = &quot;PrintWXMessage&quot;</div><div class="line">  spec.version          = &quot;1.0.0&quot;</div><div class="line">  spec.summary          = &quot;Print WX Message for MonkeyDev&quot;</div><div class="line">  spec.description      = &lt;&lt;-DESC</div><div class="line">                          - Print WX Message for MonkeyDev</div><div class="line">                        DESC</div><div class="line"></div><div class="line">  spec.homepage         = &quot;https://github.com/AloneMonkey/MonkeyDev&quot;</div><div class="line"></div><div class="line">  spec.license          = &#123; :type =&gt; &quot;BSD&quot;, :file =&gt; &quot;LICENSE&quot; &#125;</div><div class="line">  spec.author           = &#123; &quot;AloneMonkey&quot; =&gt; &quot;liupeiqing1993@163.com&quot; &#125;</div><div class="line">  spec.social_media_url = &quot;http://weibo.com/xiaoqing28&quot;</div><div class="line">  spec.platform         = :ios, &quot;8.0&quot;</div><div class="line">  spec.source           = &#123; :http =&gt; &quot;https://github.com/AloneMonkey/MonkeyDevPod/raw/master/PrintWXMessage/LatestBuild/PrintWXMessage.zip&quot;&#125;</div><div class="line">  spec.vendored_frameworks = &quot;PrintWXMessage.framework&quot;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这里source直接写的是zip包的地址，里面就是笔者生成的framework动态库。</p>
+<p>增加私有CocosPods:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod repo add MonkeyDevSpecs https://github.com/AloneMonkey/MonkeyDevSpecs.git</div></pre></td></tr></table></figure>
+<p>将PrintWXMessage包发布到私有Pod:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod repo push MonkeyDevSpecs PrintWXMessage.podspec</div></pre></td></tr></table></figure>
+<p>修改Podfile文件内容如下，然后pod install安装，并且把原来写在<code>MonkeyAppDylib.m</code>的打印微信消息的代码删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">source &apos;https://github.com/AloneMonkey/MonkeyDevSpecs.git&apos;</div><div class="line"></div><div class="line">target &apos;MonkeyAppDylib&apos; do</div><div class="line">     pod &apos;PrintWXMessage&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">~ MonkeyApp pod install</div><div class="line">Cloning spec repo `alonemonkey` from `https://github.com/AloneMonkey/MonkeyDevSpecs.git`</div><div class="line">Analyzing dependencies</div><div class="line">Downloading dependencies</div><div class="line">Installing PrintWXMessage (1.0.0)</div><div class="line">Generating Pods project</div><div class="line">Integrating client project</div><div class="line"></div><div class="line">[!] Please close any current Xcode sessions and use `MonkeyPod.xcworkspace` for this project from now on.</div><div class="line">Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.</div></pre></td></tr></table></figure>
+<p>运行即可看到插件已经完美集成成功！！！</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-184350.png" alt=""></p>
+<p>MonkeyDev项目地址请点击阅读原文查看。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag">#逆向</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/24/monkeypod/" rel="next" title="MonkeyDev + CocoaPods 擦出的火花">
+                <i class="fa fa-chevron-left"></i> MonkeyDev + CocoaPods 擦出的火花
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用途"><span class="nav-number">2.</span> <span class="nav-text">用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">3.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">4.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块介绍"><span class="nav-number">5.</span> <span class="nav-text">模块介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#越狱模块"><span class="nav-number">5.1.</span> <span class="nav-text">越狱模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非越狱模块"><span class="nav-number">5.2.</span> <span class="nav-text">非越狱模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能介绍"><span class="nav-number">6.</span> <span class="nav-text">功能介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备"><span class="nav-number">6.1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建项目"><span class="nav-number">6.2.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拖入砸壳应用编译"><span class="nav-number">6.3.</span> <span class="nav-text">拖入砸壳应用编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取微信消息"><span class="nav-number">7.</span> <span class="nav-text">获取微信消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用CocoaPods集成SDK"><span class="nav-number">8.</span> <span class="nav-text">使用CocoaPods集成SDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非越狱插件商店"><span class="nav-number">9.</span> <span class="nav-text">非越狱插件商店</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="powered-by">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div class="theme-info">
+  <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'alonemonkey';
+      var disqus_identifier = '2017/07/26/cocoapods-wechat-message/';
+      var disqus_title = '使用 CocoaPods 给微信集成 SDK 打印收发消息';
+      var disqus_url = 'http://www.alonemonkey.com/2017/07/26/cocoapods-wechat-message/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
