@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/201501058944_.jpg">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-170518.png">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-184350.png">
-<meta property="og:updated_time" content="2017-07-26T14:38:55.000Z">
+<meta property="og:updated_time" content="2017-11-04T08:07:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 CocoaPods 给微信集成 SDK 打印收发消息">
 <meta name="twitter:description" content="本文介绍的是一套逆向工具，可以在非越狱手机上给任意应用增加插件。在文末的示例中，作者拿微信举例，展示出在微信中打印收发消息的功能。">
@@ -368,7 +368,7 @@
 <h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>在使用之前，大家关心的都是它的功能，可以做什么。那么MonkeyDev这个工具可以做什么呢？总结来说可以做如下这些事情:</p>
 <ul>
 <li>可以使用Xcode开发CaptainHook Tweak、Logos Tweak 和 Command-line Tool，在越狱机器开发插件，这是原来iOSOpenDev功能的迁移和改进。</li>
-<li>只需拖入一个砸壳应用，自动集成Reveal、Cycript和注入的动态库并重签名安装到非越狱机器。</li>
+<li>只需拖入一个砸壳应用，自动集成Reveal、Cycript和注入的动态库并重签名安装到非越狱机器。</li>
 <li>支持调试自己编写的动态库和第三方App</li>
 <li>支持通过CocoaPods第三方应用集成SDK以及非越狱插件，简单来说就是通过CocoaPods搭建了一个非越狱插件商店。</li>
 </ul>
@@ -409,7 +409,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-update</div></pre></td></tr></table></figure>
 <h3 id="模块介绍"><a href="#模块介绍" class="headerlink" title="模块介绍"></a>模块介绍</h3><p>安装完成之后，打开Xcode，点击<code>File - New - Project...</code>，选择iOS滑动到最下方可以看到MonkeyDev提供的模块:</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170713-185817.png" alt="image"></p>
-<p>介绍下这几个模块的用途:</p>
+<p>介绍下这几个模块的用途:</p>
 <h4 id="越狱模块"><a href="#越狱模块" class="headerlink" title="越狱模块"></a>越狱模块</h4><ul>
 <li>CaptainHook Tweak</li>
 </ul>
@@ -456,7 +456,7 @@
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163128.png" alt=""></p>
 <p>然后就可以愉快的开发非越狱插件了，还可以直接调试!</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163443.png" alt=""></p>
-<h3 id="使用CocoaPods集成SDK"><a href="#使用CocoaPods集成SDK" class="headerlink" title="使用CocoaPods集成SDK"></a>使用CocoaPods集成SDK</h3><p>MonkeyDev还支持CocoaPods给第三方应用集成SDK，新建Podfile，写入:</p>
+<h3 id="使用CocoaPods集成SDK"><a href="#使用CocoaPods集成SDK" class="headerlink" title="使用CocoaPods集成SDK"></a>使用CocoaPods集成SDK</h3><p>MonkeyDev还支持CocoaPods给第三方应用集成SDK，新建Podfile，写入:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MonkeyAppDylib&apos; do</div><div class="line">     pod &apos;FLEX&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
 <p>这里的Target要设置为动态库而不是App，然后执行Pod install。然后将如下选项改回Yes。</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-164324.png" alt=""></p>
