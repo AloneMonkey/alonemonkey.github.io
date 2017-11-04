@@ -22,11 +22,11 @@
     <published>2017-07-25T16:00:00.000Z</published>
     <updated>2017-07-26T14:38:55.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>笔者本身是一个iOS逆向的爱好者，曾在使用iOSOpenDev在Xcode开发越狱插件的时候，由于工具已经好几年没有更新，安装和使用起来都会诸多问题，所以最初笔者只是想改良iOSOpenDev的兼容问题，后面在开发中不断冒出新的idea，并在工具中实现了这些想法，所以就有了本文将要给大家强烈推荐的工具<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>。</p>
+    <content type="html"><![CDATA[笔者本身是一个iOS逆向的爱好者，曾在使用iOSOpenDev在Xcode开发越狱插件的时候，由于工具已经好几年没有更新，安装和使用起来都会诸多问题，所以最初笔者只是想改良iOSOpenDev的兼容问题，后面在开发中不断冒出新的idea，并在工具中实现了这些想法，所以就有了本文将要给大家强烈推荐的工具<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>。</p>
 <h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>在使用之前，大家关心的都是它的功能，可以做什么。那么MonkeyDev这个工具可以做什么呢？总结来说可以做如下这些事情:</p>
 <ul>
 <li>可以使用Xcode开发CaptainHook Tweak、Logos Tweak 和 Command-line Tool，在越狱机器开发插件，这是原来iOSOpenDev功能的迁移和改进。</li>
-<li>只需拖入一个砸壳应用，自动集成Reveal、Cycript和注入的动态库并重签名安装到非越狱机器。</li>
+<li>只需拖入一个砸壳应用，自动集成Reveal、Cycript和注入的动态库并重签名安装到非越狱机器。</li>
 <li>支持调试自己编写的动态库和第三方App</li>
 <li>支持通过CocoaPods第三方应用集成SDK以及非越狱插件，简单来说就是通过CocoaPods搭建了一个非越狱插件商店。</li>
 </ul>
@@ -67,7 +67,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./md-update</div></pre></td></tr></table></figure>
 <h3 id="模块介绍"><a href="#模块介绍" class="headerlink" title="模块介绍"></a>模块介绍</h3><p>安装完成之后，打开Xcode，点击<code>File - New - Project...</code>，选择iOS滑动到最下方可以看到MonkeyDev提供的模块:</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170713-185817.png" alt="image"></p>
-<p>介绍下这几个模块的用途:</p>
+<p>介绍下这几个模块的用途:</p>
 <h4 id="越狱模块"><a href="#越狱模块" class="headerlink" title="越狱模块"></a>越狱模块</h4><ul>
 <li>CaptainHook Tweak</li>
 </ul>
@@ -114,7 +114,7 @@
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163128.png" alt=""></p>
 <p>然后就可以愉快的开发非越狱插件了，还可以直接调试!</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-163443.png" alt=""></p>
-<h3 id="使用CocoaPods集成SDK"><a href="#使用CocoaPods集成SDK" class="headerlink" title="使用CocoaPods集成SDK"></a>使用CocoaPods集成SDK</h3><p>MonkeyDev还支持CocoaPods给第三方应用集成SDK，新建Podfile，写入:</p>
+<h3 id="使用CocoaPods集成SDK"><a href="#使用CocoaPods集成SDK" class="headerlink" title="使用CocoaPods集成SDK"></a>使用CocoaPods集成SDK</h3><p>MonkeyDev还支持CocoaPods给第三方应用集成SDK，新建Podfile，写入:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MonkeyAppDylib&apos; do</div><div class="line">     pod &apos;FLEX&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
 <p>这里的Target要设置为动态库而不是App，然后执行Pod install。然后将如下选项改回Yes。</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20170726-164324.png" alt=""></p>
@@ -325,14 +325,14 @@
     <published>2017-06-01T16:00:00.000Z</published>
     <updated>2017-06-16T06:45:59.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前写过一篇《关于LLVM，这些东西你必须知道！》，先已收录在《iOS成长之路》。<br>其中讲解了编译器的编译过程，以及通过LLVM可以做哪些有意思的事情，今天继续来跟着官方的文档继续了解Pass。</p>
-<p>获取代码：</p>
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前写过一篇《关于LLVM，这些东西你必须知道！》，先已收录在《iOS成长之路》。<br>其中讲解了编译器的编译过程，以及通过LLVM可以做哪些有意思的事情，今天继续来跟着官方的文档继续了解Pass。</p>
+<p>获取代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git clone http://llvm.org/git/llvm.git</div><div class="line">git clone http://llvm.org/git/clang.git llvm/tools/clang</div><div class="line">git clone http://llvm.org/git/clang-tools-extra.git llvm/tools/clang/tools/extra</div><div class="line">git clone http://llvm.org/git/compiler-rt.git llvm/projects/compiler-rt</div></pre></td></tr></table></figure>
 <p>编译成<code>Xcode项目</code>:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir build</div><div class="line">cd build</div><div class="line">cmake -G Xcode CMAKE_BUILD_TYPE=&quot;Debug&quot; ../llvm</div><div class="line"></div><div class="line">open LLVM.xcodeproj</div></pre></td></tr></table></figure>
 <p>然后运行<code>clang</code>，准备工作做好后，继续Pass的学习。</p>
 <h3 id="什么是Pass？"><a href="#什么是Pass？" class="headerlink" title="什么是Pass？"></a>什么是Pass？</h3><p>LLVM Pass是LLVM系统中非常重要和有趣的一个模块，Pass处理编译过程中代码的转换以及优化工作。</p>
-<p>所有的Pass都是<a href="http://llvm.org/doxygen/classllvm_1_1Pass.html" target="_blank" rel="external">Pass</a>的子类，不同的Pass实现不同的作用可以继承<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-modulepass" target="_blank" rel="external">ModulePass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-callgraphsccpass" target="_blank" rel="external">CallGraphSCCPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-functionpass" target="_blank" rel="external">FunctionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-looppass" target="_blank" rel="external">LoopPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-regionpass" target="_blank" rel="external">RegionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-basicblockpass" target="_blank" rel="external">BasicBlockPass</a>等类。</p>
+<p>所有的Pass都是<a href="http://llvm.org/doxygen/classllvm_1_1Pass.html" target="_blank" rel="external">Pass</a>的子类，不同的Pass实现不同的作用可以继承<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-modulepass" target="_blank" rel="external">ModulePass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-callgraphsccpass" target="_blank" rel="external">CallGraphSCCPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-functionpass" target="_blank" rel="external">FunctionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-looppass" target="_blank" rel="external">LoopPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-regionpass" target="_blank" rel="external">RegionPass</a>,<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-basicblockpass" target="_blank" rel="external">BasicBlockPass</a>等类。</p>
 <p>接下来开始介绍如何编写一个Pass，编译，加载以及运行的过程。</p>
 <h3 id="编写hello-world"><a href="#编写hello-world" class="headerlink" title="编写hello world"></a>编写hello world</h3><p>先编写一个“Hello” Pass，只是简单的输出程序中每个非外部方法的方法名，不会修改程序本身的功能。官方Demo的源代码存在<code>lib/Transforms/Hello</code>文件夹。</p>
 <h4 id="配置编译环境"><a href="#配置编译环境" class="headerlink" title="配置编译环境"></a>配置编译环境</h4><p>首先来看看环境的配置，如果你想编译一个新的Pass，你可以在<code>lib/Transforms/</code>下新建一个文件夹，这里我自己创建的是<code>PassDemo</code>，然后配置编译脚本去编译你的源代码。 在新建的目录下创建文件<code>CMakeLists.txt</code>:</p>
@@ -340,7 +340,7 @@
 <p>然后增加下面一行代码到<code>lib/Transforms/CMakeLists.txt</code>：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">add_subdirectory(PassDemo)</div></pre></td></tr></table></figure>
 <p>编译脚本指定了编译源文件<code>Hello.cpp</code>去编译生成动态库<code>$(LEVEL)/lib/LLVMPassDemo.dylib</code>。该文件可以被<code>opt</code>通过<code>-load</code>参数动态加载。如果不是Mac平台生成的后缀会不一样，比如<code>Linux</code>下是<code>so</code>。</p>
-<p>配置好编译脚本后，打开<code>Xcode</code>项目，按<code>command + B</code>编译，然后在项目里面就可以看到刚刚增加的<code>Target</code>，打开<code>Hello.cpp</code>文件就可以编写代码了。</p>
+<p>配置好编译脚本后，打开<code>Xcode</code>项目，按<code>command + B</code>编译，然后在项目里面就可以看到刚刚增加的<code>Target</code>，打开<code>Hello.cpp</code>文件就可以编写代码了。</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496846680486.png" alt="image"></p>
 <h4 id="基础代码"><a href="#基础代码" class="headerlink" title="基础代码"></a>基础代码</h4><p>首先编辑<code>Hello.cpp</code>文件，导入头文件:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#include &quot;llvm/Pass.h&quot;</div><div class="line">#include &quot;llvm/IR/Function.h&quot;</div><div class="line">#include &quot;llvm/Support/raw_ostream.h&quot;</div></pre></td></tr></table></figure>
@@ -348,11 +348,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">using namespace llvm;</div></pre></td></tr></table></figure>
 <p>由于导入文件里面的方法是属于<code>llvm</code>命名空间的，所以先指定使用的命名空间。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">namespace &#123;</div></pre></td></tr></table></figure>
-<p>编写一个匿名的命名空间，<code>C++</code>中的匿名命名空间和<code>C</code>语言里面的<code>static</code>关键词一样，定义在匿名空间中的变量仅仅对当前文件可见。</p>
+<p>编写一个匿名的命名空间，<code>C++</code>中的匿名命名空间和<code>C</code>语言里面的<code>static</code>关键词一样，定义在匿名空间中的变量仅仅对当前文件可见。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">struct Hello : public FunctionPass&#123;</div></pre></td></tr></table></figure>
 <p>定义<code>Hello</code>类继承<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-functionpass" target="_blank" rel="external">FunctionPass</a>，后面会讲到不同用处的Pass会继承不同的父类，现在只需要知道，继承自<code>FunctionPass</code>可以操作程序中的方法。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">static char ID;</div><div class="line">Hello() : FunctionPass(ID)&#123;&#125;</div></pre></td></tr></table></figure>
-<p>定义可供LLVM标示的Pass ID。</p>
+<p>定义可供LLVM标示的Pass ID。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">        bool runOnFunction(Function &amp;F) override&#123;</div><div class="line">            errs() &lt;&lt; &quot;Hello: &quot;;</div><div class="line">            errs().write_escaped(F.getName()) &lt;&lt; &quot;\n&quot;;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里定义了一个<a href="http://llvm.org/docs/WritingAnLLVMPass.html#writing-an-llvm-pass-runonfunction" target="_blank" rel="external">runOnFunction</a>，重载继承自父类的抽象虚函数。在这个函数里面可以做针对于函数的特殊处理，这里只是打印出每个方法的名字。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">char Hello::ID = 0;</div></pre></td></tr></table></figure>
@@ -388,7 +388,7 @@
 <h3 id="更多Pass类"><a href="#更多Pass类" class="headerlink" title="更多Pass类"></a>更多Pass类</h3><p>当你写一个新的Pass的时候，你需要根据需要去选择需要继承的父类，根据不同的作用有 <code>ImmutablePass</code>、<code>ModulePass</code>、<code>CallGraphSCCPass</code>、<code>FunctionPass</code>、<code>LoopPass</code>、<code>RegionPass</code>、<code>BasicBlockPass</code>、<code>MachineFunctionPass</code>。具体可以参考<a href="http://llvm.org/docs/WritingAnLLVMPass.html" target="_blank" rel="external">官方文档</a>。</p>
 <h3 id="调用其它Pass"><a href="#调用其它Pass" class="headerlink" title="调用其它Pass"></a>调用其它Pass</h3><p>如果在编写的Pass中需要使用到其它Pass提供的函数功能，需要在:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virtual void getAnalysisUsage(AnalysisUsage &amp;AU) const;</div></pre></td></tr></table></figure>
-<p>说明，比如像要获取程序中存在循环的信息，可以在该函数里面申请需要依赖的Pass。</p>
+<p>说明，比如像要获取程序中存在循环的信息，可以在该函数里面申请需要依赖的Pass。</p>
 <p>以上面的Pass为例，导入头文件<code>#include &quot;llvm/Analysis/LoopInfo.h&quot;</code>，在<code>getAnalysisUsage</code>中调用:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">AU.addRequired&lt;LoopInfoWrapperPass&gt;();</div><div class="line">AU.setPreservesAll();</div></pre></td></tr></table></figure>
 <p>然后就可以通过它提供接口获取存在循环的个数。</p>
@@ -519,7 +519,7 @@
 <p>替换原可执行文件，然后打开，弹出了:</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496203632361.png" alt="image"></p>
 <p>看来它还验证签名了。</p>
-<p>那么找到启动时的回调:</p>
+<p>那么找到启动时的回调:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-[SMAppDelegate applicationWillFinishLaunching:]</div></pre></td></tr></table></figure>
 <p>可以找到对应的代码。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if ([rax codeSignState] != 0x2) goto loc_100024851;</div></pre></td></tr></table></figure>
@@ -533,19 +533,19 @@
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496214065433.png" alt="image"></p>
 <p>查看每一处调用，发现这么一段代码:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">void ___24+[SMLicenseManager load]_block_invoke(void * _block) &#123;</div><div class="line">    if ([SMLicenseManager verifyLicenseWithName:@&quot;Test User&quot; code:@&quot;GAWAE-8C69D-7LZ5H-9D8M3-HVEG7-KHNQC-CQ7RF-SEPQC-CRF82-G47U5-H6DKAB-8SKA7-EWSCM-7Q7SV-MYF4&quot;] != 0x0) &#123;</div><div class="line">            [*_NSApp terminate:0x0];</div><div class="line">    &#125;</div><div class="line">    return;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>作者自己拿了假的<code>License</code>测试，如果通过就直接退出了。</p>
+<p>作者自己拿了假的<code>License</code>测试，如果通过就直接退出了。</p>
 <p>所以这里<code>je         loc_10010ec26</code>对应二进制<code>74 1A</code>改成<code>75 1A</code>。</p>
 <p>然后重新生成可执行文件，打开随便填入<code>License</code>注册即可。</p>
 <p>额，好像有点扯远了，不过本文的目的就是为了学习Mac逆向的分析过程，所以这一部分并不是多余的。</p>
 <p>当然这里还有坑，如何你发现<code>attach process</code>的时候报错的话，请参考<a href="http://bbs.iosre.com/t/fix-bug-for-interface-inspector-on-macos-serria/5665" target="_blank" rel="external">Fix Bug for Interface Inspector on macOS Serria</a>这篇文章重新编译<code>mach_inject_bundle_stub.bundle</code>。</p>
-<p>终于准备好了，附加到QQ，选中聊天界面。可以找到<code>MQAIOChatViewController</code>这样的一个<code>ViewController</code>。</p>
+<p>终于准备好了，附加到QQ，选中聊天界面。可以找到<code>MQAIOChatViewController</code>这样的一个<code>ViewController</code>。</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496216671572.png" alt="image"></p>
-<p>下面通过动态跟踪函数调用来看看这个类的调用流程。</p>
+<p>下面通过动态跟踪函数调用来看看这个类的调用流程。</p>
 <h3 id="动态跟踪"><a href="#动态跟踪" class="headerlink" title="动态跟踪"></a>动态跟踪</h3><p>动态跟踪的方法有多种，除了iOS逆向中使用的<a href="https://www.frida.re/" target="_blank" rel="external">Frida</a>, lldb , Mac上面还可以使用Dtrace。</p>
-<h4 id="Frida"><a href="#Frida" class="headerlink" title="Frida"></a>Frida</h4><p><code>Frida</code>是一个通过<code>js</code>和<code>Native</code>交互的跨平台工具，可以通过<code>frida QQ</code>的方式附加，查看当前加载的类，类的方法等等。除此外还可以加载自己的<code>js</code>脚本<code>frida QQ -l trace.js</code>。</p>
+<h4 id="Frida"><a href="#Frida" class="headerlink" title="Frida"></a>Frida</h4><p><code>Frida</code>是一个通过<code>js</code>和<code>Native</code>交互的跨平台工具，可以通过<code>frida QQ</code>的方式附加，查看当前加载的类，类的方法等等。除此外还可以加载自己的<code>js</code>脚本<code>frida QQ -l trace.js</code>。</p>
 <p>在<code>python</code>中，有可以<code>import frida</code>来获取设置以及目标等相关信息，同时也能调用<code>js</code>并获取返回结果。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ObjC.classes.MQAIOChatViewController.$methods</div></pre></td></tr></table></figure>
-<p><code>frida</code>还提供了一个非常有用的功能，可以用于此处，也就是<code>frida-trace</code>。</p>
+<p><code>frida</code>还提供了一个非常有用的功能，可以用于此处，也就是<code>frida-trace</code>。</p>
 <p>可以通过这个工具来跟踪指定方法或者指定类的调用过程，这里感兴趣的是<code>MQAIOChatViewController</code>这个类的调用过程，所以可以通过如下命令来跟踪：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">frida-trace -m &quot;-[MQAIOChatViewController *]&quot; QQ</div></pre></td></tr></table></figure>
 <p>然后撤回一条消息可以看到如下调用过程:</p>
@@ -554,7 +554,7 @@
 <h4 id="Dtrace"><a href="#Dtrace" class="headerlink" title="Dtrace"></a>Dtrace</h4><p>讲<code>lldb</code>前，先讲下<code>Dtrace</code>这个Linux上的动态追踪神器，可以通过它来监控应用程序或者内核的调用，所以这里可以用于监控OC函数的调用。</p>
 <p>新建文件<code>trace.d</code>，写入内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#!/usr/sbin/dtrace -s</div><div class="line"></div><div class="line">objc$target:MQAIOChatViewController::entry&#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后找到<code>QQ</code>的进程id <code>ps -e | grep QQ</code>。再运行<code>dtrace</code>脚本</p>
+<p>然后找到<code>QQ</code>的进程id <code>ps -e | grep QQ</code>。再运行<code>dtrace</code>脚本</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ./trace.d -p 24105</div></pre></td></tr></table></figure>
 <p>撤回消息可得到如下输出结果:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">2  30436           -revokeMessages::entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">2  30382 -scrollViewDidScrollToBottom::entry</div><div class="line">2  44569  -scheduleRecognitionLogic:entry</div><div class="line">2  44561  -topMsgListViewController:entry</div><div class="line">6  44608           -isSimplestModel:entry</div><div class="line">6  44608           -isSimplestModel:entry</div><div class="line">0  44608           -isSimplestModel:entry</div></pre></td></tr></table></figure>
@@ -562,22 +562,22 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo dtrace -n &apos;objc$target:MQAIOChatViewController::entry&#123;&#125;&apos; -p 24105</div></pre></td></tr></table></figure>
 <p>只是在文件里面可以进行更多的操作。</p>
 <h4 id="lldb"><a href="#lldb" class="headerlink" title="lldb"></a>lldb</h4><p><code>lldb</code>这部分的动态跟踪在后面<code>Xcode</code>调试会有讲到。</p>
-<h3 id="Xcode"><a href="#Xcode" class="headerlink" title="Xcode"></a>Xcode</h3><p>找到了函数之后，可以写个动态库注入为了方便调试以及动态库注入这里创建一个<code>dylib</code>的Xcode项目，选择<code>macOS Library</code>，点击创建，Type选择<code>Dynamic</code>。</p>
-<p>为了<code>Hook</code>函数，先选择一个现成的库来做，可以选择:</p>
+<h3 id="Xcode"><a href="#Xcode" class="headerlink" title="Xcode"></a>Xcode</h3><p>找到了函数之后，可以写个动态库注入为了方便调试以及动态库注入这里创建一个<code>dylib</code>的Xcode项目，选择<code>macOS Library</code>，点击创建，Type选择<code>Dynamic</code>。</p>
+<p>为了<code>Hook</code>函数，先选择一个现成的库来做，可以选择:</p>
 <ul>
 <li><a href="https://github.com/alexzielenski/ZKSwizzle" target="_blank" rel="external">ZKSwizzle</a></li>
 <li><a href="https://github.com/steipete/Aspects" target="_blank" rel="external">Aspects</a></li>
 <li><a href="https://github.com/comex/substitute" target="_blank" rel="external">substitute</a></li>
 <li>……</li>
 </ul>
-<p>这里你可能会想一个撤回一条命令一个文件哪有这么麻烦，而这些都是一般逆向中可能用到的，不针对功能。</p>
-<p>我个人倾向于使用<code>substitute</code>，它有着和<code>substrate</code>一样的api接口。</p>
-<p>那么首先要编译一个<code>Mac</code>平台的<code>substitute</code>动态库。</p>
+<p>这里你可能会想一个撤回一条命令一个文件哪有这么麻烦，而这些都是一般逆向中可能用到的，不针对功能。</p>
+<p>我个人倾向于使用<code>substitute</code>，它有着和<code>substrate</code>一样的api接口。</p>
+<p>那么首先要编译一个<code>Mac</code>平台的<code>substitute</code>动态库。</p>
 <p>直接编译会报错<code>syscall</code>被弃用，到<a href="https://github.com/phracker/MacOSX-SDKs" target="_blank" rel="external">这里</a>下载一个早一点的比如<code>MacOSX10.11.sdk</code>，然后放到<code>/Applications/XCode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs</code>下。</p>
 <p>然后通过如下命令行编译:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --xcode-sdk macosx10.11 &amp;&amp; make -j8</div></pre></td></tr></table></figure>
-<p>在<code>out</code>目录就可以看到生成的动态库。</p>
-<p>查看动态库的加载地址，把其重命名为<code>libsubstitute.0.dylib</code>并拷贝到<code>/usr/local/lib/</code>。</p>
+<p>在<code>out</code>目录就可以看到生成的动态库。</p>
+<p>查看动态库的加载地址，把其重命名为<code>libsubstitute.0.dylib</code>并拷贝到<code>/usr/local/lib/</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  out git:(master) ✗ otool -L libsubstitute.dylib</div><div class="line">libsubstitute.dylib:</div><div class="line">	/usr/local/lib/libsubstitute.0.dylib (compatibility version 0.0.0, current version 0.0.0)</div></pre></td></tr></table></figure>
 <p>然后把头文件和动态库引入Xcode项目， 然后在构造函数里面hook<code>-[MQAIOChatViewController revokeMessages:]</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#import &quot;substrate.h&quot;</div><div class="line"></div><div class="line">@class MQAIOChatViewController;</div><div class="line"></div><div class="line">static void (*origin_MQAIOChatViewController_revokeMessages)(MQAIOChatViewController*,SEL,id);</div><div class="line">static void new_MQAIOChatViewController_revokeMessages(MQAIOChatViewController* self,SEL _cmd,id arrays)&#123;</div><div class="line">    NSLog(@&quot;revokeMessages:%@&quot;,arrays);</div><div class="line">    return;</div><div class="line">&#125;</div><div class="line"></div><div class="line">static void __attribute__((constructor)) initialize(void) &#123;</div><div class="line">    MSHookMessageEx(objc_getClass(&quot;MQAIOChatViewController&quot;),  @selector(revokeMessages:), (IMP)&amp;new_MQAIOChatViewController_revokeMessages, (IMP*)&amp;origin_MQAIOChatViewController_revokeMessages);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -586,7 +586,7 @@
 <p>这里为了方便就直接通过环境变量注入了。</p>
 <p>点击<code>Build Phases</code>左上角的<code>+</code>，然后点击<code>New Run Script Phase</code>。</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496284722475.png" alt="image"></p>
-<p>写入脚本:</p>
+<p>写入脚本:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd $&#123;TARGET_BUILD_DIR&#125;</div><div class="line">export DYLD_INSERT_LIBRARIES=./libMacQQRevoke.dylib &amp;&amp; /Applications/QQ.app/Contents/MacOS/QQ</div></pre></td></tr></table></figure>
 <p><code>Command + B</code>， 注入动态库，运行QQ。</p>
 <p>然后撤回消息，发现消息还在，并且控制台有如下输出。</p>
@@ -599,7 +599,7 @@
 <p>然后选择<code>Debug -&gt; Attach to Process</code>。</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287517422.png" alt="image"></p>
 <p>附加到QQ进程。</p>
-<p>撤回消息，Xcode便断在了<code>new_MQAIOChatViewController_revokeMessages</code>。</p>
+<p>撤回消息，Xcode便断在了<code>new_MQAIOChatViewController_revokeMessages</code>。</p>
 <p>查看堆栈如下:</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496287617990.png" alt="image"></p>
 <p>因为block的符号没恢复，所以看来是block里面调用过来的。</p>
@@ -612,7 +612,7 @@
 <p>调过来的。<br>在<code>revokeMessageModel</code>下断点<code>b -[BHMessageChatModel revokeMessageModel:]</code>，再撤回，可以看到调用堆栈。</p>
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1496288458933.png" alt="image"></p>
 <p>这下应该就比较清楚了。</p>
-<p>那么就在比较上层的调用中去处理，比如：</p>
+<p>那么就在比较上层的调用中去处理，比如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-[RecallProcessor solveRecallNotify:isOnline:]</div><div class="line">-[QQMessageRevokeEngine handleRecallNotify:isOnline:]</div></pre></td></tr></table></figure>
 <p>测试直接hook<code>-[QQMessageRevokeEngine handleRecallNotify:isOnline:]</code>是不会再本地删除的。</p>
 <p>关于hook中的参数类型可以使用<a href="https://github.com/nygard/class-dump" target="_blank" rel="external">class-dump</a> dump出头文件，从头文件可以看到第一个参数是<code>struct RecallModel</code>类型。</p>
@@ -620,7 +620,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">rb \[MQAIOChatViewController *\]</div><div class="line">br com add 1</div><div class="line">po $rdi</div><div class="line">x/s $rsi</div><div class="line">c</div><div class="line">DONE</div></pre></td></tr></table></figure>
 <p>撤回消息即可看到打印结果如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa1f89e: &quot;revokeMessages:&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa1f973: &quot;scheduleRecognitionLogic&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10fa07e45: &quot;topMsgListViewController&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div><div class="line"> po $rdi</div><div class="line">&lt;MQAIOChatViewController: 0x7fca3a8def10&gt;</div><div class="line"></div><div class="line"> x/s $rsi</div><div class="line">0x10f9e881c: &quot;isSimplestModel&quot;</div><div class="line"> c</div><div class="line">Process 35302 resuming</div><div class="line">Command #3 &apos;c&apos; continued the target.</div></pre></td></tr></table></figure>
-<p>在x64汇编中，传递参数依次通过以下寄存器传递。</p>
+<p>在x64汇编中，传递参数依次通过以下寄存器传递。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rdi, rsi, rdx, rcx, r8, r9</div></pre></td></tr></table></figure>
 <p>在很多动态分析的过程中可以借助lldb调试来帮助分析解决问题。</p>
 <h3 id="MachO注入"><a href="#MachO注入" class="headerlink" title="MachO注入"></a>MachO注入</h3><p>为了避免每次从环境变量注入，还可以直接使用<a href="https://github.com/Tyilo/insert_dylib" target="_blank" rel="external">insert_dylib</a>注入可执行文件。</p>
