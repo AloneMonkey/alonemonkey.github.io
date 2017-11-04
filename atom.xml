@@ -22,7 +22,7 @@
     <published>2017-07-25T16:00:00.000Z</published>
     <updated>2017-07-26T14:38:55.000Z</updated>
     
-    <content type="html"><![CDATA[笔者本身是一个iOS逆向的爱好者，曾在使用iOSOpenDev在Xcode开发越狱插件的时候，由于工具已经好几年没有更新，安装和使用起来都会诸多问题，所以最初笔者只是想改良iOSOpenDev的兼容问题，后面在开发中不断冒出新的idea，并在工具中实现了这些想法，所以就有了本文将要给大家强烈推荐的工具<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>。</p>
+    <content type="html"><![CDATA[<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>笔者本身是一个iOS逆向的爱好者，曾在使用iOSOpenDev在Xcode开发越狱插件的时候，由于工具已经好几年没有更新，安装和使用起来都会诸多问题，所以最初笔者只是想改良iOSOpenDev的兼容问题，后面在开发中不断冒出新的idea，并在工具中实现了这些想法，所以就有了本文将要给大家强烈推荐的工具<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>。</p>
 <h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>在使用之前，大家关心的都是它的功能，可以做什么。那么MonkeyDev这个工具可以做什么呢？总结来说可以做如下这些事情:</p>
 <ul>
 <li>可以使用Xcode开发CaptainHook Tweak、Logos Tweak 和 Command-line Tool，在越狱机器开发插件，这是原来iOSOpenDev功能的迁移和改进。</li>
