@@ -5,10 +5,10 @@
     
   <url>
     <loc>http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/</loc>
-    <lastmod>2017-11-20T11:29:57.000Z</lastmod>
+    <lastmod>2017-11-20T11:32:22.000Z</lastmod>
     <data>
         <display>
-        <title>动手写一个简单的Mac内核反调试扩展</title>
+        <title>动手写一个简单的Mac内核反反调试扩展</title>
         <pubTime>2017-11-19T16:00:00.000Z</pubTime>
         
         <tag>逆向</tag>

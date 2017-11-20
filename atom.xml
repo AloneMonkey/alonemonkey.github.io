@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-11-20T11:29:57.000Z</updated>
+  <updated>2017-11-20T11:32:22.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>动手写一个简单的Mac内核反调试扩展</title>
+    <title>动手写一个简单的Mac内核反反调试扩展</title>
     <link href="http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/"/>
     <id>http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/</id>
     <published>2017-11-19T16:00:00.000Z</published>
-    <updated>2017-11-20T11:29:57.000Z</updated>
+    <updated>2017-11-20T11:32:22.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在Windows上面用户直接操作的东西都是在应用层在权限方面有很多限制，所以大部分的安全厂商和外挂、木马的对抗都是在内核层，看谁在内核层接管的时机最早，隐蔽性最高。使用到的技术有SSDT、Shadow SSDT Hook、DKOM、Inline Hook等等来达到隐藏进程、隐藏端口、隐藏恶意文件、篡改用户行为、键盘网络监控等等、之前的博客也有写过一些相关的技术文章<a href="http://www.blogfshare.com/category/kernel" target="_blank" rel="external">Windows内核</a>，感兴趣的可以看看。而在Mac平台虽然这种对抗现在很少，但是我们也可以开发自己的内核扩展模块来达到隐藏进程、隐藏文件、监控网络等操作。</p>
 <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><ul>
