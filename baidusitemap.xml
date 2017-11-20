@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/</loc>
+    <lastmod>2017-11-20T11:29:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>动手写一个简单的Mac内核反调试扩展</title>
+        <pubTime>2017-11-19T16:00:00.000Z</pubTime>
+        
+        <tag>逆向</tag>
+         
+         
+           
+             
+              <breadCrumb title="逆向" url="http://www.alonemonkey.com/categories/%E9%80%86%E5%90%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.alonemonkey.com/2017/05/31/get-start-with-mac-reverse/</loc>
     <lastmod>2017-11-04T08:18:28.000Z</lastmod>
     <data>

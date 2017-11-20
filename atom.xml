@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-11-04T08:07:48.000Z</updated>
+  <updated>2017-11-20T11:29:57.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,84 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>动手写一个简单的Mac内核反调试扩展</title>
+    <link href="http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/"/>
+    <id>http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/</id>
+    <published>2017-11-19T16:00:00.000Z</published>
+    <updated>2017-11-20T11:29:57.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在Windows上面用户直接操作的东西都是在应用层在权限方面有很多限制，所以大部分的安全厂商和外挂、木马的对抗都是在内核层，看谁在内核层接管的时机最早，隐蔽性最高。使用到的技术有SSDT、Shadow SSDT Hook、DKOM、Inline Hook等等来达到隐藏进程、隐藏端口、隐藏恶意文件、篡改用户行为、键盘网络监控等等、之前的博客也有写过一些相关的技术文章<a href="http://www.blogfshare.com/category/kernel" target="_blank" rel="external">Windows内核</a>，感兴趣的可以看看。而在Mac平台虽然这种对抗现在很少，但是我们也可以开发自己的内核扩展模块来达到隐藏进程、隐藏文件、监控网络等操作。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><ul>
+<li><p>安装虚拟机和系统: 在编写Windows内核驱动的时候要需要准备环境，当时是通过Windows安装VM虚拟机加上Windbg来调试内核以及内核驱动的。所以Mac内核的调试也可以按照这个套路，笔者的环境是VMware Fusion加macos 10.12。首先安装VMware Fusion这个没什么好说的，然后下载macos 10.12的系统镜像文件<a href="https://plus.google.com/+SysAdminsHowtos/posts/6e98eRghsw1" target="_blank" rel="external">下载地址</a>，下完安装并设置网络为桥接模式。</p>
+</li>
+<li><p>安装KDK: 为了调试dev的内核首先要在mac电脑和虚拟机里面的系统安装苹果提供的Kernel Debug Kit，首先要找到调试系统的版本号，点击左上角的苹果-&gt;关于本机-&gt;系统报告-&gt;软件-&gt;系统版本，笔者的是macOS 10.12(16A323)。直接在<a href="https://developer.apple.com/download/more/" target="_blank" rel="external">这里</a>找到对应的版本下载然后分别在自己的系统和调试系统安装KDK。</p>
+</li>
+<li><p>关闭SIP: 由于后面需要运行未签名的内核扩展所以需要先关闭SIP，在虚拟机开机的时候按Command+R进入恢复模式(要多试几次)，然后在终端输入<code>csrutil disable</code>。顺便把KDK里面的开发内核拷贝命令如下:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /Library/Developer/KDKs/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development /Systems/Library/Kernels</div></pre></td></tr></table></figure>
+<ul>
+<li>设置boot-args: 为了将虚拟机设置成调试模式，需要使用<code>nvram</code>设置<code>boot-args</code>，命令如下:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nvram boot-args=&quot;debug=0x141 kext-dev-mode=1 kcsuffix=development pmuflags=1 -v&quot;</div></pre></td></tr></table></figure>
+<p>debug=0x141: 含义可以在<a href="https://developer.apple.com/library/content/documentation/Darwin/Conceptual/KernelProgramming/build/build.html#//apple_ref/doc/uid/TP30000905-CH221-BABDGEGF" target="_blank" rel="external">Kernel Programming Guide</a>找到，这里使用的是(DB_HALT | DB_ARP | DB_LOG_PI_SCRN)</p>
+<p>kext-dev-mode=1: 允许加载未签名kext</p>
+<p>kcsuffix=development: 指定加载上面拷贝的kernel.development</p>
+<p>pmuflags=1: 关闭定时器</p>
+<p>-v: 显示内核加载信息</p>
+<ul>
+<li>清除kext缓存: 先运行<code>uanme -v</code>查看xnu源码版本，然后运行<code>sudo kextcache -invalidate /</code>和<code>sudo reboot</code>清除内核缓存使用新的内核加载然后重启，重启之后被调试的系统会显示IP等待被调试器附加如下图:</li>
+</ul>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-184118.png" alt=""></p>
+<ul>
+<li>配置源码进行调试: 为了能够在调试的时候能对应到源码，从<a href="https://opensource.apple.com/tarballs/xnu/" target="_blank" rel="external">苹果开源代码</a>下载上一步看到的xnu版本的代码放到<code>/Library/Caches/com.apple.xbs/Sources/xnu/</code>下面。并将如下设置加到<code>~/.lldbinit</code>文件:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">settings set target.load-script-from-symbol-file true</div></pre></td></tr></table></figure>
+<p>然后运行如下命令就可以开始内核调试:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">lldb /Library/Developer/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development</div><div class="line">(lldb) kdp-remote 虚拟机IP地址</div><div class="line">.........</div><div class="line">Process 1 stopped</div><div class="line">* thread #2, name = &apos;0xffffff800b777b00&apos;, queue = &apos;0x0&apos;, stop reason = signal SIGSTOP</div><div class="line">    frame #0: 0xffffff800520ea14 kernel.development`kdp_register_send_receive(send=(IONetworkingFamily`IOKernelDebugger::kdpTransmitDispatcher(void*, unsigned int) at IOKernelDebugger.cpp:369), receive=(IONetworkingFamily`IOKernelDebugger::kdpReceiveDispatcher(void*, unsigned int*, unsigned int) at IOKernelDebugger.cpp:353)) at kdp_udp.c:478 [opt]</div><div class="line">   475 	kdp_unregister_send_receive(</div><div class="line">   476 		__unused kdp_send_t	send,</div><div class="line">   477 		__unused kdp_receive_t	receive)</div><div class="line">-&gt; 478 	&#123;</div><div class="line">   479 		if (current_debugger == KDP_CUR_DB)</div><div class="line">   480 			current_debugger = NO_CUR_DB;</div><div class="line">   481 		kdp_flag &amp;= ~KDP_READY;</div><div class="line">Target 0: (kernel.development) stopped.</div><div class="line">(lldb)</div></pre></td></tr></table></figure>
+<h3 id="编写内核扩展"><a href="#编写内核扩展" class="headerlink" title="编写内核扩展"></a>编写内核扩展</h3><p>环境准备好之后就可以开始编写和调试内核扩展了，编写的过程还是在自己的系统完成然后在拷贝到虚拟机里面所以最好保证主系统和虚拟机系统大版本一致，首先使用Xcode就可以通过如下方式直接创建内核扩展模块。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-112922.png" alt=""></p>
+<p>创建出来的工程中会有如下两个函数，分别是驱动加载和卸载时调用的函数，一般用于加载的时候初始化设备驱动、hook函数，卸载的时候还原hook、删除设备驱动等等:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#include &lt;mach/mach_types.h&gt;</div><div class="line">#include &lt;libkern/libkern.h&gt;   //printf所在头文件</div><div class="line"></div><div class="line">kern_return_t HelloWorld_start(kmod_info_t * ki, void *d);</div><div class="line">kern_return_t HelloWorld_stop(kmod_info_t *ki, void *d);</div><div class="line"></div><div class="line">kern_return_t HelloWorld_start(kmod_info_t * ki, void *d)</div><div class="line">&#123;</div><div class="line">    asm(&quot;int $3&quot;);</div><div class="line">    printf(&quot;HelloWorld_start...\n&quot;);</div><div class="line">    return KERN_SUCCESS;</div><div class="line">&#125;</div><div class="line"></div><div class="line">kern_return_t HelloWorld_stop(kmod_info_t *ki, void *d)</div><div class="line">&#123;</div><div class="line">    printf(&quot;HelloWorld_stop...\n&quot;);</div><div class="line">    return KERN_SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>分别在上面两个函数中使用printf打印输出，在kext中printf函数是在libkern中的，所以要include该头文件。另外为了在加载的时候能找到符号还要在<code>Info.plist</code>中的<code>OSBundleLibraries</code>加上<code>com.apple.kpi.libkern    16.0.0</code>，后面这个版本号可以在被调试的机器上面运行<code>kextstat</code>看到， 在<code>Build Setting</code>设置<code>Debug Information Format</code>为<code>DWARF with DSYM File</code> 即在Debug也生成符号文件方便源码调试， 为了让调试器主动断下来便在模块加载的时候使用<code>int 3</code>主要触发断点。</p>
+<p>使用<code>scp ./HelloWorld.kext xxx@10.xx.xx.xx:/Users/xxxx/Desktop/</code>将生成的<code>HelloWorld.kext</code>文件拷贝到被调试的机器，在这之前需要在被调试机器上的系统偏好设置-共享开启远程登录。最后使用如下命令修改用户组并加载以及卸载:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo chown -R root:wheel ./HelloWorld.kext</div><div class="line">sudo kextload ./HelloWorld.kext</div><div class="line">sudo kextutil ./HelloWorld.kext   //可以查看加载出错的原因</div><div class="line">sudo kextunload ./HelloWorld.kext</div></pre></td></tr></table></figure>
+<p>使用如下命令可以查看在模块中的输出日志:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo dmesg | tail -n 10</div></pre></td></tr></table></figure>
+<p>并且在加载的时候会主动触发断点并关联到本地的符号文件对应的源码的对应行如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Loading 1 kext modules . done.</div><div class="line">Process 1 stopped</div><div class="line">* thread #17, name = &apos;0xffffff801a9be1a0&apos;, queue = &apos;0x0&apos;, stop reason = EXC_BREAKPOINT (code=3, subcode=0x0)</div><div class="line">    frame #0: 0xffffff7f95c61f21 HelloWorld`HelloWorld_start(ki=0xffffff7f95c62000, d=0x0000000000000000) at HelloWorld.c:17</div><div class="line">   14</div><div class="line">   15  	kern_return_t HelloWorld_start(kmod_info_t * ki, void *d)</div><div class="line">   16  	&#123;</div><div class="line">-&gt; 17  	    asm(&quot;int $3&quot;);</div><div class="line">   18  	    printf(&quot;HelloWorld_start...\n&quot;);</div><div class="line">   19  	    return KERN_SUCCESS;</div><div class="line">   20  	&#125;</div><div class="line">Target 0: (kernel.development) stopped.</div><div class="line">(lldb)</div></pre></td></tr></table></figure>
+<h3 id="内核反调试"><a href="#内核反调试" class="headerlink" title="内核反调试"></a>内核反调试</h3><p>之前在<a href="http://www.alonemonkey.com/2017/05/25/antiantidebug/">关于反调试&amp;反反调试那些事</a>中讲到一些反调试的方法和过反调试的方法，但是在应用层的话需要对每个应用都进行patch hook，而通过内核扩展模块可以直接从内核模块来接管系统调用针对调试检测和禁止附加的系统调用进行修改就行了。</p>
+<p>我们知道在Windows平台有一个叫SSDT的东西，SSDT 的全称是 System Services Descriptor Table，系统服务描述符表，里面保存 Windows 系统服务地址的数组，通过修改该数组的函数地址就可以达到hook的效果，而在XNU中也有一个系统调用的表叫sysent，在<code>bsd/sys/sysent.h</code>可以找到其定义:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">struct sysent &#123;		/* system call table */</div><div class="line">	sy_call_t	*sy_call;	/* implementing function */</div><div class="line">#if CONFIG_REQUIRES_U32_MUNGING || (__arm__ &amp;&amp; (__BIGGEST_ALIGNMENT__ &gt; 4))</div><div class="line">	sy_munge_t	*sy_arg_munge32; /* system call arguments munger for 32-bit process */</div><div class="line">#endif</div><div class="line">	int32_t		sy_return_type; /* system call return types */</div><div class="line">	int16_t		sy_narg;	/* number of args */</div><div class="line">	uint16_t	sy_arg_bytes;	/* Total size of arguments in bytes for</div><div class="line">					 * 32-bit system calls</div><div class="line">					 */</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>所以如果能够找到这个表在内存中的位置然后修改其中ptrace和sysctl在表中对应的sy_call就可以接管ptrace和sysctl的调用了，但是因为这个符号不导出只能从内核文件分析找到在内存在模块加载的基地址然后加上文件中对应的位置确定sysent。首先使用IDA打开文件<code>/Library/Developer/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development</code>搜索找到符号<code>sysent</code>位于<code>__constdata</code>处，根据上面的结构体将IDA显示结果手动解析如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-172025.png" alt=""></p>
+<p>可以通过搜索sysent表中前面几个符号的地址来确定sysent在<code>__constdata</code>的位置，由于KASLR所以首先要找到内核模块加载后在内存中的基地址，在10.11之后可以通过<code>vm_kernel_unslide_or_perm_external</code>来计算偏移，之前的话可以在内存中搜索文件头:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">m_offset_t func_address = (vm_offset_t) vm_kernel_unslide_or_perm_external;</div><div class="line">vm_offset_t func_address_unslid = 0;</div><div class="line">vm_kernel_unslide_or_perm_external(func_address, &amp;func_address_unslid);</div><div class="line">g_kernel_slide = func_address - func_address_unslid;</div></pre></td></tr></table></figure>
+<p>得到内核加载在内存中的偏移之后剩下就是macho文件格式的解析与处理，首先获取<code>__CONST,__constdata</code>并该section中找<code>sysent</code>所在的位置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">struct sysent * find_sysent_table()&#123;</div><div class="line">    if (g_sysent_table) &#123;</div><div class="line">        return g_sysent_table;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    mach_header_t* kernel_header = find_kernel_header();</div><div class="line"></div><div class="line">    if (!kernel_header) &#123;</div><div class="line">        return NULL;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // The first three entries of the sysent table point to these functions.</div><div class="line">    sy_call_t *nosys = (sy_call_t *) kernel_find_symbol(&quot;_nosys&quot;);</div><div class="line">    sy_call_t *exit = (sy_call_t *) kernel_find_symbol(&quot;_exit&quot;);</div><div class="line">    sy_call_t *fork = (sy_call_t *) kernel_find_symbol(&quot;_fork&quot;);</div><div class="line">    if (!nosys || !exit || !fork) &#123;</div><div class="line">        return NULL;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    const char *data_segment_name;</div><div class="line">    const char *const_section_name;</div><div class="line">    if (macOS_Sierra()) &#123;</div><div class="line">        data_segment_name = &quot;__CONST&quot;;</div><div class="line">        const_section_name = &quot;__constdata&quot;;</div><div class="line">    &#125; else &#123;</div><div class="line">        data_segment_name = &quot;__DATA&quot;;</div><div class="line">        const_section_name = &quot;__const&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    section_t* section = macho_find_section(kernel_header, data_segment_name, const_section_name);</div><div class="line"></div><div class="line">    if(!section)&#123;</div><div class="line">        return NULL;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    vm_offset_t offset;</div><div class="line">    for (offset = 0; offset &lt; section-&gt;size; offset += 16) &#123;</div><div class="line">        struct sysent *table = (struct sysent *) (section-&gt;addr + offset);</div><div class="line">        if (table-&gt;sy_call != nosys) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line">        vm_offset_t next_entry_offset = sizeof(struct sysent);</div><div class="line">        if (OSX_Mavericks()) &#123;</div><div class="line">            next_entry_offset = sizeof(struct sysent_mavericks);</div><div class="line">        &#125;</div><div class="line">        struct sysent *next_entry = (struct sysent *)</div><div class="line">        ((vm_offset_t)table + next_entry_offset);</div><div class="line">        if (next_entry-&gt;sy_call != exit) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line">        next_entry = (struct sysent *)</div><div class="line">        ((vm_offset_t)next_entry + next_entry_offset);</div><div class="line">        if (next_entry-&gt;sy_call != fork) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        g_sysent_table = table;</div><div class="line">        return g_sysent_table;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return NULL;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获取到<code>sysent</code>之后就可以直接保存原来的<code>sy_call</code>然后替换<code>sy_call</code>的地址为我们自己的实现就可以接管系统调用了，由于<code>__CONST,__constdata</code>默认是只读的所以写之前要先关闭写保护写完之后再还原:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">kern_return_t anti_ptrace(int cmd)&#123;</div><div class="line">    /* Mountain Lion (10.8+) moved sysent[] to read-only section */</div><div class="line">    kwrite_on();</div><div class="line"></div><div class="line">    /*</div><div class="line">     * we check if the syscalls had been already assigned, because we get kernel panic if we overwrite the syscall with same function</div><div class="line">     */</div><div class="line">    if(cmd == DISABLE &amp;&amp; g_sysent_table[SYS_ptrace].sy_call != (sy_call_t *)sys_ptrace)&#123;</div><div class="line">        if(sys_ptrace != NULL)&#123;</div><div class="line">            /* restore pointer to the original function */</div><div class="line">            g_sysent_table[SYS_ptrace].sy_call = (sy_call_t *)sys_ptrace;</div><div class="line"></div><div class="line">            /* remove the flag that indicates the hooked status */</div><div class="line">            g_hooked_functions &amp;= ~HK_PTRACE;</div><div class="line">        &#125;</div><div class="line">    &#125;else if(cmd == ENABLE &amp;&amp; !(g_hooked_functions &amp; HK_PTRACE))&#123;</div><div class="line">        /* save address of the real function */</div><div class="line">        sys_ptrace = (void *)g_sysent_table[SYS_ptrace].sy_call;</div><div class="line"></div><div class="line">        /* hook the syscall by replacing the pointer in sysent */</div><div class="line">        g_sysent_table[SYS_ptrace].sy_call = (sy_call_t *)ar_ptrace;</div><div class="line"></div><div class="line">        /* we set our global variable g_hooked_functions to know this function has been hooked */</div><div class="line">        g_hooked_functions |= HK_PTRACE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    kwrite_off();</div><div class="line"></div><div class="line">    return KERN_SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后编译加载kext然后使用如下代码测试效果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#import &lt;dlfcn.h&gt;</div><div class="line">#import &lt;sys/sysctl.h&gt;</div><div class="line"></div><div class="line">#ifndef PT_DENY_ATTACH</div><div class="line">#define PT_DENY_ATTACH 31</div><div class="line">#endif</div><div class="line">typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);</div><div class="line"></div><div class="line">BOOL isDebuggerPresent()&#123;</div><div class="line">    int name[4];                </div><div class="line"></div><div class="line">    struct kinfo_proc info;     </div><div class="line">    size_t info_size = sizeof(info);</div><div class="line"></div><div class="line">    info.kp_proc.p_flag = 0;</div><div class="line"></div><div class="line">    name[0] = CTL_KERN;</div><div class="line">    name[1] = KERN_PROC;</div><div class="line">    name[2] = KERN_PROC_PID;</div><div class="line">    name[3] = getpid();</div><div class="line"></div><div class="line">    if(sysctl(name, 4, &amp;info, &amp;info_size, NULL, 0) == -1)&#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return ((info.kp_proc.p_flag &amp; P_TRACED) != 0);</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, const char * argv[]) &#123;</div><div class="line">    @autoreleasepool &#123;</div><div class="line">        // insert code here...</div><div class="line">        void *handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);</div><div class="line">        ptrace_ptr_t ptrace_ptr = (ptrace_ptr_t)dlsym(handle, &quot;ptrace&quot;);</div><div class="line">        ptrace_ptr(PT_DENY_ATTACH, 0, 0, 0);</div><div class="line"></div><div class="line">        NSLog(@&quot;pass ptrace&quot;);</div><div class="line"></div><div class="line">        if(isDebuggerPresent())&#123;</div><div class="line">            return 0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        NSLog(@&quot;pass sysctl&quot;);</div><div class="line">    &#125;</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用lldb调试:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">lldb ./demo</div><div class="line">(lldb) target create &quot;./demo&quot;</div><div class="line">Current executable set to &apos;./demo&apos; (x86_64).</div><div class="line">2017-11-18 14:06:22.370273 demo[403:4277] pass ptrace</div><div class="line">2017-11-18 14:06:22.370346 demo[403:4277] pass sysctl</div><div class="line">Process 403 exited with status = 0 (0x00000000)</div></pre></td></tr></table></figure>
+<p>相关代码: <a href="https://github.com/AloneMonkey/MacKext" target="_blank" rel="external">MacKext</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      本文主要是在现在有的一些文章和代码的基础上面笔者自己的一个尝试，了解Mac下kext开发的流程
+    
+    </summary>
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/categories/%E9%80%86%E5%90%91/"/>
+    
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>使用 CocoaPods 给微信集成 SDK 打印收发消息</title>
@@ -319,80 +397,6 @@
   </entry>
   
   <entry>
-    <title>iOS成长之路开售！</title>
-    <link href="http://www.alonemonkey.com/2017/06/02/ios-book-pr/"/>
-    <id>http://www.alonemonkey.com/2017/06/02/ios-book-pr/</id>
-    <published>2017-06-01T16:00:00.000Z</published>
-    <updated>2017-06-02T06:17:34.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>经过 3 个月的筹备 iOS 成长之路第二期和大家见面啦。经历了第一期的蹒跚发布后，终于在盛夏迎来了更好的第二期。这一期相比第一期更有料了，从第一期的 8 篇文章增加到 12 篇文章。</p>
-<p>这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。</p>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><p>Chris Lattner 访谈录(下)</p>
-<p>译者：@故胤道长，亚马逊 iOS 工程师，曾就职于 Uber。</p>
-<p>博客：<a href="http://www.jianshu.com/u/8d5b91490ca5" target="_blank" rel="external">http://www.jianshu.com/u/8d5b91490ca5</a></p>
-</li>
-<li><p>动手玩 LLVM</p>
-<p>作者：戴铭，滴滴出行技术专家。最近正在研究 iOS 编译相关底层技术，用来解决工程优化问题。</p>
-<p>博客：<a href="https://ming1016.github.io/" target="_blank" rel="external">https://ming1016.github.io/</a></p>
-</li>
-<li><p>Swift 性能分析</p>
-<p>作者：唐巧，小猿搜题产品技术负责人，6 年 iOS 开发经验，《iOS开发进阶》作者。</p>
-<p>博客：<a href="http://blog.devtang.com/about/" target="_blank" rel="external">http://blog.devtang.com/about/</a></p>
-</li>
-<li><p>监控SDK的架构设计实践(<strong>6月5号上线</strong>)</p>
-<p>作者：王朝成， @圣迪 , 饿了么移动架构师。耕耘移动基础设施的建设，致力于移动大数据与人工智能的结合</p>
-<p>博客：<a href="http://www.jianshu.com/u/a774b58c9b89" target="_blank" rel="external">http://www.jianshu.com/u/a774b58c9b89</a></p>
-</li>
-<li><p>初识 LLVM</p>
-<p>作者：@Alone_Monkey， 网易 iOS 工程师</p>
-<p>博客：<a href="http://www.blogfshare.com" target="_blank" rel="external">www.blogfshare.com</a></p>
-</li>
-<li><p>TCP / IP 漫游</p>
-<p>作者：@mrriddler，蚂蚁金服 iOS 工程师。</p>
-<p>博客：<a href="http://blog.mrriddler.com" target="_blank" rel="external">blog.mrriddler.com</a></p>
-</li>
-<li><p>复用的精妙 - UITableView 复用技术原理分析</p>
-<p>作者：冬瓜，微博：@冬瓜争做全栈瓜，爱奇艺 iOS 工程师。</p>
-<p>博客：<a href="http://www.desgard.com" target="_blank" rel="external">http://www.desgard.com</a></p>
-</li>
-<li><p>试图取代 TCP 的 QUIC 协议到底是什么</p>
-<p>作者：张星宇，@bestswifter，百度 iOS 工程师，喜欢探索问题的本质，讨厌一切不说人话的描述。正在学习前端，励志成为一名大前端全栈工程师。</p>
-<p>博客：<a href="https://bestswifter.com/" target="_blank" rel="external">https://bestswifter.com/</a></p>
-</li>
-<li><p>AFNetworking 源码分析</p>
-<p>作者： @涂耀辉 ，今日头条 iOS 工程师</p>
-<p>博客：<a href="http://www.jianshu.com/u/14431e509ae8" target="_blank" rel="external">http://www.jianshu.com/u/14431e509ae8</a></p>
-</li>
-<li><p>SpriteKit 入门与实践</p>
-<p>作者：郭鹏，丁香园资深 iOS 工程师</p>
-</li>
-<li><p>基于 Rx 的网络层实践</p>
-<p>作者：李富强，@李富强Jason，美团外卖 iOS 架构师<br>博客：<a href="http://blog.csdn.net/colorapp" target="_blank" rel="external">http://blog.csdn.net/colorapp</a></p>
-</li>
-<li><p>iOS 组件化 —— 路由设计思路分析</p>
-<p>作者： @一缕殇流化隐半边冰霜，饿了么 iOS 工程师，微博 @halfrost</p>
-<p>博客：<a href="http://www.jianshu.com/u/12201cdd5d7a" target="_blank" rel="external">http://www.jianshu.com/u/12201cdd5d7a</a></p>
-</li>
-</ul>
-<h2 id="淘宝购买地址"><a href="#淘宝购买地址" class="headerlink" title="淘宝购买地址"></a>淘宝购买地址</h2><p><a href="https://item.taobao.com/item.htm?id=552290531953" target="_blank" rel="external">https://item.taobao.com/item.htm?id=552290531953</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/225849-9d5cec83919493f9.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://www.alonemonkey.com/categories/iOS/"/>
-    
-    
-      <category term="iOS" scheme="http://www.alonemonkey.com/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
     <title>0x01 Xcode调试一个LLVM Pass</title>
     <link href="http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/"/>
     <id>http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/</id>
@@ -483,6 +487,80 @@
     
     
       <category term="llvm" scheme="http://www.alonemonkey.com/tags/llvm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS成长之路开售！</title>
+    <link href="http://www.alonemonkey.com/2017/06/02/ios-book-pr/"/>
+    <id>http://www.alonemonkey.com/2017/06/02/ios-book-pr/</id>
+    <published>2017-06-01T16:00:00.000Z</published>
+    <updated>2017-06-02T06:17:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>经过 3 个月的筹备 iOS 成长之路第二期和大家见面啦。经历了第一期的蹒跚发布后，终于在盛夏迎来了更好的第二期。这一期相比第一期更有料了，从第一期的 8 篇文章增加到 12 篇文章。</p>
+<p>这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><p>Chris Lattner 访谈录(下)</p>
+<p>译者：@故胤道长，亚马逊 iOS 工程师，曾就职于 Uber。</p>
+<p>博客：<a href="http://www.jianshu.com/u/8d5b91490ca5" target="_blank" rel="external">http://www.jianshu.com/u/8d5b91490ca5</a></p>
+</li>
+<li><p>动手玩 LLVM</p>
+<p>作者：戴铭，滴滴出行技术专家。最近正在研究 iOS 编译相关底层技术，用来解决工程优化问题。</p>
+<p>博客：<a href="https://ming1016.github.io/" target="_blank" rel="external">https://ming1016.github.io/</a></p>
+</li>
+<li><p>Swift 性能分析</p>
+<p>作者：唐巧，小猿搜题产品技术负责人，6 年 iOS 开发经验，《iOS开发进阶》作者。</p>
+<p>博客：<a href="http://blog.devtang.com/about/" target="_blank" rel="external">http://blog.devtang.com/about/</a></p>
+</li>
+<li><p>监控SDK的架构设计实践(<strong>6月5号上线</strong>)</p>
+<p>作者：王朝成， @圣迪 , 饿了么移动架构师。耕耘移动基础设施的建设，致力于移动大数据与人工智能的结合</p>
+<p>博客：<a href="http://www.jianshu.com/u/a774b58c9b89" target="_blank" rel="external">http://www.jianshu.com/u/a774b58c9b89</a></p>
+</li>
+<li><p>初识 LLVM</p>
+<p>作者：@Alone_Monkey， 网易 iOS 工程师</p>
+<p>博客：<a href="http://www.blogfshare.com" target="_blank" rel="external">www.blogfshare.com</a></p>
+</li>
+<li><p>TCP / IP 漫游</p>
+<p>作者：@mrriddler，蚂蚁金服 iOS 工程师。</p>
+<p>博客：<a href="http://blog.mrriddler.com" target="_blank" rel="external">blog.mrriddler.com</a></p>
+</li>
+<li><p>复用的精妙 - UITableView 复用技术原理分析</p>
+<p>作者：冬瓜，微博：@冬瓜争做全栈瓜，爱奇艺 iOS 工程师。</p>
+<p>博客：<a href="http://www.desgard.com" target="_blank" rel="external">http://www.desgard.com</a></p>
+</li>
+<li><p>试图取代 TCP 的 QUIC 协议到底是什么</p>
+<p>作者：张星宇，@bestswifter，百度 iOS 工程师，喜欢探索问题的本质，讨厌一切不说人话的描述。正在学习前端，励志成为一名大前端全栈工程师。</p>
+<p>博客：<a href="https://bestswifter.com/" target="_blank" rel="external">https://bestswifter.com/</a></p>
+</li>
+<li><p>AFNetworking 源码分析</p>
+<p>作者： @涂耀辉 ，今日头条 iOS 工程师</p>
+<p>博客：<a href="http://www.jianshu.com/u/14431e509ae8" target="_blank" rel="external">http://www.jianshu.com/u/14431e509ae8</a></p>
+</li>
+<li><p>SpriteKit 入门与实践</p>
+<p>作者：郭鹏，丁香园资深 iOS 工程师</p>
+</li>
+<li><p>基于 Rx 的网络层实践</p>
+<p>作者：李富强，@李富强Jason，美团外卖 iOS 架构师<br>博客：<a href="http://blog.csdn.net/colorapp" target="_blank" rel="external">http://blog.csdn.net/colorapp</a></p>
+</li>
+<li><p>iOS 组件化 —— 路由设计思路分析</p>
+<p>作者： @一缕殇流化隐半边冰霜，饿了么 iOS 工程师，微博 @halfrost</p>
+<p>博客：<a href="http://www.jianshu.com/u/12201cdd5d7a" target="_blank" rel="external">http://www.jianshu.com/u/12201cdd5d7a</a></p>
+</li>
+</ul>
+<h2 id="淘宝购买地址"><a href="#淘宝购买地址" class="headerlink" title="淘宝购买地址"></a>淘宝购买地址</h2><p><a href="https://item.taobao.com/item.htm?id=552290531953" target="_blank" rel="external">https://item.taobao.com/item.htm?id=552290531953</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/225849-9d5cec83919493f9.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.alonemonkey.com/categories/iOS/"/>
+    
+    
+      <category term="iOS" scheme="http://www.alonemonkey.com/tags/iOS/"/>
     
   </entry>
   
@@ -1331,101 +1409,6 @@
     <summary type="html">
     
       什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~ 
-    
-    </summary>
-    
-      <category term="rxswift" scheme="http://www.alonemonkey.com/categories/rxswift/"/>
-    
-    
-      <category term="RxSwift" scheme="http://www.alonemonkey.com/tags/RxSwift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RxSwift学习之旅 - 用户注册</title>
-    <link href="http://www.alonemonkey.com/2017/03/27/rxswift-part-five/"/>
-    <id>http://www.alonemonkey.com/2017/03/27/rxswift-part-five/</id>
-    <published>2017-03-26T16:00:00.000Z</published>
-    <updated>2017-04-19T09:11:58.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>在本文开始前，我们先来理一理一个正常的注册流程中可能会有哪些需求:</p>
-<ul>
-<li>用户名或密码是否为空</li>
-<li>用户名密码是否合法</li>
-<li>重复密码是否一致</li>
-<li>点击注册发送网络请求</li>
-<li>处理返回结果</li>
-<li>…….</li>
-</ul>
-<p>在这里其实可以把很多处理归并到<code>被观察者 - 订阅者</code>模式，通过某种事件触发某种行为，某种行为依赖不同事件的状态，所以我们可以通过<code>RxSwift</code>很方便的去解决我们的问题。</p>
-<h3 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h3><p>新建项目<code>RxSwiftRegister</code>，<code>pod</code>引入<code>RxSwift</code>和<code>RxCocoa</code>。先来设计一个简单的界面，界面上会有账号和密码的输入框，注册按钮，以及提示信息，然后绑定到<code>LoginViewController</code>。</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490535465031.png" alt="image"></p>
-<h3 id="验证为空"><a href="#验证为空" class="headerlink" title="验证为空"></a>验证为空</h3><p>这里需要验证用户名是不是为空，是否已经注册，密码是否为空，重复密码是否一致。</p>
-<p>为了让逻辑与视图分离，这里我们使用<code>MVVM</code>模式，如果你还不知道<code>MVVM</code>可以自己先了解一下。</p>
-<p>新建<code>LoginViewModel</code>文件，接受账号、密码、重复密码作为被观察者，然后对其中的<code>text</code>进行验证处理，返回一个验证的结果(暂时用Bool表示)。</p>
-<p>文件目录:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490539454404.png" alt="image"></p>
-<p><code>LoginViewModel</code>编写如下代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">class RegisterViewModel &#123;</div><div class="line">    let validatedUsername: Observable&lt;Bool&gt;</div><div class="line">    let validatedPassword: Observable&lt;Bool&gt;</div><div class="line">    let validatedPasswordRepeated: Observable&lt;Bool&gt;</div><div class="line">    </div><div class="line">    init(input:(</div><div class="line">        username: Observable&lt;String&gt;,</div><div class="line">        password: Observable&lt;String&gt;,</div><div class="line">        repeatedPassword: Observable&lt;String&gt;,</div><div class="line">        registerTap: Observable&lt;Void&gt;</div><div class="line">        ))&#123;</div><div class="line">        </div><div class="line">        validatedUsername = input.username.map&#123;</div><div class="line">            username in</div><div class="line">            return username == &quot;&quot; ? false : true</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        validatedPassword = input.password.map&#123;</div><div class="line">            password in</div><div class="line">            return password == &quot;&quot; ? false : true</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        validatedPasswordRepeated = Observable.combineLatest(input.password, input.repeatedPassword)&#123;</div><div class="line">            password, repeatedPassword in</div><div class="line">            if repeatedPassword == &quot;&quot;&#123;</div><div class="line">                return false</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            if password != repeatedPassword&#123;</div><div class="line">                return false</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            return true</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里只是简单验证是否为空，后面再改进。</p>
-<p><code>RegisterViewController</code>代码如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">class RegisterViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    @IBOutlet weak var username: UITextField!</div><div class="line">    @IBOutlet weak var usernameValidation: UILabel!</div><div class="line">    </div><div class="line">    @IBOutlet weak var password: UITextField!</div><div class="line">    @IBOutlet weak var passwordValidation: UILabel!</div><div class="line">    </div><div class="line">    @IBOutlet weak var repoatedPassword: UITextField!</div><div class="line">    @IBOutlet weak var repeatedPasswordValidation: UILabel!</div><div class="line">    </div><div class="line">    @IBOutlet weak var registerIndicator: UIActivityIndicatorView!</div><div class="line">    @IBOutlet weak var register: UIButton!</div><div class="line">    </div><div class="line">    let disposed = DisposeBag()</div><div class="line">    </div><div class="line">    override func viewDidLoad() &#123;</div><div class="line">        super.viewDidLoad()</div><div class="line">        </div><div class="line">        let viewModel = RegisterViewModel(input:(</div><div class="line">            username: username.rx.text.orEmpty.asObservable(),</div><div class="line">            password: password.rx.text.orEmpty.asObservable(),</div><div class="line">            repeatedPassword: repoatedPassword.rx.text.orEmpty.asObservable(),</div><div class="line">            registerTap: register.rx.tap.asObservable()</div><div class="line">        ))</div><div class="line">        </div><div class="line">        viewModel.validatedUsername.subscribe(</div><div class="line">            onNext:&#123;</div><div class="line">                valid in</div><div class="line">                print(&quot;username is \(valid)&quot;)</div><div class="line">            &#125;</div><div class="line">        ).disposed(by: disposed)</div><div class="line">        </div><div class="line">        viewModel.validatedPassword.subscribe(</div><div class="line">            onNext:&#123;</div><div class="line">                valid in</div><div class="line">                print(&quot;password is \(valid)&quot;)</div><div class="line">            &#125;</div><div class="line">        ).disposed(by: disposed)</div><div class="line">        </div><div class="line">        viewModel.validatedPasswordRepeated.subscribe(</div><div class="line">            onNext:&#123;</div><div class="line">                valid in</div><div class="line">                print(&quot;repoatedPassword is \(valid)&quot;)</div><div class="line">            &#125;</div><div class="line">        ).disposed(by: disposed)</div><div class="line">        </div><div class="line">    &#125;</div><div class="line"></div><div class="line">    override func didReceiveMemoryWarning() &#123;</div><div class="line">        super.didReceiveMemoryWarning()</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>订阅账号、密码、重复密码是否验证成功的值打印出来，运行可以得到验证，一开始都是false，输入了后变成true。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">username is false</div><div class="line">password is false</div><div class="line">repoatedPassword is false</div><div class="line">username is false</div><div class="line">username is true</div><div class="line">username is true</div><div class="line">password is false</div><div class="line">repoatedPassword is false</div><div class="line">password is true</div><div class="line">repoatedPassword is false</div><div class="line">password is true</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is false</div><div class="line">repoatedPassword is true</div></pre></td></tr></table></figure>
-<p>接下来来看一些问题，当有两个订阅者去订阅用户名是否验证ok，然后在验证的时候去打印一下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">viewModel.validatedUsername.subscribe(</div><div class="line">    onNext:&#123;</div><div class="line">        valid in</div><div class="line">        print(&quot;username is \(valid)&quot;)</div><div class="line">    &#125;</div><div class="line">).disposed(by: disposed)</div><div class="line"></div><div class="line">viewModel.validatedUsername.subscribe(</div><div class="line">    onNext:&#123;</div><div class="line">        valid in</div><div class="line">        print(&quot;username 2 is \(valid)&quot;)</div><div class="line">    &#125;</div><div class="line">).disposed(by: disposed)</div><div class="line"></div><div class="line">-------------------------------------------</div><div class="line"></div><div class="line">validatedUsername = input.username.map&#123;</div><div class="line">    username in</div><div class="line">    print(username)</div><div class="line">    return username == &quot;&quot; ? false : true</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>会发现，多了一个订阅者后，验证的逻辑会执行两次，这并不是我们想要的效果，当验证是一个网络请求的话，会发出两个一样的。同一个值只需要验证一次，然后告诉所有的订阅者就行了。这里需要使用到<code>shareReplay(1)</code>，保证多个订阅者共享单个订阅，并重播最新的一次<code>replay</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">validatedUsername = input.username.map&#123;</div><div class="line">    username in</div><div class="line">    print(username)</div><div class="line">    return username == &quot;&quot; ? false : true</div><div class="line">&#125;.shareReplay(1)</div></pre></td></tr></table></figure>
-<p>同样对密码和重复密码也只需要共享一次。</p>
-<h3 id="绑定错误到Label"><a href="#绑定错误到Label" class="headerlink" title="绑定错误到Label"></a>绑定错误到Label</h3><p>上面只是通过控制台打印了验证的对或错，但是并不知道错的原因，也没有显示到<code>label</code>上，现在来实现这个效果，我们要定义个表示不同验证结果和信息的枚举。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">enum ValidationResult &#123;</div><div class="line">    case ok(message: String)    //验证成功和信息</div><div class="line">    case empty                  //输入为空</div><div class="line">    case validating</div><div class="line">    case failed(message: String)      //验证失败的原因</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后修改返回结果类型为<code>ValidationResult</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">enum ValidationResult &#123;</div><div class="line">    case ok(message: String)</div><div class="line">    case empty</div><div class="line">    case validating</div><div class="line">    case failed(message: String)</div><div class="line">&#125;</div><div class="line"></div><div class="line">class RegisterViewModel &#123;</div><div class="line">    let validatedUsername: Observable&lt;ValidationResult&gt;</div><div class="line">    let validatedPassword: Observable&lt;ValidationResult&gt;</div><div class="line">    let validatedPasswordRepeated: Observable&lt;ValidationResult&gt;</div><div class="line">    </div><div class="line">    init(input:(</div><div class="line">        username: Observable&lt;String&gt;,</div><div class="line">        password: Observable&lt;String&gt;,</div><div class="line">        repeatedPassword: Observable&lt;String&gt;,</div><div class="line">        registerTap: Observable&lt;Void&gt;</div><div class="line">        ))&#123;</div><div class="line">        </div><div class="line">        validatedUsername = input.username.map&#123;</div><div class="line">            username in</div><div class="line">            return username == &quot;&quot; ? .empty : .ok(message: &quot;验证通过&quot;)</div><div class="line">        &#125;.shareReplay(1)</div><div class="line">        </div><div class="line">        validatedPassword = input.password.map&#123;</div><div class="line">            password in</div><div class="line">            return password == &quot;&quot; ? .empty : .ok(message: &quot;验证通过&quot;)</div><div class="line">        &#125;.shareReplay(1)</div><div class="line">        </div><div class="line">        validatedPasswordRepeated = Observable.combineLatest(input.password, input.repeatedPassword)&#123;</div><div class="line">            password, repeatedPassword in</div><div class="line">            if repeatedPassword == &quot;&quot;&#123;</div><div class="line">                return .empty</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            if password != repeatedPassword&#123;</div><div class="line">                return .failed(message:&quot;两次输入的密码不一致&quot;)</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            return .ok(message: &quot;验证通过&quot;)</div><div class="line">        &#125;.shareReplay(1)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后绑定错误到<code>label</code>，为了让<code>ValidationResult</code>能绑定到<code>label</code>，需要给出不同结果的文字颜色和文字信息，这时需要给<code>ValidationResult</code>扩展一下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">extension ValidationResult: CustomStringConvertible &#123;</div><div class="line">    var description: String &#123;</div><div class="line">        switch self &#123;</div><div class="line">        case let .ok(message):</div><div class="line">            return message</div><div class="line">        case .empty:</div><div class="line">            return &quot;&quot;</div><div class="line">        case .validating:</div><div class="line">            return &quot;validating ...&quot;</div><div class="line">        case let .failed(message):</div><div class="line">            return message</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">struct ValidationColors &#123;</div><div class="line">    static let okColor = UIColor(red: 138.0 / 255.0, green: 221.0 / 255.0, blue: 109.0 / 255.0, alpha: 1.0)</div><div class="line">    static let errorColor = UIColor.red</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension ValidationResult &#123;</div><div class="line">    var textColor: UIColor &#123;</div><div class="line">        switch self &#123;</div><div class="line">        case .ok:</div><div class="line">            return ValidationColors.okColor</div><div class="line">        case .empty:</div><div class="line">            return UIColor.black</div><div class="line">        case .validating:</div><div class="line">            return UIColor.black</div><div class="line">        case .failed:</div><div class="line">            return ValidationColors.errorColor</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>同样为了使<code>label</code>能够根据对应的信息和颜色更新，需要提供:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">extension Reactive where Base: UILabel &#123;</div><div class="line">    var validationResult: UIBindingObserver&lt;Base, ValidationResult&gt; &#123;</div><div class="line">        return UIBindingObserver(UIElement: base) &#123; label, result in</div><div class="line">            label.textColor = result.textColor</div><div class="line">            label.text = result.description</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后绑定:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">viewModel.validatedUsername</div><div class="line">    .bindTo(usernameValidation.rx.validationResult)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line">        </div><div class="line">viewModel.validatedPassword</div><div class="line">    .bindTo(passwordValidation.rx.validationResult)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">viewModel.validatedPasswordRepeated</div><div class="line">    .bindTo(repeatedPasswordValidation.rx.validationResult)</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>效果如下:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490545656582.png" alt="image"></p>
-<h3 id="注册按钮状态"><a href="#注册按钮状态" class="headerlink" title="注册按钮状态"></a>注册按钮状态</h3><p>接下来需要根据上面的验证结果来确定注册按钮的可点击状态，只有当账号、密码、重复密码都验证通过之后才会变成可点击的状态。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">let registerEnabled: Observable&lt;Bool&gt;</div><div class="line"></div><div class="line">registerEnabled = Observable.combineLatest(validatedUsername, validatedPassword, validatedPasswordRepeated)&#123;</div><div class="line">    username, password, repeatedPassword in</div><div class="line">    username.isValid &amp;&amp;</div><div class="line">    password.isValid &amp;&amp;</div><div class="line">    repeatedPassword.isValid</div><div class="line">    &#125;</div><div class="line">    .distinctUntilChanged()</div><div class="line">    .shareReplay(1)</div><div class="line"></div><div class="line">viewModel.registerEnabled.subscribe(</div><div class="line">    onNext:&#123;</div><div class="line">        [weak self] valid in</div><div class="line">        guard let `self` = self else&#123;</div><div class="line">            return</div><div class="line">        &#125;</div><div class="line">        self.register.isEnabled = valid</div><div class="line">        self.register.alpha = valid ? 1.0 : 0.5</div><div class="line">    &#125;</div><div class="line">).disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>这里有几点：</p>
-<ul>
-<li>只需要共享一次，使用<code>shareReplay</code></li>
-<li>不用每次改变都发射给订阅者，只有当发生改变时再发射，使用<code>distinctUntilChanged</code></li>
-<li>捕获<code>self</code>的弱引用，然后再里面转成强引用</li>
-</ul>
-<h3 id="网络验证"><a href="#网络验证" class="headerlink" title="网络验证"></a>网络验证</h3><p>前面只是在本地做了一个简单的验证，现在想要验证输入的账号是否能注册，就需要发送网络请求去验证。</p>
-<p>这里参考官方给出的例子，通过url判断是否有效:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">class GitHubAPI&#123;</div><div class="line">    let URLSession: URLSession</div><div class="line">    </div><div class="line">    static let sharedAPI = GitHubAPI(</div><div class="line">        URLSession: Foundation.URLSession.shared</div><div class="line">    )</div><div class="line">    </div><div class="line">    init(URLSession: URLSession)&#123;</div><div class="line">        self.URLSession = URLSession</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func usernameAvailable(_ username: String) -&gt; Observable&lt;Bool&gt;&#123;</div><div class="line">        let url = URL(string: &quot;https://github.com/\(username.URLEscaped)&quot;)!</div><div class="line">        let request = URLRequest(url: url)</div><div class="line">        return self.URLSession.rx.response(request: request)</div><div class="line">            .map&#123;</div><div class="line">                (response, _) in</div><div class="line">                return response.statusCode == 404</div><div class="line">            &#125;</div><div class="line">            .catchErrorJustReturn(false)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>如果url存在就认为已注册，否则就是没有。</p>
-<p>那么用户名验证可以改为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">//flatMapLatest 如果有新的值发射出来，则会取消原来发出的网络请求</div><div class="line">//flatMap 则不会</div><div class="line">validatedUsername = input.username</div><div class="line">    .flatMapLatest&#123;</div><div class="line">    username -&gt; Observable&lt;ValidationResult&gt; in</div><div class="line">    //是否为空</div><div class="line">    if username.characters.count == 0&#123;</div><div class="line">        return Observable.just(.empty)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //是否是数字和字母</div><div class="line">    if username.rangeOfCharacter(from: CharacterSet.alphanumerics.inverted) != nil &#123;</div><div class="line">        return  Observable.just(.failed(message: &quot;Username can only contain numbers or digits&quot;))</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    let loadingValue = ValidationResult.validating</div><div class="line">    </div><div class="line">    return API.usernameAvailable(username)</div><div class="line">            .map&#123;</div><div class="line">                available in</div><div class="line">                if available &#123;</div><div class="line">                    return .ok(message: &quot;Username available&quot;)</div><div class="line">                &#125;</div><div class="line">                else &#123;</div><div class="line">                    return .failed(message: &quot;Username already taken&quot;)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            .startWith(loadingValue)  //开始发射一个正在验证的值</div><div class="line">            .observeOn(MainScheduler.instance)   //将监听事件绑定到主线程</div><div class="line">            .catchErrorJustReturn(.failed(message: &quot;Error contacting server&quot;))</div><div class="line">&#125;.shareReplay(1)</div></pre></td></tr></table></figure>
-<p>同样把密码和重复密码也改下。</p>
-<h3 id="注册请求"><a href="#注册请求" class="headerlink" title="注册请求"></a>注册请求</h3><p>这里和官方例子一样，模拟下注册过程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func register(_ username: String, password: String) -&gt; Observable&lt;Bool&gt;&#123;</div><div class="line">    let registerResult = arc4random() % 5 == 0 ? false : true</div><div class="line">    return Observable.just(registerResult)</div><div class="line">            .delay(1.0, scheduler: MainScheduler.instance)  //延迟一秒</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后绑定注册的点击事件，执行注册请求。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//合并注册点击和账号密码序列，每次注册点击，从第二个序列取最新的值</div><div class="line">let usernameAndPassword = Observable.combineLatest(input.username, input.password) &#123; ($0, $1) &#125;</div><div class="line">        </div><div class="line">registered = input.registerTap.withLatestFrom(usernameAndPassword)</div><div class="line">    .flatMapLatest&#123;</div><div class="line">        (username, password) in</div><div class="line">        return API.register(username, password: password)</div><div class="line">                .observeOn(MainScheduler.instance)</div><div class="line">                .catchErrorJustReturn(false)</div><div class="line">                .trackActivity(registering)</div><div class="line">    &#125;.shareReplay(1)</div></pre></td></tr></table></figure>
-<p><code>trackActivity</code>是官方例子里面的，用于监控序列的计算中和结束。</p>
-<p>到此这个例子就结束了，如图:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1490618590053.png" alt="image"></p>
-<h3 id="项目优化"><a href="#项目优化" class="headerlink" title="项目优化"></a>项目优化</h3><p>有几点交互需要优化一下:</p>
-<ul>
-<li>点击背景收起键盘</li>
-<li>点击键盘的<code>Next</code>调到下一个<code>UITextField</code></li>
-<li>点击<code>Go</code>触发注册流程</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//点击背景收起键盘</div><div class="line">let tapBackground = UITapGestureRecognizer()</div><div class="line">tapBackground.rx.event</div><div class="line">    .subscribe(onNext: &#123; [unowned self] _ in</div><div class="line">        self.view.endEditing(true)</div><div class="line">    &#125;)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line">view.addGestureRecognizer(tapBackground)</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">username.rx.controlEvent(.editingDidEnd)</div><div class="line">    .subscribe&#123;</div><div class="line">        [unowned self] _ in</div><div class="line">        self.password.becomeFirstResponder()</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">password.rx.controlEvent(.editingDidEnd)</div><div class="line">    .subscribe&#123;</div><div class="line">        [unowned self] _ in</div><div class="line">        self.repoatedPassword.becomeFirstResponder()</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">repoatedPassword.rx.controlEvent(.editingDidEndOnExit)</div><div class="line">    .bindTo(viewModel.registerTap)</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>完整源码见Github</p>
-<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftRegister</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      本文以最常见的用户注册界面为例，学习RxSwift在实践中的更多应用。
     
     </summary>
     

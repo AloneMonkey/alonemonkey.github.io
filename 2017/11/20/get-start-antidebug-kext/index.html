@@ -1,0 +1,855 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="逆向," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文主要是在现在有的一些文章和代码的基础上面笔者自己的一个尝试，了解Mac下kext开发的流程">
+<meta name="keywords" content="逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动手写一个简单的Mac内核反调试扩展">
+<meta property="og:url" content="http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="本文主要是在现在有的一些文章和代码的基础上面笔者自己的一个尝试，了解Mac下kext开发的流程">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-184118.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-112922.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-172025.png">
+<meta property="og:updated_time" content="2017-11-20T11:29:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="动手写一个简单的Mac内核反调试扩展">
+<meta name="twitter:description" content="本文主要是在现在有的一些文章和代码的基础上面笔者自己的一个尝试，了解Mac下kext开发的流程">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-184118.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 动手写一个简单的Mac内核反调试扩展 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                动手写一个简单的Mac内核反调试扩展
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-11-20T00:00:00+08:00" content="2017-11-20">
+              2017-11-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/逆向/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/11/20/get-start-antidebug-kext/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/20/get-start-antidebug-kext/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在Windows上面用户直接操作的东西都是在应用层在权限方面有很多限制，所以大部分的安全厂商和外挂、木马的对抗都是在内核层，看谁在内核层接管的时机最早，隐蔽性最高。使用到的技术有SSDT、Shadow SSDT Hook、DKOM、Inline Hook等等来达到隐藏进程、隐藏端口、隐藏恶意文件、篡改用户行为、键盘网络监控等等、之前的博客也有写过一些相关的技术文章<a href="http://www.blogfshare.com/category/kernel" target="_blank" rel="external">Windows内核</a>，感兴趣的可以看看。而在Mac平台虽然这种对抗现在很少，但是我们也可以开发自己的内核扩展模块来达到隐藏进程、隐藏文件、监控网络等操作。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><ul>
+<li><p>安装虚拟机和系统: 在编写Windows内核驱动的时候要需要准备环境，当时是通过Windows安装VM虚拟机加上Windbg来调试内核以及内核驱动的。所以Mac内核的调试也可以按照这个套路，笔者的环境是VMware Fusion加macos 10.12。首先安装VMware Fusion这个没什么好说的，然后下载macos 10.12的系统镜像文件<a href="https://plus.google.com/+SysAdminsHowtos/posts/6e98eRghsw1" target="_blank" rel="external">下载地址</a>，下完安装并设置网络为桥接模式。</p>
+</li>
+<li><p>安装KDK: 为了调试dev的内核首先要在mac电脑和虚拟机里面的系统安装苹果提供的Kernel Debug Kit，首先要找到调试系统的版本号，点击左上角的苹果-&gt;关于本机-&gt;系统报告-&gt;软件-&gt;系统版本，笔者的是macOS 10.12(16A323)。直接在<a href="https://developer.apple.com/download/more/" target="_blank" rel="external">这里</a>找到对应的版本下载然后分别在自己的系统和调试系统安装KDK。</p>
+</li>
+<li><p>关闭SIP: 由于后面需要运行未签名的内核扩展所以需要先关闭SIP，在虚拟机开机的时候按Command+R进入恢复模式(要多试几次)，然后在终端输入<code>csrutil disable</code>。顺便把KDK里面的开发内核拷贝命令如下:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /Library/Developer/KDKs/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development /Systems/Library/Kernels</div></pre></td></tr></table></figure>
+<ul>
+<li>设置boot-args: 为了将虚拟机设置成调试模式，需要使用<code>nvram</code>设置<code>boot-args</code>，命令如下:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nvram boot-args=&quot;debug=0x141 kext-dev-mode=1 kcsuffix=development pmuflags=1 -v&quot;</div></pre></td></tr></table></figure>
+<p>debug=0x141: 含义可以在<a href="https://developer.apple.com/library/content/documentation/Darwin/Conceptual/KernelProgramming/build/build.html#//apple_ref/doc/uid/TP30000905-CH221-BABDGEGF" target="_blank" rel="external">Kernel Programming Guide</a>找到，这里使用的是(DB_HALT | DB_ARP | DB_LOG_PI_SCRN)</p>
+<p>kext-dev-mode=1: 允许加载未签名kext</p>
+<p>kcsuffix=development: 指定加载上面拷贝的kernel.development</p>
+<p>pmuflags=1: 关闭定时器</p>
+<p>-v: 显示内核加载信息</p>
+<ul>
+<li>清除kext缓存: 先运行<code>uanme -v</code>查看xnu源码版本，然后运行<code>sudo kextcache -invalidate /</code>和<code>sudo reboot</code>清除内核缓存使用新的内核加载然后重启，重启之后被调试的系统会显示IP等待被调试器附加如下图:</li>
+</ul>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-184118.png" alt=""></p>
+<ul>
+<li>配置源码进行调试: 为了能够在调试的时候能对应到源码，从<a href="https://opensource.apple.com/tarballs/xnu/" target="_blank" rel="external">苹果开源代码</a>下载上一步看到的xnu版本的代码放到<code>/Library/Caches/com.apple.xbs/Sources/xnu/</code>下面。并将如下设置加到<code>~/.lldbinit</code>文件:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">settings set target.load-script-from-symbol-file true</div></pre></td></tr></table></figure>
+<p>然后运行如下命令就可以开始内核调试:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">lldb /Library/Developer/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development</div><div class="line">(lldb) kdp-remote 虚拟机IP地址</div><div class="line">.........</div><div class="line">Process 1 stopped</div><div class="line">* thread #2, name = &apos;0xffffff800b777b00&apos;, queue = &apos;0x0&apos;, stop reason = signal SIGSTOP</div><div class="line">    frame #0: 0xffffff800520ea14 kernel.development`kdp_register_send_receive(send=(IONetworkingFamily`IOKernelDebugger::kdpTransmitDispatcher(void*, unsigned int) at IOKernelDebugger.cpp:369), receive=(IONetworkingFamily`IOKernelDebugger::kdpReceiveDispatcher(void*, unsigned int*, unsigned int) at IOKernelDebugger.cpp:353)) at kdp_udp.c:478 [opt]</div><div class="line">   475 	kdp_unregister_send_receive(</div><div class="line">   476 		__unused kdp_send_t	send,</div><div class="line">   477 		__unused kdp_receive_t	receive)</div><div class="line">-&gt; 478 	&#123;</div><div class="line">   479 		if (current_debugger == KDP_CUR_DB)</div><div class="line">   480 			current_debugger = NO_CUR_DB;</div><div class="line">   481 		kdp_flag &amp;= ~KDP_READY;</div><div class="line">Target 0: (kernel.development) stopped.</div><div class="line">(lldb)</div></pre></td></tr></table></figure>
+<h3 id="编写内核扩展"><a href="#编写内核扩展" class="headerlink" title="编写内核扩展"></a>编写内核扩展</h3><p>环境准备好之后就可以开始编写和调试内核扩展了，编写的过程还是在自己的系统完成然后在拷贝到虚拟机里面所以最好保证主系统和虚拟机系统大版本一致，首先使用Xcode就可以通过如下方式直接创建内核扩展模块。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-112922.png" alt=""></p>
+<p>创建出来的工程中会有如下两个函数，分别是驱动加载和卸载时调用的函数，一般用于加载的时候初始化设备驱动、hook函数，卸载的时候还原hook、删除设备驱动等等:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#include &lt;mach/mach_types.h&gt;</div><div class="line">#include &lt;libkern/libkern.h&gt;   //printf所在头文件</div><div class="line"></div><div class="line">kern_return_t HelloWorld_start(kmod_info_t * ki, void *d);</div><div class="line">kern_return_t HelloWorld_stop(kmod_info_t *ki, void *d);</div><div class="line"></div><div class="line">kern_return_t HelloWorld_start(kmod_info_t * ki, void *d)</div><div class="line">&#123;</div><div class="line">    asm(&quot;int $3&quot;);</div><div class="line">    printf(&quot;HelloWorld_start...\n&quot;);</div><div class="line">    return KERN_SUCCESS;</div><div class="line">&#125;</div><div class="line"></div><div class="line">kern_return_t HelloWorld_stop(kmod_info_t *ki, void *d)</div><div class="line">&#123;</div><div class="line">    printf(&quot;HelloWorld_stop...\n&quot;);</div><div class="line">    return KERN_SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>分别在上面两个函数中使用printf打印输出，在kext中printf函数是在libkern中的，所以要include该头文件。另外为了在加载的时候能找到符号还要在<code>Info.plist</code>中的<code>OSBundleLibraries</code>加上<code>com.apple.kpi.libkern    16.0.0</code>，后面这个版本号可以在被调试的机器上面运行<code>kextstat</code>看到， 在<code>Build Setting</code>设置<code>Debug Information Format</code>为<code>DWARF with DSYM File</code> 即在Debug也生成符号文件方便源码调试， 为了让调试器主动断下来便在模块加载的时候使用<code>int 3</code>主要触发断点。</p>
+<p>使用<code>scp ./HelloWorld.kext xxx@10.xx.xx.xx:/Users/xxxx/Desktop/</code>将生成的<code>HelloWorld.kext</code>文件拷贝到被调试的机器，在这之前需要在被调试机器上的系统偏好设置-共享开启远程登录。最后使用如下命令修改用户组并加载以及卸载:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo chown -R root:wheel ./HelloWorld.kext</div><div class="line">sudo kextload ./HelloWorld.kext</div><div class="line">sudo kextutil ./HelloWorld.kext   //可以查看加载出错的原因</div><div class="line">sudo kextunload ./HelloWorld.kext</div></pre></td></tr></table></figure>
+<p>使用如下命令可以查看在模块中的输出日志:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo dmesg | tail -n 10</div></pre></td></tr></table></figure>
+<p>并且在加载的时候会主动触发断点并关联到本地的符号文件对应的源码的对应行如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Loading 1 kext modules . done.</div><div class="line">Process 1 stopped</div><div class="line">* thread #17, name = &apos;0xffffff801a9be1a0&apos;, queue = &apos;0x0&apos;, stop reason = EXC_BREAKPOINT (code=3, subcode=0x0)</div><div class="line">    frame #0: 0xffffff7f95c61f21 HelloWorld`HelloWorld_start(ki=0xffffff7f95c62000, d=0x0000000000000000) at HelloWorld.c:17</div><div class="line">   14</div><div class="line">   15  	kern_return_t HelloWorld_start(kmod_info_t * ki, void *d)</div><div class="line">   16  	&#123;</div><div class="line">-&gt; 17  	    asm(&quot;int $3&quot;);</div><div class="line">   18  	    printf(&quot;HelloWorld_start...\n&quot;);</div><div class="line">   19  	    return KERN_SUCCESS;</div><div class="line">   20  	&#125;</div><div class="line">Target 0: (kernel.development) stopped.</div><div class="line">(lldb)</div></pre></td></tr></table></figure>
+<h3 id="内核反调试"><a href="#内核反调试" class="headerlink" title="内核反调试"></a>内核反调试</h3><p>之前在<a href="http://www.alonemonkey.com/2017/05/25/antiantidebug/">关于反调试&amp;反反调试那些事</a>中讲到一些反调试的方法和过反调试的方法，但是在应用层的话需要对每个应用都进行patch hook，而通过内核扩展模块可以直接从内核模块来接管系统调用针对调试检测和禁止附加的系统调用进行修改就行了。</p>
+<p>我们知道在Windows平台有一个叫SSDT的东西，SSDT 的全称是 System Services Descriptor Table，系统服务描述符表，里面保存 Windows 系统服务地址的数组，通过修改该数组的函数地址就可以达到hook的效果，而在XNU中也有一个系统调用的表叫sysent，在<code>bsd/sys/sysent.h</code>可以找到其定义:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">struct sysent &#123;		/* system call table */</div><div class="line">	sy_call_t	*sy_call;	/* implementing function */</div><div class="line">#if CONFIG_REQUIRES_U32_MUNGING || (__arm__ &amp;&amp; (__BIGGEST_ALIGNMENT__ &gt; 4))</div><div class="line">	sy_munge_t	*sy_arg_munge32; /* system call arguments munger for 32-bit process */</div><div class="line">#endif</div><div class="line">	int32_t		sy_return_type; /* system call return types */</div><div class="line">	int16_t		sy_narg;	/* number of args */</div><div class="line">	uint16_t	sy_arg_bytes;	/* Total size of arguments in bytes for</div><div class="line">					 * 32-bit system calls</div><div class="line">					 */</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>所以如果能够找到这个表在内存中的位置然后修改其中ptrace和sysctl在表中对应的sy_call就可以接管ptrace和sysctl的调用了，但是因为这个符号不导出只能从内核文件分析找到在内存在模块加载的基地址然后加上文件中对应的位置确定sysent。首先使用IDA打开文件<code>/Library/Developer/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development</code>搜索找到符号<code>sysent</code>位于<code>__constdata</code>处，根据上面的结构体将IDA显示结果手动解析如下图所示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/WX20171120-172025.png" alt=""></p>
+<p>可以通过搜索sysent表中前面几个符号的地址来确定sysent在<code>__constdata</code>的位置，由于KASLR所以首先要找到内核模块加载后在内存中的基地址，在10.11之后可以通过<code>vm_kernel_unslide_or_perm_external</code>来计算偏移，之前的话可以在内存中搜索文件头:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">m_offset_t func_address = (vm_offset_t) vm_kernel_unslide_or_perm_external;</div><div class="line">vm_offset_t func_address_unslid = 0;</div><div class="line">vm_kernel_unslide_or_perm_external(func_address, &amp;func_address_unslid);</div><div class="line">g_kernel_slide = func_address - func_address_unslid;</div></pre></td></tr></table></figure>
+<p>得到内核加载在内存中的偏移之后剩下就是macho文件格式的解析与处理，首先获取<code>__CONST,__constdata</code>并该section中找<code>sysent</code>所在的位置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">struct sysent * find_sysent_table()&#123;</div><div class="line">    if (g_sysent_table) &#123;</div><div class="line">        return g_sysent_table;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    mach_header_t* kernel_header = find_kernel_header();</div><div class="line"></div><div class="line">    if (!kernel_header) &#123;</div><div class="line">        return NULL;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // The first three entries of the sysent table point to these functions.</div><div class="line">    sy_call_t *nosys = (sy_call_t *) kernel_find_symbol(&quot;_nosys&quot;);</div><div class="line">    sy_call_t *exit = (sy_call_t *) kernel_find_symbol(&quot;_exit&quot;);</div><div class="line">    sy_call_t *fork = (sy_call_t *) kernel_find_symbol(&quot;_fork&quot;);</div><div class="line">    if (!nosys || !exit || !fork) &#123;</div><div class="line">        return NULL;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    const char *data_segment_name;</div><div class="line">    const char *const_section_name;</div><div class="line">    if (macOS_Sierra()) &#123;</div><div class="line">        data_segment_name = &quot;__CONST&quot;;</div><div class="line">        const_section_name = &quot;__constdata&quot;;</div><div class="line">    &#125; else &#123;</div><div class="line">        data_segment_name = &quot;__DATA&quot;;</div><div class="line">        const_section_name = &quot;__const&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    section_t* section = macho_find_section(kernel_header, data_segment_name, const_section_name);</div><div class="line"></div><div class="line">    if(!section)&#123;</div><div class="line">        return NULL;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    vm_offset_t offset;</div><div class="line">    for (offset = 0; offset &lt; section-&gt;size; offset += 16) &#123;</div><div class="line">        struct sysent *table = (struct sysent *) (section-&gt;addr + offset);</div><div class="line">        if (table-&gt;sy_call != nosys) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line">        vm_offset_t next_entry_offset = sizeof(struct sysent);</div><div class="line">        if (OSX_Mavericks()) &#123;</div><div class="line">            next_entry_offset = sizeof(struct sysent_mavericks);</div><div class="line">        &#125;</div><div class="line">        struct sysent *next_entry = (struct sysent *)</div><div class="line">        ((vm_offset_t)table + next_entry_offset);</div><div class="line">        if (next_entry-&gt;sy_call != exit) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line">        next_entry = (struct sysent *)</div><div class="line">        ((vm_offset_t)next_entry + next_entry_offset);</div><div class="line">        if (next_entry-&gt;sy_call != fork) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        g_sysent_table = table;</div><div class="line">        return g_sysent_table;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return NULL;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获取到<code>sysent</code>之后就可以直接保存原来的<code>sy_call</code>然后替换<code>sy_call</code>的地址为我们自己的实现就可以接管系统调用了，由于<code>__CONST,__constdata</code>默认是只读的所以写之前要先关闭写保护写完之后再还原:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">kern_return_t anti_ptrace(int cmd)&#123;</div><div class="line">    /* Mountain Lion (10.8+) moved sysent[] to read-only section */</div><div class="line">    kwrite_on();</div><div class="line"></div><div class="line">    /*</div><div class="line">     * we check if the syscalls had been already assigned, because we get kernel panic if we overwrite the syscall with same function</div><div class="line">     */</div><div class="line">    if(cmd == DISABLE &amp;&amp; g_sysent_table[SYS_ptrace].sy_call != (sy_call_t *)sys_ptrace)&#123;</div><div class="line">        if(sys_ptrace != NULL)&#123;</div><div class="line">            /* restore pointer to the original function */</div><div class="line">            g_sysent_table[SYS_ptrace].sy_call = (sy_call_t *)sys_ptrace;</div><div class="line"></div><div class="line">            /* remove the flag that indicates the hooked status */</div><div class="line">            g_hooked_functions &amp;= ~HK_PTRACE;</div><div class="line">        &#125;</div><div class="line">    &#125;else if(cmd == ENABLE &amp;&amp; !(g_hooked_functions &amp; HK_PTRACE))&#123;</div><div class="line">        /* save address of the real function */</div><div class="line">        sys_ptrace = (void *)g_sysent_table[SYS_ptrace].sy_call;</div><div class="line"></div><div class="line">        /* hook the syscall by replacing the pointer in sysent */</div><div class="line">        g_sysent_table[SYS_ptrace].sy_call = (sy_call_t *)ar_ptrace;</div><div class="line"></div><div class="line">        /* we set our global variable g_hooked_functions to know this function has been hooked */</div><div class="line">        g_hooked_functions |= HK_PTRACE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    kwrite_off();</div><div class="line"></div><div class="line">    return KERN_SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后编译加载kext然后使用如下代码测试效果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#import &lt;dlfcn.h&gt;</div><div class="line">#import &lt;sys/sysctl.h&gt;</div><div class="line"></div><div class="line">#ifndef PT_DENY_ATTACH</div><div class="line">#define PT_DENY_ATTACH 31</div><div class="line">#endif</div><div class="line">typedef int (*ptrace_ptr_t)(int _request, pid_t _pid, caddr_t _addr, int _data);</div><div class="line"></div><div class="line">BOOL isDebuggerPresent()&#123;</div><div class="line">    int name[4];                </div><div class="line"></div><div class="line">    struct kinfo_proc info;     </div><div class="line">    size_t info_size = sizeof(info);</div><div class="line"></div><div class="line">    info.kp_proc.p_flag = 0;</div><div class="line"></div><div class="line">    name[0] = CTL_KERN;</div><div class="line">    name[1] = KERN_PROC;</div><div class="line">    name[2] = KERN_PROC_PID;</div><div class="line">    name[3] = getpid();</div><div class="line"></div><div class="line">    if(sysctl(name, 4, &amp;info, &amp;info_size, NULL, 0) == -1)&#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return ((info.kp_proc.p_flag &amp; P_TRACED) != 0);</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, const char * argv[]) &#123;</div><div class="line">    @autoreleasepool &#123;</div><div class="line">        // insert code here...</div><div class="line">        void *handle = dlopen(0, RTLD_GLOBAL | RTLD_NOW);</div><div class="line">        ptrace_ptr_t ptrace_ptr = (ptrace_ptr_t)dlsym(handle, &quot;ptrace&quot;);</div><div class="line">        ptrace_ptr(PT_DENY_ATTACH, 0, 0, 0);</div><div class="line"></div><div class="line">        NSLog(@&quot;pass ptrace&quot;);</div><div class="line"></div><div class="line">        if(isDebuggerPresent())&#123;</div><div class="line">            return 0;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        NSLog(@&quot;pass sysctl&quot;);</div><div class="line">    &#125;</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用lldb调试:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">lldb ./demo</div><div class="line">(lldb) target create &quot;./demo&quot;</div><div class="line">Current executable set to &apos;./demo&apos; (x86_64).</div><div class="line">2017-11-18 14:06:22.370273 demo[403:4277] pass ptrace</div><div class="line">2017-11-18 14:06:22.370346 demo[403:4277] pass sysctl</div><div class="line">Process 403 exited with status = 0 (0x00000000)</div></pre></td></tr></table></figure>
+<p>相关代码: <a href="https://github.com/AloneMonkey/MacKext" target="_blank" rel="external">MacKext</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag">#逆向</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/26/cocoapods-wechat-message/" rel="next" title="使用 CocoaPods 给微信集成 SDK 打印收发消息">
+                <i class="fa fa-chevron-left"></i> 使用 CocoaPods 给微信集成 SDK 打印收发消息
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">2.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写内核扩展"><span class="nav-number">3.</span> <span class="nav-text">编写内核扩展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核反调试"><span class="nav-number">4.</span> <span class="nav-text">内核反调试</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="powered-by">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div class="theme-info">
+  <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'alonemonkey';
+      var disqus_identifier = '2017/11/20/get-start-antidebug-kext/';
+      var disqus_title = '动手写一个简单的Mac内核反调试扩展';
+      var disqus_url = 'http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
