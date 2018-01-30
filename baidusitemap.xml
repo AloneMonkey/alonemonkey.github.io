@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://www.alonemonkey.com/2018/01/30/frida-ios-dump/</loc>
+    <lastmod>2018-01-30T16:19:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>一条命令完成砸壳</title>
+        <pubTime>2018-01-29T16:00:00.000Z</pubTime>
+        
+        <tag>逆向</tag>
+         
+         
+           
+             
+              <breadCrumb title="逆向" url="http://www.alonemonkey.com/categories/%E9%80%86%E5%90%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.alonemonkey.com/2017/11/20/get-start-antidebug-kext/</loc>
     <lastmod>2017-11-20T11:32:22.000Z</lastmod>
     <data>

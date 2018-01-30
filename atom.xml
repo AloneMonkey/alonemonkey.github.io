@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.alonemonkey.com/"/>
-  <updated>2017-11-20T11:32:22.000Z</updated>
+  <updated>2018-01-30T16:19:52.000Z</updated>
   <id>http://www.alonemonkey.com/</id>
   
   <author>
@@ -14,6 +14,48 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一条命令完成砸壳</title>
+    <link href="http://www.alonemonkey.com/2018/01/30/frida-ios-dump/"/>
+    <id>http://www.alonemonkey.com/2018/01/30/frida-ios-dump/</id>
+    <published>2018-01-29T16:00:00.000Z</published>
+    <updated>2018-01-30T16:19:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>最早的砸壳工具是stefanesser写的<a href="https://github.com/stefanesser/dumpdecrypted" target="_blank" rel="external">dumpdecrypted</a>，通过手动注入然后启动应用程序在内存进行dump解密后的内存实现砸壳，这种砸壳只能砸主App可执行文件。</p>
+<p>对于应用程序里面存在framework的情况可以使用conradev的<a href="https://github.com/conradev/dumpdecrypted" target="_blank" rel="external">dumpdecrypted</a>，通过_dyld_register_func_for_add_image注册回调对每个模块进行dump解密。</p>
+<p>但是这种还是需要拷贝dumpdecrypted.dylib，然后找路径什么的，还是挺麻烦的。所以笔者干脆放到<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>模板变成一个tweak的形式<a href="https://github.com/AloneMonkey/dumpdecrypted" target="_blank" rel="external">dumpdecrypted</a>，这样填写目标bundle id然后看日志把文件拷贝出来就可以了。</p>
+<p>但是还是很麻烦，需要拷贝文件自己还原ipa，然后有了KJCracks的<a href="https://github.com/KJCracks/Clutch" target="_blank" rel="external">Clutch</a>通过posix_spawnp创建进程然后dump直接生成ipa包在设备，可以说是很方便了。这个是工具在使用的时候大部分应用会出报错，此外生成的包还需要自己拷贝。</p>
+<h3 id="一键dump"><a href="#一键dump" class="headerlink" title="一键dump"></a>一键dump</h3><p>人都是想偷懒的，于是便有了本文将要介绍的<a href="https://github.com/AloneMonkey/frida-ios-dump" target="_blank" rel="external">frida-ios-dump</a>，该工具基于frida提供的强大功能通过注入js实现内存dump然后通过python自动拷贝到电脑生成ipa文件，通过以下方式配置完成之后真的就是一条命令砸壳。</p>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><p>首先上面也说了该工具基于frida，所以首先要在手机和mac电脑上面安装frida，安装方式参数官网的文档:<a href="https://www.frida.re/docs/home/" target="_blank" rel="external">https://www.frida.re/docs/home/</a></p>
+<p>如果mac端报如下错:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Uninstalling a distutils installed project (six) has been deprecated and will be removed in a future version. This is due to the fact that uninstalling a distutils project will only partially uninstall the project.</div></pre></td></tr></table></figure>
+<p>使用如下命令安装即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip install frida –upgrade –ignore-installed six</div></pre></td></tr></table></figure>
+<p>然后将越狱设备通过USB连上电脑进行端口映射:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iproxy 2222 22</div></pre></td></tr></table></figure>
+<p>到此环境就配置好了，接下来就可以一键砸壳了！ (另当前python基于2.x的语法，先切换到python 2.x的环境</p>
+<h3 id="一键砸壳"><a href="#一键砸壳" class="headerlink" title="一键砸壳"></a>一键砸壳</h3><p>最简单的方式直接使用./dump + 应用显示的名字即可，如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">➜  frida-ios-dump ./dump.py 微信</div><div class="line">open target app......</div><div class="line">Waiting for the application to open......</div><div class="line">start dump target app......</div><div class="line">start dump /var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/WeChat</div><div class="line">WeChat                                        100%   68MB  11.4MB/s   00:05</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/WCDB.framework/WCDB</div><div class="line">WCDB                                          100% 2555KB  11.0MB/s   00:00</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/MMCommon.framework/MMCommon</div><div class="line">MMCommon                                      100%  979KB  10.6MB/s   00:00</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/MultiMedia.framework/MultiMedia</div><div class="line">MultiMedia                                    100% 6801KB  11.1MB/s   00:00</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/mars.framework/mars</div><div class="line">mars                                          100% 7462KB  11.1MB/s   00:00</div><div class="line">AppIcon60x60@2x.png                           100% 2253   230.9KB/s   00:00</div><div class="line">AppIcon60x60@3x.png                           100% 4334   834.8KB/s   00:00</div><div class="line">AppIcon76x76@2x~ipad.png                      100% 2659   620.6KB/s   00:00</div><div class="line">AppIcon76x76~ipad.png                         100% 1523   358.0KB/s   00:00</div><div class="line">AppIcon83.5x83.5@2x~ipad.png                  100% 2725   568.9KB/s   00:00</div><div class="line">Assets.car                                    100%   10MB  11.1MB/s   00:00</div><div class="line">.......</div><div class="line">AppIntentVocabulary.plist                     100%  197    52.9KB/s   00:00</div><div class="line">AppIntentVocabulary.plist                     100%  167    43.9KB/s   00:00</div><div class="line">AppIntentVocabulary.plist                     100%  187    50.2KB/s   00:00</div><div class="line">InfoPlist.strings                             100% 1720   416.4KB/s   00:00</div><div class="line">TipsPressTalk@2x.png                          100%   14KB   2.2MB/s   00:00</div><div class="line">mm.strings                                    100%  404KB  10.2MB/s   00:00</div><div class="line">network_setting.html                          100% 1695   450.4KB/s   00:00</div><div class="line">InfoPlist.strings                             100% 1822   454.1KB/s   00:00</div><div class="line">mm.strings                                    100%  409KB  10.2MB/s   00:00</div><div class="line">network_setting.html                          100% 1819   477.5KB/s   00:00</div><div class="line">InfoPlist.strings                             100% 1814   466.8KB/s   00:00</div><div class="line">mm.strings                                    100%  409KB  10.3MB/s   00:00</div><div class="line">network_setting.html                          100% 1819   404.9KB/s   00:00</div></pre></td></tr></table></figure>
+<p>如果存在应用名称重复了怎么办呢？没关系首先使用如下命令查看安装的应用的名字和bundle id:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">➜  frida-ios-dump git:(master) ✗ ./dump.py -l</div><div class="line">  PID  Name                       Identifier</div><div class="line">-----  -------------------------  ----------------------------------------</div><div class="line"> 9661  App Store                  com.apple.AppStore</div><div class="line">16977  Moment                     com.kevinholesh.Moment</div><div class="line"> 1311  Safari                     com.apple.mobilesafari</div><div class="line">16586  信息                         com.apple.MobileSMS</div><div class="line"> 4147  微信                         com.tencent.xin</div><div class="line">10048  相机                         com.apple.camera</div><div class="line"> 7567  设置                         com.apple.Preferences</div><div class="line">    -  CrashReporter              crash-reporter</div><div class="line">    -  Cydia                      com.saurik.Cydia</div><div class="line">    -  通讯录                        com.apple.MobileAddressBook</div><div class="line">    -  邮件                         com.apple.mobilemail</div><div class="line">    -  音乐                         com.apple.Music</div><div class="line">    ......</div></pre></td></tr></table></figure>
+<p>然后使用如下命令对指定的bundle id应用进行砸壳即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  frida-ios-dump git:(master) ✗ ./dump.py -b com.tencent.xin</div></pre></td></tr></table></figure>
+<p>等待自动砸壳传输完成之后便会到当前目录生成一个解密后的ipa文件，这个时候赶紧拖到<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>开始逆向之旅吧！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      由于现有砸壳工具太繁琐，笔者基于frida写了一个一条命令就能搞定砸壳的工具。
+    
+    </summary>
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/categories/%E9%80%86%E5%90%91/"/>
+    
+    
+      <category term="逆向" scheme="http://www.alonemonkey.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>动手写一个简单的Mac内核反反调试扩展</title>
@@ -397,6 +439,80 @@
   </entry>
   
   <entry>
+    <title>iOS成长之路开售！</title>
+    <link href="http://www.alonemonkey.com/2017/06/02/ios-book-pr/"/>
+    <id>http://www.alonemonkey.com/2017/06/02/ios-book-pr/</id>
+    <published>2017-06-01T16:00:00.000Z</published>
+    <updated>2017-06-02T06:17:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>经过 3 个月的筹备 iOS 成长之路第二期和大家见面啦。经历了第一期的蹒跚发布后，终于在盛夏迎来了更好的第二期。这一期相比第一期更有料了，从第一期的 8 篇文章增加到 12 篇文章。</p>
+<p>这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><p>Chris Lattner 访谈录(下)</p>
+<p>译者：@故胤道长，亚马逊 iOS 工程师，曾就职于 Uber。</p>
+<p>博客：<a href="http://www.jianshu.com/u/8d5b91490ca5" target="_blank" rel="external">http://www.jianshu.com/u/8d5b91490ca5</a></p>
+</li>
+<li><p>动手玩 LLVM</p>
+<p>作者：戴铭，滴滴出行技术专家。最近正在研究 iOS 编译相关底层技术，用来解决工程优化问题。</p>
+<p>博客：<a href="https://ming1016.github.io/" target="_blank" rel="external">https://ming1016.github.io/</a></p>
+</li>
+<li><p>Swift 性能分析</p>
+<p>作者：唐巧，小猿搜题产品技术负责人，6 年 iOS 开发经验，《iOS开发进阶》作者。</p>
+<p>博客：<a href="http://blog.devtang.com/about/" target="_blank" rel="external">http://blog.devtang.com/about/</a></p>
+</li>
+<li><p>监控SDK的架构设计实践(<strong>6月5号上线</strong>)</p>
+<p>作者：王朝成， @圣迪 , 饿了么移动架构师。耕耘移动基础设施的建设，致力于移动大数据与人工智能的结合</p>
+<p>博客：<a href="http://www.jianshu.com/u/a774b58c9b89" target="_blank" rel="external">http://www.jianshu.com/u/a774b58c9b89</a></p>
+</li>
+<li><p>初识 LLVM</p>
+<p>作者：@Alone_Monkey， 网易 iOS 工程师</p>
+<p>博客：<a href="http://www.blogfshare.com" target="_blank" rel="external">www.blogfshare.com</a></p>
+</li>
+<li><p>TCP / IP 漫游</p>
+<p>作者：@mrriddler，蚂蚁金服 iOS 工程师。</p>
+<p>博客：<a href="http://blog.mrriddler.com" target="_blank" rel="external">blog.mrriddler.com</a></p>
+</li>
+<li><p>复用的精妙 - UITableView 复用技术原理分析</p>
+<p>作者：冬瓜，微博：@冬瓜争做全栈瓜，爱奇艺 iOS 工程师。</p>
+<p>博客：<a href="http://www.desgard.com" target="_blank" rel="external">http://www.desgard.com</a></p>
+</li>
+<li><p>试图取代 TCP 的 QUIC 协议到底是什么</p>
+<p>作者：张星宇，@bestswifter，百度 iOS 工程师，喜欢探索问题的本质，讨厌一切不说人话的描述。正在学习前端，励志成为一名大前端全栈工程师。</p>
+<p>博客：<a href="https://bestswifter.com/" target="_blank" rel="external">https://bestswifter.com/</a></p>
+</li>
+<li><p>AFNetworking 源码分析</p>
+<p>作者： @涂耀辉 ，今日头条 iOS 工程师</p>
+<p>博客：<a href="http://www.jianshu.com/u/14431e509ae8" target="_blank" rel="external">http://www.jianshu.com/u/14431e509ae8</a></p>
+</li>
+<li><p>SpriteKit 入门与实践</p>
+<p>作者：郭鹏，丁香园资深 iOS 工程师</p>
+</li>
+<li><p>基于 Rx 的网络层实践</p>
+<p>作者：李富强，@李富强Jason，美团外卖 iOS 架构师<br>博客：<a href="http://blog.csdn.net/colorapp" target="_blank" rel="external">http://blog.csdn.net/colorapp</a></p>
+</li>
+<li><p>iOS 组件化 —— 路由设计思路分析</p>
+<p>作者： @一缕殇流化隐半边冰霜，饿了么 iOS 工程师，微博 @halfrost</p>
+<p>博客：<a href="http://www.jianshu.com/u/12201cdd5d7a" target="_blank" rel="external">http://www.jianshu.com/u/12201cdd5d7a</a></p>
+</li>
+</ul>
+<h2 id="淘宝购买地址"><a href="#淘宝购买地址" class="headerlink" title="淘宝购买地址"></a>淘宝购买地址</h2><p><a href="https://item.taobao.com/item.htm?id=552290531953" target="_blank" rel="external">https://item.taobao.com/item.htm?id=552290531953</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/225849-9d5cec83919493f9.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.alonemonkey.com/categories/iOS/"/>
+    
+    
+      <category term="iOS" scheme="http://www.alonemonkey.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title>0x01 Xcode调试一个LLVM Pass</title>
     <link href="http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/"/>
     <id>http://www.alonemonkey.com/2017/06/02/writing-an-llvm-pass/</id>
@@ -487,80 +603,6 @@
     
     
       <category term="llvm" scheme="http://www.alonemonkey.com/tags/llvm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS成长之路开售！</title>
-    <link href="http://www.alonemonkey.com/2017/06/02/ios-book-pr/"/>
-    <id>http://www.alonemonkey.com/2017/06/02/ios-book-pr/</id>
-    <published>2017-06-01T16:00:00.000Z</published>
-    <updated>2017-06-02T06:17:34.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>经过 3 个月的筹备 iOS 成长之路第二期和大家见面啦。经历了第一期的蹒跚发布后，终于在盛夏迎来了更好的第二期。这一期相比第一期更有料了，从第一期的 8 篇文章增加到 12 篇文章。</p>
-<p>这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。</p>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><p>Chris Lattner 访谈录(下)</p>
-<p>译者：@故胤道长，亚马逊 iOS 工程师，曾就职于 Uber。</p>
-<p>博客：<a href="http://www.jianshu.com/u/8d5b91490ca5" target="_blank" rel="external">http://www.jianshu.com/u/8d5b91490ca5</a></p>
-</li>
-<li><p>动手玩 LLVM</p>
-<p>作者：戴铭，滴滴出行技术专家。最近正在研究 iOS 编译相关底层技术，用来解决工程优化问题。</p>
-<p>博客：<a href="https://ming1016.github.io/" target="_blank" rel="external">https://ming1016.github.io/</a></p>
-</li>
-<li><p>Swift 性能分析</p>
-<p>作者：唐巧，小猿搜题产品技术负责人，6 年 iOS 开发经验，《iOS开发进阶》作者。</p>
-<p>博客：<a href="http://blog.devtang.com/about/" target="_blank" rel="external">http://blog.devtang.com/about/</a></p>
-</li>
-<li><p>监控SDK的架构设计实践(<strong>6月5号上线</strong>)</p>
-<p>作者：王朝成， @圣迪 , 饿了么移动架构师。耕耘移动基础设施的建设，致力于移动大数据与人工智能的结合</p>
-<p>博客：<a href="http://www.jianshu.com/u/a774b58c9b89" target="_blank" rel="external">http://www.jianshu.com/u/a774b58c9b89</a></p>
-</li>
-<li><p>初识 LLVM</p>
-<p>作者：@Alone_Monkey， 网易 iOS 工程师</p>
-<p>博客：<a href="http://www.blogfshare.com" target="_blank" rel="external">www.blogfshare.com</a></p>
-</li>
-<li><p>TCP / IP 漫游</p>
-<p>作者：@mrriddler，蚂蚁金服 iOS 工程师。</p>
-<p>博客：<a href="http://blog.mrriddler.com" target="_blank" rel="external">blog.mrriddler.com</a></p>
-</li>
-<li><p>复用的精妙 - UITableView 复用技术原理分析</p>
-<p>作者：冬瓜，微博：@冬瓜争做全栈瓜，爱奇艺 iOS 工程师。</p>
-<p>博客：<a href="http://www.desgard.com" target="_blank" rel="external">http://www.desgard.com</a></p>
-</li>
-<li><p>试图取代 TCP 的 QUIC 协议到底是什么</p>
-<p>作者：张星宇，@bestswifter，百度 iOS 工程师，喜欢探索问题的本质，讨厌一切不说人话的描述。正在学习前端，励志成为一名大前端全栈工程师。</p>
-<p>博客：<a href="https://bestswifter.com/" target="_blank" rel="external">https://bestswifter.com/</a></p>
-</li>
-<li><p>AFNetworking 源码分析</p>
-<p>作者： @涂耀辉 ，今日头条 iOS 工程师</p>
-<p>博客：<a href="http://www.jianshu.com/u/14431e509ae8" target="_blank" rel="external">http://www.jianshu.com/u/14431e509ae8</a></p>
-</li>
-<li><p>SpriteKit 入门与实践</p>
-<p>作者：郭鹏，丁香园资深 iOS 工程师</p>
-</li>
-<li><p>基于 Rx 的网络层实践</p>
-<p>作者：李富强，@李富强Jason，美团外卖 iOS 架构师<br>博客：<a href="http://blog.csdn.net/colorapp" target="_blank" rel="external">http://blog.csdn.net/colorapp</a></p>
-</li>
-<li><p>iOS 组件化 —— 路由设计思路分析</p>
-<p>作者： @一缕殇流化隐半边冰霜，饿了么 iOS 工程师，微博 @halfrost</p>
-<p>博客：<a href="http://www.jianshu.com/u/12201cdd5d7a" target="_blank" rel="external">http://www.jianshu.com/u/12201cdd5d7a</a></p>
-</li>
-</ul>
-<h2 id="淘宝购买地址"><a href="#淘宝购买地址" class="headerlink" title="淘宝购买地址"></a>淘宝购买地址</h2><p><a href="https://item.taobao.com/item.htm?id=552290531953" target="_blank" rel="external">https://item.taobao.com/item.htm?id=552290531953</a></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/225849-9d5cec83919493f9.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/600" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      这一期的内容也提供了更多的广度和深度，从基于 Rx 的网络层设计到 AFN 源码解析，从 Swift 性能分析到 LLVM 体验，从 SpriteKit 到 APM 监控 SDK 的架构设计。希望大家会喜欢这一期。
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://www.alonemonkey.com/categories/iOS/"/>
-    
-    
-      <category term="iOS" scheme="http://www.alonemonkey.com/tags/iOS/"/>
     
   </entry>
   
@@ -1336,79 +1378,6 @@
     <summary type="html">
     
       在开发中，除了前面讲到的注册或登录界面，打交道最后的应该是UITableView，来看看Rx中是怎么处理UITableView的。
-    
-    </summary>
-    
-      <category term="rxswift" scheme="http://www.alonemonkey.com/categories/rxswift/"/>
-    
-    
-      <category term="RxSwift" scheme="http://www.alonemonkey.com/tags/RxSwift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RxSwift学习之旅 - Observable 和 Driver</title>
-    <link href="http://www.alonemonkey.com/2017/03/28/rxswift-part-six/"/>
-    <id>http://www.alonemonkey.com/2017/03/28/rxswift-part-six/</id>
-    <published>2017-03-27T16:00:00.000Z</published>
-    <updated>2017-03-27T16:34:34.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="什么是Driver"><a href="#什么是Driver" class="headerlink" title="什么是Driver"></a>什么是Driver</h3><p><code>Driver</code>的出现是为了让我们在写UI层的响应式代码的时候更加直观。</p>
-<p>为什么它的名字叫<code>Driver</code>？它意图更好的通过数据去驱动我们的应用程序。</p>
-<p>比如:</p>
-<ul>
-<li>从数据模型去驱动UI</li>
-<li>使用其它UI元素的值去驱动UI</li>
-<li>…….</li>
-</ul>
-<p>在正常开发中，由于用户操作导致错误发生可能会使我们的应用程序崩溃。</p>
-<p>由于UI元素操作通常不是线程安全的，要保证在主线程操作。</p>
-<p>或者某个序列在有多个订阅者者时只需要<code>shareReplay(1)</code>。</p>
-<h3 id="经典例子"><a href="#经典例子" class="headerlink" title="经典例子"></a>经典例子</h3><p>先来看一下经典的例子，看看我们在正常的开发中可能会写出如下的代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .bind(to: resultCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">results</div><div class="line">    .bind(to: resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>这段代码的意图是：</p>
-<ul>
-<li>对用户的输入进行节流</li>
-<li>每次查询连接服务器搜索结果</li>
-<li>绑定结果到UI结果</li>
-</ul>
-<p>我们来看看这段代码有什么问题？</p>
-<ul>
-<li>如果<code>fetchAutoCompleteItems</code>发生了错误，网络错误或者解析出错，这个错误会导致取消所有绑定，UI界面也不会更新新的结果。</li>
-<li>如果<code>fetchAutoCompleteItems</code>在后台线程返回了结果，结果可能会在后台线程绑定到UI界面，这样会导致不确定的崩溃。</li>
-<li>结果绑定到了两个UI元素，意味着，每次用户搜索，会发送2次请求，这不是我们想要的行为。</li>
-</ul>
-<p>所以规范一点的写法应该是这样:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">            .observeOn(MainScheduler.instance)  // results are returned on MainScheduler</div><div class="line">            .catchErrorJustReturn([])           // in the worst case, errors are handled</div><div class="line">    &#125;</div><div class="line">    .shareReplay(1)                             // HTTP requests are shared and results replayed</div><div class="line">                                                // to all UI elements</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .bind(to: resultCount.rx.text)</div><div class="line">    .disposed(by: disposeBag)</div><div class="line"></div><div class="line">results</div><div class="line">    .bind(to: resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<p>要保证这些所有的情况都被处理在大的系统里面是很难的，这里有一种简单的方法哪就是使用<code>Driver</code>。来看下下面的例子:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">let results = query.rx.text.asDriver()        // This converts a normal sequence into a `Driver` sequence.</div><div class="line">    .throttle(0.3, scheduler: MainScheduler.instance)</div><div class="line">    .flatMapLatest &#123; query in</div><div class="line">        fetchAutoCompleteItems(query)</div><div class="line">            .asDriver(onErrorJustReturn: [])  // Builder just needs info about what to return in case of error.</div><div class="line">    &#125;</div><div class="line"></div><div class="line">results</div><div class="line">    .map &#123; &quot;\($0.count)&quot; &#125;</div><div class="line">    .drive(resultCount.rx.text)               // If there is a `drive` method available instead of `bindTo`,</div><div class="line">    .disposed(by: disposeBag)              // that means that the compiler has proven that all properties</div><div class="line">                                              // are satisfied.</div><div class="line">results</div><div class="line">    .drive(resultsTableView.rx.items(cellIdentifier: &quot;Cell&quot;)) &#123; (_, result, cell) in</div><div class="line">        cell.textLabel?.text = &quot;\(result)&quot;</div><div class="line">    &#125;</div><div class="line">    .disposed(by: disposeBag)</div></pre></td></tr></table></figure>
-<h3 id="Driver特性"><a href="#Driver特性" class="headerlink" title="Driver特性"></a>Driver特性</h3><p>上面改进后的版本发生了什么？首先第一个<code>asDriver</code>把<code>ControlProperty</code>对象转换成了<code>Driver</code>对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">query.rx.text.asDriver()</div></pre></td></tr></table></figure>
-<p><code>Driver</code>拥有<code>ControlProperty</code>的所有属性，其实它是在上面包了一层。</p>
-<p>第二个改变的地方是:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.asDriver(onErrorJustReturn: [])</div></pre></td></tr></table></figure>
-<p>任何的可被观察的序列都能转成<code>Driver</code>，只要满足以下3点:</p>
-<ul>
-<li>不能抛出错误</li>
-<li>订阅在主线程</li>
-<li>多个订阅者<code>shareReplay(1)</code></li>
-</ul>
-<p><code>asDriver(onErrorJustReturn: [])</code>其实等同于:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">let safeSequence = xs</div><div class="line">  .observeOn(MainScheduler.instance)       // observe events on main scheduler</div><div class="line">  .catchErrorJustReturn(onErrorJustReturn) // can&apos;t error out</div><div class="line">  .shareReplayLatestWhileConnected         // side effects sharing</div><div class="line">return Driver(raw: safeSequence)           // wrap it up</div></pre></td></tr></table></figure>
-<p>最后一点就是使用<code>drive</code>代替<code>bindTo</code>。</p>
-<p>所以下面的代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let intDriver = sequenceOf(1, 2, 3, 4, 5, 6)</div><div class="line">    .asDriver(onErrorJustReturn: 1)</div><div class="line">    .map &#123; $0 + 1 &#125;</div><div class="line">    .filter &#123; $0 &lt; 5 &#125;</div></pre></td></tr></table></figure>
-<p>等价:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let intObservable = sequenceOf(1, 2, 3, 4, 5, 6)</div><div class="line">    .observeOn(MainScheduler.sharedInstance)</div><div class="line">    .catchErrorJustReturn(1)</div><div class="line">    .map &#123; $0 + 1 &#125;</div><div class="line">    .filter &#123; $0 &lt; 5 &#125;</div><div class="line">    .shareReplay(1)</div></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过例子，大家也看到了什么时候应该使用<code>Driver</code>，如果你的代码需要满足上面三种情况的话，那么你可以使用<code>Driver</code>。否则如果你要多次切换线程、自己捕获传递错误、或者其它，可以仍用<code>Observable</code>。</p>
-<p>大家试着把上一篇讲的注册项目改成<code>Driver</code>。</p>
-<p>然后参考<code>Driver</code>的版本:</p>
-<p><a href="https://github.com/AloneMonkey/RxSwiftStudy" target="_blank" rel="external">RxSwiftRegisterDriver</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      什么是Driver，它有什么特点？和Observable用起来有哪些区别，我们来一起看看吧~ 
     
     </summary>
     

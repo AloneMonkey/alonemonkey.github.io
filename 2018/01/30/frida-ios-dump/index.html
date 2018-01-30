@@ -1,0 +1,811 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="逆向," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="由于现有砸壳工具太繁琐，笔者基于frida写了一个一条命令就能搞定砸壳的工具。">
+<meta name="keywords" content="逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一条命令完成砸壳">
+<meta property="og:url" content="http://www.alonemonkey.com/2018/01/30/frida-ios-dump/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="由于现有砸壳工具太繁琐，笔者基于frida写了一个一条命令就能搞定砸壳的工具。">
+<meta property="og:updated_time" content="2018-01-30T16:19:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一条命令完成砸壳">
+<meta name="twitter:description" content="由于现有砸壳工具太繁琐，笔者基于frida写了一个一条命令就能搞定砸壳的工具。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 一条命令完成砸壳 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一条命令完成砸壳
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-01-30T00:00:00+08:00" content="2018-01-30">
+              2018-01-30
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/逆向/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/01/30/frida-ios-dump/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/01/30/frida-ios-dump/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>最早的砸壳工具是stefanesser写的<a href="https://github.com/stefanesser/dumpdecrypted" target="_blank" rel="external">dumpdecrypted</a>，通过手动注入然后启动应用程序在内存进行dump解密后的内存实现砸壳，这种砸壳只能砸主App可执行文件。</p>
+<p>对于应用程序里面存在framework的情况可以使用conradev的<a href="https://github.com/conradev/dumpdecrypted" target="_blank" rel="external">dumpdecrypted</a>，通过_dyld_register_func_for_add_image注册回调对每个模块进行dump解密。</p>
+<p>但是这种还是需要拷贝dumpdecrypted.dylib，然后找路径什么的，还是挺麻烦的。所以笔者干脆放到<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>模板变成一个tweak的形式<a href="https://github.com/AloneMonkey/dumpdecrypted" target="_blank" rel="external">dumpdecrypted</a>，这样填写目标bundle id然后看日志把文件拷贝出来就可以了。</p>
+<p>但是还是很麻烦，需要拷贝文件自己还原ipa，然后有了KJCracks的<a href="https://github.com/KJCracks/Clutch" target="_blank" rel="external">Clutch</a>通过posix_spawnp创建进程然后dump直接生成ipa包在设备，可以说是很方便了。这个是工具在使用的时候大部分应用会出报错，此外生成的包还需要自己拷贝。</p>
+<h3 id="一键dump"><a href="#一键dump" class="headerlink" title="一键dump"></a>一键dump</h3><p>人都是想偷懒的，于是便有了本文将要介绍的<a href="https://github.com/AloneMonkey/frida-ios-dump" target="_blank" rel="external">frida-ios-dump</a>，该工具基于frida提供的强大功能通过注入js实现内存dump然后通过python自动拷贝到电脑生成ipa文件，通过以下方式配置完成之后真的就是一条命令砸壳。</p>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><p>首先上面也说了该工具基于frida，所以首先要在手机和mac电脑上面安装frida，安装方式参数官网的文档:<a href="https://www.frida.re/docs/home/" target="_blank" rel="external">https://www.frida.re/docs/home/</a></p>
+<p>如果mac端报如下错:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Uninstalling a distutils installed project (six) has been deprecated and will be removed in a future version. This is due to the fact that uninstalling a distutils project will only partially uninstall the project.</div></pre></td></tr></table></figure>
+<p>使用如下命令安装即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip install frida –upgrade –ignore-installed six</div></pre></td></tr></table></figure>
+<p>然后将越狱设备通过USB连上电脑进行端口映射:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iproxy 2222 22</div></pre></td></tr></table></figure>
+<p>到此环境就配置好了，接下来就可以一键砸壳了！ (另当前python基于2.x的语法，先切换到python 2.x的环境</p>
+<h3 id="一键砸壳"><a href="#一键砸壳" class="headerlink" title="一键砸壳"></a>一键砸壳</h3><p>最简单的方式直接使用./dump + 应用显示的名字即可，如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">➜  frida-ios-dump ./dump.py 微信</div><div class="line">open target app......</div><div class="line">Waiting for the application to open......</div><div class="line">start dump target app......</div><div class="line">start dump /var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/WeChat</div><div class="line">WeChat                                        100%   68MB  11.4MB/s   00:05</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/WCDB.framework/WCDB</div><div class="line">WCDB                                          100% 2555KB  11.0MB/s   00:00</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/MMCommon.framework/MMCommon</div><div class="line">MMCommon                                      100%  979KB  10.6MB/s   00:00</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/MultiMedia.framework/MultiMedia</div><div class="line">MultiMedia                                    100% 6801KB  11.1MB/s   00:00</div><div class="line">start dump /private/var/containers/Bundle/Application/6665AA28-68CC-4845-8610-7010E96061C6/WeChat.app/Frameworks/mars.framework/mars</div><div class="line">mars                                          100% 7462KB  11.1MB/s   00:00</div><div class="line">AppIcon60x60@2x.png                           100% 2253   230.9KB/s   00:00</div><div class="line">AppIcon60x60@3x.png                           100% 4334   834.8KB/s   00:00</div><div class="line">AppIcon76x76@2x~ipad.png                      100% 2659   620.6KB/s   00:00</div><div class="line">AppIcon76x76~ipad.png                         100% 1523   358.0KB/s   00:00</div><div class="line">AppIcon83.5x83.5@2x~ipad.png                  100% 2725   568.9KB/s   00:00</div><div class="line">Assets.car                                    100%   10MB  11.1MB/s   00:00</div><div class="line">.......</div><div class="line">AppIntentVocabulary.plist                     100%  197    52.9KB/s   00:00</div><div class="line">AppIntentVocabulary.plist                     100%  167    43.9KB/s   00:00</div><div class="line">AppIntentVocabulary.plist                     100%  187    50.2KB/s   00:00</div><div class="line">InfoPlist.strings                             100% 1720   416.4KB/s   00:00</div><div class="line">TipsPressTalk@2x.png                          100%   14KB   2.2MB/s   00:00</div><div class="line">mm.strings                                    100%  404KB  10.2MB/s   00:00</div><div class="line">network_setting.html                          100% 1695   450.4KB/s   00:00</div><div class="line">InfoPlist.strings                             100% 1822   454.1KB/s   00:00</div><div class="line">mm.strings                                    100%  409KB  10.2MB/s   00:00</div><div class="line">network_setting.html                          100% 1819   477.5KB/s   00:00</div><div class="line">InfoPlist.strings                             100% 1814   466.8KB/s   00:00</div><div class="line">mm.strings                                    100%  409KB  10.3MB/s   00:00</div><div class="line">network_setting.html                          100% 1819   404.9KB/s   00:00</div></pre></td></tr></table></figure>
+<p>如果存在应用名称重复了怎么办呢？没关系首先使用如下命令查看安装的应用的名字和bundle id:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">➜  frida-ios-dump git:(master) ✗ ./dump.py -l</div><div class="line">  PID  Name                       Identifier</div><div class="line">-----  -------------------------  ----------------------------------------</div><div class="line"> 9661  App Store                  com.apple.AppStore</div><div class="line">16977  Moment                     com.kevinholesh.Moment</div><div class="line"> 1311  Safari                     com.apple.mobilesafari</div><div class="line">16586  信息                         com.apple.MobileSMS</div><div class="line"> 4147  微信                         com.tencent.xin</div><div class="line">10048  相机                         com.apple.camera</div><div class="line"> 7567  设置                         com.apple.Preferences</div><div class="line">    -  CrashReporter              crash-reporter</div><div class="line">    -  Cydia                      com.saurik.Cydia</div><div class="line">    -  通讯录                        com.apple.MobileAddressBook</div><div class="line">    -  邮件                         com.apple.mobilemail</div><div class="line">    -  音乐                         com.apple.Music</div><div class="line">    ......</div></pre></td></tr></table></figure>
+<p>然后使用如下命令对指定的bundle id应用进行砸壳即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  frida-ios-dump git:(master) ✗ ./dump.py -b com.tencent.xin</div></pre></td></tr></table></figure>
+<p>等待自动砸壳传输完成之后便会到当前目录生成一个解密后的ipa文件，这个时候赶紧拖到<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="external">MonkeyDev</a>开始逆向之旅吧！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag">#逆向</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/20/get-start-antidebug-kext/" rel="next" title="动手写一个简单的Mac内核反反调试扩展">
+                <i class="fa fa-chevron-left"></i> 动手写一个简单的Mac内核反反调试扩展
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键dump"><span class="nav-number">2.</span> <span class="nav-text">一键dump</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境配置"><span class="nav-number">3.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键砸壳"><span class="nav-number">4.</span> <span class="nav-text">一键砸壳</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="powered-by">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div class="theme-info">
+  <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'alonemonkey';
+      var disqus_identifier = '2018/01/30/frida-ios-dump/';
+      var disqus_title = '一条命令完成砸壳';
+      var disqus_url = 'http://www.alonemonkey.com/2018/01/30/frida-ios-dump/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
