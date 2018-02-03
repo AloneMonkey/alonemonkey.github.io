@@ -1,0 +1,874 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="description" content="猿，改变世界的动物！@AloneMonkey">
+<meta name="keyword"  content="Coder,Android,iOS,安全,逆向,驱动,PHP">
+<link rel="shortcut icon" href="/images/favicon.ico">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="8PIEzWgm2j" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="逆向," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AloneMonkey" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="尝试Android Unity3D游戏逆向，C#脚本分析与修改，以当前流行的旅行的青蛙为例。">
+<meta name="keywords" content="逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="旅行的青蛙Unity游戏逆向修改--Android篇">
+<meta property="og:url" content="http://www.alonemonkey.com/2018/02/02/unity-reverse-android/index.html">
+<meta property="og:site_name" content="AloneMonkey">
+<meta property="og:description" content="尝试Android Unity3D游戏逆向，C#脚本分析与修改，以当前流行的旅行的青蛙为例。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/dnspy-qingwa.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-2001441517659518.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/QQ20180203200914.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/qingwa_calltutorial.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/qingwa_rename.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/qingwa_rename_result.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-203204.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-204107.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/search_no_enough.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/del_il_code.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/change_colver_num.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-205515.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-210802.png">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/user_prizeballname.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/clover_create.jpg">
+<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/fourleaf_il_code.jpg">
+<meta property="og:updated_time" content="2018-02-03T14:06:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="旅行的青蛙Unity游戏逆向修改--Android篇">
+<meta name="twitter:description" content="尝试Android Unity3D游戏逆向，C#脚本分析与修改，以当前流行的旅行的青蛙为例。">
+<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/dnspy-qingwa.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 旅行的青蛙Unity游戏逆向修改--Android篇 | AloneMonkey </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?58a7d0034fc8119156711597befcc3fe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AloneMonkey</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Coder Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-weekly">
+          <a href="/weekly" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-rss-square"></i> <br />
+            
+            一周一报
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-classify">
+          <a href="/classify" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-star"></i> <br />
+            
+            干货
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                旅行的青蛙Unity游戏逆向修改--Android篇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-02-02T00:00:00+08:00" content="2018-02-02">
+              2018-02-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/逆向/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/02/02/unity-reverse-android/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/02/02/unity-reverse-android/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实这篇文章也没有太多的技术含量，主要是试一试Android上面Unity3D游戏C#脚本的分析与修改，话不多说先准备好旅行青蛙的apk就开始吧。</p>
+<h3 id="C-脚本"><a href="#C-脚本" class="headerlink" title="C#脚本"></a>C#脚本</h3><p>首先将Android apk安装包解压，查看<code>assets/bin/Data/Managed</code>文件夹下面的dll文件，其中<code>Assembly-CSharp.dll</code>便是游戏中的C#脚本，使用<a href="https://www.red-gate.com/products/dotnet-development/reflector/" target="_blank" rel="noopener">Reflector</a>或者<a href="https://github.com/0xd4d/dnSpy" target="_blank" rel="noopener">dnSpy</a>进行反编译都可以，如何出现反编译出错的情况，那可能就是脚本被加密了，一般在尝试在<code>libmono.so</code>中的<code>mono_image_open_from_data_with_name</code>中获取解密后的dll脚本，而当前分析的游戏C#脚本并没有加密。在dnSpy中的反编译结果如下:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/dnspy-qingwa.jpg" alt="image"></p>
+<p>左侧就可以看到对应的类，点击类就可以看到反编译出来的代码，下面先跟游戏里面的一些特征来分析反编译出来的脚本。</p>
+<h3 id="汉化"><a href="#汉化" class="headerlink" title="汉化"></a>汉化</h3><p>首先使用<code>adb install tabikaeru.apk</code>命令安装apk文件，然后打开游戏可以看到如下界面:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-2001441517659518.png" alt=""></p>
+<p>首先来看看怎么修改显示的文字以达到汉化的效果，使用dnSpy点击<code>编辑-&gt;搜索程序集</code>搜索右边选择<code>数字/字符串</code>然后搜索<code>名前</code>:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/QQ20180203200914.jpg" alt=""></p>
+<p>点击<code>CallTutorial</code>可以找到刚刚在屏幕上面显示的文字:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/qingwa_calltutorial.jpg" alt=""></p>
+<p>鼠标点击右键选择<code>编辑IL指令</code>，修改刚刚看到的文字为汉字:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/qingwa_rename.jpg" alt=""></p>
+<p>然后点击应用即可看到修改后的效果:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/qingwa_rename_result.jpg" alt=""></p>
+<p>点击<code>文件-&gt;全部保存</code>替换<code>assets/bin/Data/Managed</code>文件夹下面对应的文件即可，然后将文件打包成apk使用jarsinger、signapk.jar或Android助手重签名安装到手机就能看到修改后的效果了。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-203204.png" alt=""></p>
+<h3 id="修改三叶草数"><a href="#修改三叶草数" class="headerlink" title="修改三叶草数"></a>修改三叶草数</h3><p>要修改三叶草数可以从购买的时候入手，比如提示三叶草不足的时候:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-204107.png" alt=""></p>
+<p>直接搜索<code>足</code>找到目标代码:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/search_no_enough.jpg" alt=""></p>
+<p>根据找到的如下代码来分析:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">if (SuperGameMaster.CloverPointStock() &gt;= itemDataFormat.price)</span><br><span class="line">&#123;</span><br><span class="line">    if (SuperGameMaster.FindItemStock(shopDataFormat.itemId) &lt; 99)</span><br><span class="line">    &#123;</span><br><span class="line">        base.GetComponent&lt;FlickCheaker&gt;().stopFlick(true);</span><br><span class="line">        ConfilmPanel confilm = this.ConfilmUI.GetComponent&lt;ConfilmPanel&gt;();</span><br><span class="line">        if (itemDataFormat.type == Item.Type.LunchBox)</span><br><span class="line">        &#123;</span><br><span class="line">            confilm.OpenPanel_YesNo(string.Concat(new object[]</span><br><span class="line">            &#123;</span><br><span class="line">                itemDataFormat.name,</span><br><span class="line">                &quot;\nを買いますか？\n（所持数\u3000&quot;,</span><br><span class="line">                SuperGameMaster.FindItemStock(shopDataFormat.itemId),</span><br><span class="line">                &quot;）&quot;</span><br><span class="line">            &#125;));</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            confilm.OpenPanel_YesNo(itemDataFormat.name + &quot;\nを買いますか？&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        confilm.ResetOnClick_Yes();</span><br><span class="line">        confilm.SetOnClick_Yes(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            confilm.ClosePanel();</span><br><span class="line">        &#125;);</span><br><span class="line">        confilm.SetOnClick_Yes(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            this.GetComponent&lt;FlickCheaker&gt;().stopFlick(false);</span><br><span class="line">        &#125;);</span><br><span class="line">        confilm.SetOnClick_Yes(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            this.BuyItem();</span><br><span class="line">        &#125;);</span><br><span class="line">        confilm.ResetOnClick_No();</span><br><span class="line">        confilm.SetOnClick_No(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            confilm.ClosePanel();</span><br><span class="line">        &#125;);</span><br><span class="line">        confilm.SetOnClick_No(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            this.GetComponent&lt;FlickCheaker&gt;().stopFlick(false);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        base.GetComponent&lt;FlickCheaker&gt;().stopFlick(true);</span><br><span class="line">        ConfilmPanel confilm = this.ConfilmUI.GetComponent&lt;ConfilmPanel&gt;();</span><br><span class="line">        confilm.OpenPanel(&quot;もちものがいっぱいです&quot;);</span><br><span class="line">        confilm.ResetOnClick_Screen();</span><br><span class="line">        confilm.SetOnClick_Screen(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            confilm.ClosePanel();</span><br><span class="line">        &#125;);</span><br><span class="line">        confilm.SetOnClick_Screen(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            this.GetComponent&lt;FlickCheaker&gt;().stopFlick(false);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>当三叶草的存储小于当前商品的价格的时候就会弹出这个提示，点击<code>SuperGameMaster.CloverPointStock()</code>得到如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static int CloverPointStock()</span><br><span class="line">&#123;</span><br><span class="line">    return SuperGameMaster.saveData.CloverPoint;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里返回的是一个从<code>saveData.CloverPoint</code>中获取的整数，可以尝试将其修改成返回一个特定的数字每次查询三叶草的数目都是这么多，右键点击<code>编辑IL指令</code>，然后点击重置并右键删除第一条指令，因为只是返回一个数字的话两条指令就够了:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/del_il_code.jpg" alt=""></p>
+<p>然后修改第二条指令为一个数字，具体的指令代表的类型可以查看IL指令说明:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/change_colver_num.jpg" alt=""></p>
+<p>点击确定后就能看到修改代码的效果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static int CloverPointStock()</span><br><span class="line">&#123;</span><br><span class="line">    return 9999;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重新签名安装之后每次购买商品之后三叶草的数目也不会减少，一直是9999。</p>
+<h3 id="修改抽奖券"><a href="#修改抽奖券" class="headerlink" title="修改抽奖券"></a>修改抽奖券</h3><p>修改抽奖券也是同样的套路，搜索<code>足</code>找到目标代码，其实刚刚搜索的时候就已经看到了。</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-205515.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if (SuperGameMaster.TicketStock() &lt; 5)</span><br><span class="line">&#123;</span><br><span class="line">    ConfilmPanel confilm = this.ConfilmUI.GetComponent&lt;ConfilmPanel&gt;();</span><br><span class="line">    confilm.OpenPanel(&quot;ふくびき券が足りません&quot;);</span><br><span class="line">    confilm.ResetOnClick_Screen();</span><br><span class="line">    confilm.SetOnClick_Screen(delegate</span><br><span class="line">    &#123;</span><br><span class="line">        confilm.ClosePanel();</span><br><span class="line">    &#125;);</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>点击<code>SuperGameMaster.TicketStock()</code>也是差不多的代码同样修改返回数字即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static int TicketStock()</span><br><span class="line">&#123;</span><br><span class="line">    return SuperGameMaster.saveData.ticket;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static int TicketStock()</span><br><span class="line">&#123;</span><br><span class="line">    return 9999;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="修改抽奖概率"><a href="#修改抽奖概率" class="headerlink" title="修改抽奖概率"></a>修改抽奖概率</h3><p>每次抽奖都是抽到白球就不是很开心了，怎么能够提供抽奖的概率呢？抽到其它颜色的球的时候会提示:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/device-2018-02-03-210802.png" alt=""></p>
+<p>搜索<code>白玉</code>找到如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public static readonly Dictionary&lt;Rank, string&gt; PrizeBallName = new Dictionary&lt;Rank, string&gt;</span><br><span class="line">&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.White,</span><br><span class="line">        &quot;白玉&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Blue,</span><br><span class="line">        &quot;青玉&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Green,</span><br><span class="line">        &quot;緑玉&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Red,</span><br><span class="line">        &quot;赤玉&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Gold,</span><br><span class="line">        &quot;黄玉&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>右键点击<code>PrizeBallName</code>选择分析找到在那里被使用的:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/user_prizeballname.jpg" alt=""></p>
+<p>双击<code>PrizeBallName</code>得到如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public void PushRollButton()</span><br><span class="line">&#123;</span><br><span class="line">    if (SuperGameMaster.TicketStock() &lt; 5)</span><br><span class="line">    &#123;</span><br><span class="line">        ConfilmPanel confilm = this.ConfilmUI.GetComponent&lt;ConfilmPanel&gt;();</span><br><span class="line">        confilm.OpenPanel(&quot;ふくびき券が足りません&quot;);</span><br><span class="line">        confilm.ResetOnClick_Screen();</span><br><span class="line">        confilm.SetOnClick_Screen(delegate</span><br><span class="line">        &#123;</span><br><span class="line">            confilm.ClosePanel();</span><br><span class="line">        &#125;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    SuperGameMaster.GetTicket(-5);</span><br><span class="line">    SuperGameMaster.set_FlagAdd(Flag.Type.ROLL_NUM, 1);</span><br><span class="line">    base.GetComponentInParent&lt;UIMaster&gt;().freezeObject(true);</span><br><span class="line">    base.GetComponentInParent&lt;UIMaster&gt;().blockUI(true, new Color(0f, 0f, 0f, 0.3f));</span><br><span class="line">    this.LotteryCheck();</span><br><span class="line">    this.ResultButton.GetComponent&lt;RollResultButton&gt;().CngImage((int)this.result);</span><br><span class="line">    this.ResultButton.GetComponent&lt;RollResultButton&gt;().CngResultText(Define.PrizeBallName[this.result] + &quot;がでました&quot;);</span><br><span class="line">    this.LotteryWheelPanel.GetComponent&lt;LotteryWheelPanel&gt;().OpenPanel(this.result);</span><br><span class="line">    SuperGameMaster.SetTmpRaffleResult((int)this.result);</span><br><span class="line">    SuperGameMaster.SaveData();</span><br><span class="line">    SuperGameMaster.audioMgr.PlaySE(Define.SEDict[&quot;SE_Raffle&quot;]);</span><br><span class="line">    this.BackFunc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从代码来看就是刚刚抽奖结果提示的地方，来分析下这个结果是怎么生成的，可以看到<code>Define.PrizeBallName[this.result]</code>这个result决定了抽到的是什么颜色的球，那么看看这个result是在哪里生成的。在当前文件中看到了两处赋值:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public void LotteryCheck()</span><br><span class="line">&#123;</span><br><span class="line">    int num = Random.Range(0, Define.PrizeBalls[Rank.RankMax]);</span><br><span class="line">    this.result = Rank.White;</span><br><span class="line">    int i = 0;</span><br><span class="line">    int num2 = 0;</span><br><span class="line">    while (i &lt; 5)</span><br><span class="line">    &#123;</span><br><span class="line">        num2 += Define.PrizeBalls[(Rank)i];</span><br><span class="line">        if (num &lt; num2)</span><br><span class="line">        &#123;</span><br><span class="line">            this.result = (Rank)i;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ublic void SetTmpResult()</span><br><span class="line">&#123;</span><br><span class="line">    this.result = (Rank)SuperGameMaster.GetTmpRaffleResult();</span><br><span class="line">    this.BackFunc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是在<code>UIMaster_raffle.UI_Start</code>中调用的，判断之前的奖品有没有领取，<code>LotteryCheck</code>这个刚好是在显示结果之前调用的，猜测就是这里控制的不同颜色的球的出现概率，分析下这段代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public void LotteryCheck()</span><br><span class="line">&#123;</span><br><span class="line">    int num = Random.Range(0, Define.PrizeBalls[Rank.RankMax]); //Rank.RankMax是5，Define.PrizeBalls[Rank.RankMax]是100，从0-100随机生成一个数</span><br><span class="line">    this.result = Rank.White;  //默认都是白色的球</span><br><span class="line">    int i = 0;</span><br><span class="line">    int num2 = 0;</span><br><span class="line">    while (i &lt; 5)</span><br><span class="line">    &#123;</span><br><span class="line">        num2 += Define.PrizeBalls[(Rank)i];  //根据PrizeBalls的值小于60是白色，大于等于60并且少于87是蓝色，大于等于87小于96是绿色，大于等于96小于99是红色，大于等于99是金色。</span><br><span class="line">        if (num &lt; num2)</span><br><span class="line">        &#123;</span><br><span class="line">            this.result = (Rank)i;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面代码分析PrizeBalls中就定义了不同颜色的球摇出概率:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public static readonly Dictionary&lt;Rank, int&gt; PrizeBalls = new Dictionary&lt;Rank, int&gt;</span><br><span class="line">&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.White,</span><br><span class="line">        60</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Blue,</span><br><span class="line">        27</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Green,</span><br><span class="line">        9</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Red,</span><br><span class="line">        3</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Gold,</span><br><span class="line">        1</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.RankMax,</span><br><span class="line">        100</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>所以直接修改这里的数字就控制摇出的概率了，比如不出白球，其它球的概率都一样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public static readonly Dictionary&lt;Rank, int&gt; PrizeBalls = new Dictionary&lt;Rank, int&gt;</span><br><span class="line">&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.White,</span><br><span class="line">        0   //不存在白球</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Blue,</span><br><span class="line">        25</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Green,</span><br><span class="line">        25</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Red,</span><br><span class="line">        25</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.Gold,</span><br><span class="line">        25</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        Rank.RankMax,</span><br><span class="line">        100</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="修改农场四叶草数"><a href="#修改农场四叶草数" class="headerlink" title="修改农场四叶草数"></a>修改农场四叶草数</h3><p>农场里面大部分都是三叶草、四叶草的概率是很小的，那么怎么修改这个呢？在界面上面好像不太好找关联，先试试搜索三叶草的英语<code>clover</code>，点击<code>checkCloverCreate</code>看起来就是控制生成的函数:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/clover_create.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">public void checkCloverCreate()</span><br><span class="line">&#123;</span><br><span class="line">    this.cloverList = SuperGameMaster.GetCloverList();</span><br><span class="line">    bool flag = false;</span><br><span class="line">    if (this.cloverList.Count == 0)  </span><br><span class="line">    &#123;</span><br><span class="line">        flag = true;</span><br><span class="line">        //这句话翻译的意思就是:有了四叶草的初期化标志。四叶草生成</span><br><span class="line">        //也就是flag为true的时候会生成四叶草</span><br><span class="line">        Debug.Log(&quot;[CloverFarm] クローバーの初期化フラグが立ちました。四葉を生成します&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (this.cloverList.Count &lt; this.cloverMax)</span><br><span class="line">    &#123;</span><br><span class="line">        Debug.Log(string.Concat(new object[]</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;[CloverFarm] クローバーの数を調整します：&quot;,</span><br><span class="line">            this.cloverList.Count,</span><br><span class="line">            &quot; &gt; &quot;,</span><br><span class="line">            this.cloverMax</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125;</span><br><span class="line">    while (this.cloverList.Count &lt; this.cloverMax)</span><br><span class="line">    &#123;</span><br><span class="line">        CloverDataFormat cloverDataFormat = new CloverDataFormat();</span><br><span class="line">        cloverDataFormat.lastHarvest = new DateTime(1970, 1, 1);</span><br><span class="line">        cloverDataFormat.timeSpanSec = -this.cloverList.Count - 1;</span><br><span class="line">        cloverDataFormat.newFlag = true;</span><br><span class="line">        this.cloverList.Add(cloverDataFormat);</span><br><span class="line">    &#125;</span><br><span class="line">    if (this.cloverList.Count &gt; this.cloverMax)</span><br><span class="line">    &#123;</span><br><span class="line">        Debug.Log(string.Concat(new object[]</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;[CloverFarm] クローバーの数を調整します：&quot;,</span><br><span class="line">            this.cloverList.Count,</span><br><span class="line">            &quot; &gt; &quot;,</span><br><span class="line">            this.cloverMax</span><br><span class="line">        &#125;));</span><br><span class="line">        this.cloverList.RemoveRange(this.cloverMax - 1, this.cloverList.Count - this.cloverMax);</span><br><span class="line">    &#125;</span><br><span class="line">    List&lt;GameObject&gt; list = new List&lt;GameObject&gt;();</span><br><span class="line">    for (int i = 0; i &lt; this.cloverList.Count; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        if (!this.cloverList[i].newFlag &amp;&amp; this.cloverList[i].timeSpanSec &lt;= 0)</span><br><span class="line">        &#123;</span><br><span class="line">            list.Add(this.LoadCloverObject(i, this.cloverList[i]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    int num = 0;</span><br><span class="line">    for (int j = 0; j &lt; this.cloverList.Count; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        if (this.cloverList[j].newFlag)</span><br><span class="line">        &#123;</span><br><span class="line">            //这里根据flag调用不同的函数，</span><br><span class="line">            if (!flag)</span><br><span class="line">            &#123;</span><br><span class="line">                //生成三叶草</span><br><span class="line">                list.Add(this.NewCloverObject(j, this.cloverList[j], list));</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                //生成四叶草，不同的是第四个参数为true</span><br><span class="line">                list.Add(this.NewCloverObject(j, this.cloverList[j], list, true));</span><br><span class="line">                flag = false;</span><br><span class="line">            &#125;</span><br><span class="line">            this.cloverList[j].x = list[list.Count - 1].transform.localPosition.x;</span><br><span class="line">            this.cloverList[j].y = list[list.Count - 1].transform.localPosition.y;</span><br><span class="line">            Clover component = list[list.Count - 1].GetComponent&lt;Clover&gt;();</span><br><span class="line">            this.cloverList[j].element = component.element;</span><br><span class="line">            this.cloverList[j].spriteNum = component.spriteNum;</span><br><span class="line">            this.cloverList[j].point = component.point;</span><br><span class="line">            this.cloverList[j].newFlag = false;</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    foreach (GameObject gameObject in list)</span><br><span class="line">    &#123;</span><br><span class="line">        int num2 = this.cloverOrderInLayer;</span><br><span class="line">        foreach (GameObject gameObject2 in list)</span><br><span class="line">        &#123;</span><br><span class="line">            if (gameObject.transform.position.y &lt; gameObject2.transform.position.y)</span><br><span class="line">            &#123;</span><br><span class="line">                num2++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        gameObject.GetComponent&lt;SpriteRenderer&gt;().sortingOrder = num2;</span><br><span class="line">    &#125;</span><br><span class="line">    Debug.Log(string.Concat(new object[]</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;[CloverFarm] クローバー生成完了：&quot;,</span><br><span class="line">        list.Count,</span><br><span class="line">        &quot;\u3000/ (新規：&quot;,</span><br><span class="line">        num,</span><br><span class="line">        &quot;)&quot;</span><br><span class="line">    &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先看<code>this.NewCloverObject(j, this.cloverList[j], list)</code>这个内部调用就是四个参数的，只不过第四个参数是false:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public GameObject NewCloverObject(int index, CloverDataFormat cloverData, List&lt;GameObject&gt; cloversObj)</span><br><span class="line">&#123;</span><br><span class="line">    return this.NewCloverObject(index, cloverData, cloversObj, false);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是第四个参数为true就是四叶草，点进去看看:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">public GameObject NewCloverObject(int index, CloverDataFormat cloverData, List&lt;GameObject&gt; cloversObj, bool fourLeafFlag)</span><br><span class="line">&#123;</span><br><span class="line">    Vector2 size = base.GetComponent&lt;BoxCollider2D&gt;().size;</span><br><span class="line">    PolygonCollider2D component = base.GetComponent&lt;PolygonCollider2D&gt;();</span><br><span class="line">    Vector2 vector;</span><br><span class="line">    vector..ctor(base.GetComponent&lt;BoxCollider2D&gt;().offset.x - size.x / 2f, base.GetComponent&lt;BoxCollider2D&gt;().offset.y - size.y / 2f);</span><br><span class="line">    int num = 0;</span><br><span class="line">    bool flag;</span><br><span class="line">    Vector3 vector2;</span><br><span class="line">    do</span><br><span class="line">    &#123;</span><br><span class="line">        flag = false;</span><br><span class="line">        vector2 = new Vector2(vector.x + Random.Range(0f, size.x), vector.y + Random.Range(0f, size.y));</span><br><span class="line">        if (!component.OverlapPoint(vector2 + base.transform.position))</span><br><span class="line">        &#123;</span><br><span class="line">            flag = true;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            for (int i = 0; i &lt; cloversObj.Count; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                Vector2 size2 = cloversObj[i].GetComponent&lt;BoxCollider2D&gt;().size;</span><br><span class="line">                if (Mathf.Abs(vector2.x - cloversObj[i].transform.localPosition.x) &lt; size2.x / 2f &amp;&amp; Mathf.Abs(vector2.y - cloversObj[i].transform.localPosition.y) &lt; size2.y / 4f)</span><br><span class="line">                &#123;</span><br><span class="line">                    flag = true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            num++;</span><br><span class="line">            if (num &gt;= 100)</span><br><span class="line">            &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    while (flag);</span><br><span class="line">    GameObject gameObject = Object.Instantiate&lt;GameObject&gt;(this.basePrefab, Vector3.zero, Quaternion.identity);</span><br><span class="line">    CloverDataFormat cloverDataFormat = new CloverDataFormat();</span><br><span class="line">    cloverDataFormat.point = 1;</span><br><span class="line">    cloverDataFormat.element = 0;</span><br><span class="line">    //如果第四个参数是false，这里就是四叶草生成的概率，是fourLeaf_percent是1那这个概率就是1/100</span><br><span class="line">    if (Random.Range(0f, 10000f) &lt; this.fourLeaf_percent * 100f)</span><br><span class="line">    &#123;</span><br><span class="line">        cloverDataFormat.element = 1;</span><br><span class="line">    &#125;</span><br><span class="line">    //如果传了这个参数为true直接生成四叶草</span><br><span class="line">    if (fourLeafFlag)</span><br><span class="line">    &#123;</span><br><span class="line">        cloverDataFormat.element = 1;</span><br><span class="line">    &#125;</span><br><span class="line">    int element = cloverDataFormat.element;</span><br><span class="line">    if (element != 0)</span><br><span class="line">    &#123;</span><br><span class="line">        if (element == 1)</span><br><span class="line">        &#123;</span><br><span class="line">            cloverDataFormat.spriteNum = Random.Range(0, this.fourCloverSprite.Length);</span><br><span class="line">            gameObject.GetComponent&lt;SpriteRenderer&gt;().sprite = this.fourCloverSprite[cloverDataFormat.spriteNum];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        cloverDataFormat.spriteNum = Random.Range(0, this.cloverSprite.Length);</span><br><span class="line">        gameObject.GetComponent&lt;SpriteRenderer&gt;().sprite = this.cloverSprite[cloverDataFormat.spriteNum];</span><br><span class="line">    &#125;</span><br><span class="line">    gameObject.GetComponent&lt;Clover&gt;().SetCloverData(index, cloverDataFormat);</span><br><span class="line">    gameObject.transform.parent = base.transform;</span><br><span class="line">    gameObject.transform.localScale = Vector3.one;</span><br><span class="line">    gameObject.transform.localPosition = vector2;</span><br><span class="line">    return gameObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么这里既可以修改四叶草生成的概率也可以修改<code>fourLeafFlag</code>这个为true，第一种方式和上面一样，看看第二种。右键<code>fourLeafFlag</code>编辑IL指令:</p>
+<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/fourleaf_il_code.jpg" alt=""></p>
+<p>这里首先取<code>fourLeafFlag</code>判断然后跳转，所以修改为true即可。修改<code>ldarg.s fourLeafFlag</code>为<code>ldc.i4 1</code>，修改后的代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (true)</span><br><span class="line">&#123;</span><br><span class="line">    cloverDataFormat.element = 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天修改的部分就到这里了，其它的大家可以自己去尝试，总结下分析Unity3D游戏过程，当然这篇文章讲的是最简单的情况，还有使用保护将dll脚本加密的，就需要hook函数或者从内存查找dump，还有通过C#脚本调用lua脚本来实现的，逻辑在lua脚本里面，lua脚本又加密了的情况等等。那么没保护的情况的话，一般可以从界面显示搜索来分析，然后根据一些特定单词去搜索查找关键代码部分。这篇主要是Android上面使用mono模式的情况，如果是使用ll2cpp的话比如iOS上面，C#脚本都转成了cpp文件c代码的形式的话分析起来就会麻烦很多，后面会有在iOS上面修改代码以及在非越狱平台也能修改运行的文章。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wx-qrcode.jpg" alt="AloneMonkey wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+<style type="text/css">
+.donate_bar {
+  text-align: center;
+  margin-top: 5%
+}
+
+.donate_bar a.btn_donate {
+  display: inline-block;
+  width: 82px;
+  height: 82px;
+  margin-left: auto;
+  margin-right: auto;
+  background: url(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)no-repeat;
+  -webkit-transition: background 0s;
+  -moz-transition: background 0s;
+  -o-transition: background 0s;
+  -ms-transition: background 0s;
+  transition: background 0s
+}
+
+.donate_bar a.btn_donate:hover {
+  background-position: 0 -82px
+}
+
+.donate_bar .donate_txt {
+  display: block;
+  color: #9d9d9d;
+  font: 14px/2 "Microsoft Yahei"
+}
+.donate_bar.hidden{
+  display: none
+}
+
+.post-donate{
+  margin-top: 80px;
+}
+
+#donate_guide{
+  height: 210px;
+  width: 420px;
+  margin: 0 auto;
+}
+
+#donate_guide img{
+  height: 200px;
+  height: 200px;
+  display:inline;
+  margin:auto 2px;
+}
+</style>
+<! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+           感谢你的支持，我会继续努力！
+        </span>
+        <br>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/images/alipay.jpg" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/images/wxpay.jpg" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag">#逆向</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/30/frida-ios-dump/" rel="next" title="一条命令完成砸壳">
+                <i class="fa fa-chevron-left"></i> 一条命令完成砸壳
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="AloneMonkey" />
+          <p class="site-author-name" itemprop="name">AloneMonkey</p>
+          <p class="site-description motion-element" itemprop="description">猿，改变世界的动物！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xiaoqing28" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/AloneMonkey" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AloneMonkey" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-脚本"><span class="nav-number">2.</span> <span class="nav-text">C#脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汉化"><span class="nav-number">3.</span> <span class="nav-text">汉化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改三叶草数"><span class="nav-number">4.</span> <span class="nav-text">修改三叶草数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改抽奖券"><span class="nav-number">5.</span> <span class="nav-text">修改抽奖券</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改抽奖概率"><span class="nav-number">6.</span> <span class="nav-text">修改抽奖概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改农场四叶草数"><span class="nav-number">7.</span> <span class="nav-text">修改农场四叶草数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AloneMonkey</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="powered-by">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div class="theme-info">
+  <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'alonemonkey';
+      var disqus_identifier = '2018/02/02/unity-reverse-android/';
+      var disqus_title = '旅行的青蛙Unity游戏逆向修改--Android篇';
+      var disqus_url = 'http://www.alonemonkey.com/2018/02/02/unity-reverse-android/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
