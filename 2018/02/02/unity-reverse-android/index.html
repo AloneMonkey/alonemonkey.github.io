@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/user_prizeballname.jpg">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/clover_create.jpg">
 <meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/fourleaf_il_code.jpg">
-<meta property="og:updated_time" content="2018-02-03T14:06:42.000Z">
+<meta property="og:updated_time" content="2018-02-04T04:31:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="旅行的青蛙Unity游戏逆向修改--Android篇">
 <meta name="twitter:description" content="尝试Android Unity3D游戏逆向，C#脚本分析与修改，以当前流行的旅行的青蛙为例。">
@@ -426,7 +426,7 @@
 <p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/hexo/fourleaf_il_code.jpg" alt=""></p>
 <p>这里首先取<code>fourLeafFlag</code>判断然后跳转，所以修改为true即可。修改<code>ldarg.s fourLeafFlag</code>为<code>ldc.i4 1</code>，修改后的代码如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (true)</span><br><span class="line">&#123;</span><br><span class="line">    cloverDataFormat.element = 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天修改的部分就到这里了，其它的大家可以自己去尝试，总结下分析Unity3D游戏过程，当然这篇文章讲的是最简单的情况，还有使用保护将dll脚本加密的，就需要hook函数或者从内存查找dump，还有通过C#脚本调用lua脚本来实现的，逻辑在lua脚本里面，lua脚本又加密了的情况等等。那么没保护的情况的话，一般可以从界面显示搜索来分析，然后根据一些特定单词去搜索查找关键代码部分。这篇主要是Android上面使用mono模式的情况，如果是使用ll2cpp的话比如iOS上面，C#脚本都转成了cpp文件c代码的形式的话分析起来就会麻烦很多，后面会有在iOS上面修改代码以及在非越狱平台也能修改运行的文章。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天修改的部分就到这里了，其它的大家可以自己去尝试，总结下分析Unity3D游戏过程，当然这篇文章讲的是最简单的情况，还有使用保护将dll脚本加密的，就需要hook函数或者从内存查找dump，还有通过C#脚本调用lua脚本来实现的，逻辑在lua脚本里面，lua脚本又加密了的情况等等。那么没保护的情况的话，一般可以从界面显示搜索来分析，然后根据一些特定单词去搜索查找关键代码部分。这篇主要是Android上面使用mono模式的情况，如果是使用IL2CPP的话比如iOS上面，C#脚本都转成了cpp文件c代码的形式的话分析起来就会麻烦很多，后面会有在iOS上面修改代码以及在非越狱平台也能修改运行的文章。</p>
 
       
     </div>
@@ -545,6 +545,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/02/03/unity-reverse-ios/" rel="prev" title="旅行的青蛙Unity游戏逆向修改--iOS篇">
+                旅行的青蛙Unity游戏逆向修改--iOS篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -618,7 +622,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
