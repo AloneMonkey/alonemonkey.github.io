@@ -98,13 +98,13 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="前段时间写了MonkeyDev支持非越狱自动集成，收到了广大网友的喜爱，今天试了试MonkeyDev能和CocoaPods擦除什么样的火花？ 我感觉开辟了一个新的世界。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909652281.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909967471.png">
-<meta property="og:updated_time" content="2017-07-24T15:36:46.000Z">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1500909652281.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1500909967471.png">
+<meta property="og:updated_time" content="2019-01-02T13:57:29.588Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MonkeyDev + CocoaPods 擦出的火花">
 <meta name="twitter:description" content="前段时间写了MonkeyDev支持非越狱自动集成，收到了广大网友的喜爱，今天试了试MonkeyDev能和CocoaPods擦除什么样的火花？ 我感觉开辟了一个新的世界。">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909652281.png">
+<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1500909652281.png">
 
 
 
@@ -349,19 +349,19 @@
 
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>既然是Xcode工程，那是不是可以支持CocoaPods？ 在我开发MonkeyDev的时候就想到过这个问题，几天突然兴起测试了一下，然后发现……</p>
-<h3 id="MonkeyDev-CocoaPods"><a href="#MonkeyDev-CocoaPods" class="headerlink" title="MonkeyDev + CocoaPods"></a>MonkeyDev + CocoaPods</h3><p><a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="external">MonkeyDev</a>我就不说了，知道的人肯定会觉得这是神器，不知道的人先看Wiki吧，用上后你会喜欢上它的。</p>
+<h3 id="MonkeyDev-CocoaPods"><a href="#MonkeyDev-CocoaPods" class="headerlink" title="MonkeyDev + CocoaPods"></a>MonkeyDev + CocoaPods</h3><p><a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="noopener">MonkeyDev</a>我就不说了，知道的人肯定会觉得这是神器，不知道的人先看Wiki吧，用上后你会喜欢上它的。</p>
 <p>安装后之后，创建一个MonkeyApp类型的工程就叫MonkeyPod。</p>
 <p>然后新建Podfile文件，内容如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MonkeyPodDylib&apos; do</div><div class="line">	pod &apos;FLEX&apos;, &apos;~&gt; 2.0&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target &apos;MonkeyPodDylib&apos; do</span><br><span class="line">	pod &apos;FLEX&apos;, &apos;~&gt; 2.0&apos;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>然后执行<code>pod install</code>。</p>
 <p>完了之后打开<code>MonkeyPod.xcworkspace</code>。</p>
 <p>然后打开文件<code>MonkeyPodDylib.m</code>导入头文件<code>#import &lt;FLEX/FLEXManager.h&gt;</code>，如下函数中加入初始化代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) &#123;</div><div class="line">    [[FLEXManager sharedManager] showExplorer];</div><div class="line">    CYListenServer(6666);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) &#123;</span><br><span class="line">    [[FLEXManager sharedManager] showExplorer];</span><br><span class="line">    CYListenServer(6666);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
 <p>直接编译，enmm…… 当然是会出错的。</p>
 <p>点击Pods，将所有Target的<code>Build Active Architecture Only</code>改成<code>No</code>，如下图:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909652281.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1500909652281.png" alt="image"></p>
 <p>然后编译，没有错误！直接运行！</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1500909967471.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1500909967471.png" alt="image"></p>
 <p>集成成功！</p>
 <p>是不是感觉踏入了一个新的世界。。。</p>
 <h3 id="待填的坑"><a href="#待填的坑" class="headerlink" title="待填的坑"></a>待填的坑</h3><ol>
@@ -680,7 +680,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

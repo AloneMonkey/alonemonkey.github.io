@@ -98,28 +98,28 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="近来微信小程序十分火热，终于解放了我手机的存储空间，那么抛开这些不说，小程序到底是怎么实现的呢？是真正的Native吗？本文以iOS端为例，一探究竟！">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703603023.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703359668.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703501181.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703969268.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484704043100.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484704768381.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484704941744.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705005819.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705053859.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705137998.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705333141.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484209991866.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705504134.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484210516197.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484210679204.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484211312381.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484706074992.png">
-<meta property="og:updated_time" content="2017-06-22T01:29:26.000Z">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703603023.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703359668.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703501181.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703969268.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484704043100.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484704768381.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484704941744.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705005819.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705053859.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705137998.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705333141.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484209991866.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705504134.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484210516197.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484210679204.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484211312381.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484706074992.png">
+<meta property="og:updated_time" content="2019-01-02T13:57:29.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="细说微信小程序">
 <meta name="twitter:description" content="近来微信小程序十分火热，终于解放了我手机的存储空间，那么抛开这些不说，小程序到底是怎么实现的呢？是真正的Native吗？本文以iOS端为例，一探究竟！">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703603023.png">
+<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1484703603023.png">
 
 
 
@@ -370,7 +370,7 @@
 <p>框架提供了自己的视图层描述语言 WXML 和 WXSS，以及基于 JavaScript 的逻辑层框架，并在视图层与逻辑层间提供了数据传输和事件系统，可以让开发者可以方便的聚焦于数据与逻辑上。</p>
 </blockquote>
 <p>可以看出微信提供了自己的视图层描述语言和逻辑框架，也就是微信给了一个框架帮你处理数据和视图的绑定，生命周期等等，开发者只需要关注自己的界面和逻辑编写。那么所谓的这套框架是不是类似于RN呢？还是只是一套前端框架+开放出来的JSApi。</p>
-<p>其实我们可以在 <a href="https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/details.html" target="_blank" rel="external">细节点</a> 看到相应的说明：</p>
+<p>其实我们可以在 <a href="https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/details.html" target="_blank" rel="noopener">细节点</a> 看到相应的说明：</p>
 <ul>
 <li>在 iOS 上，小程序的 javascript 代码是运行在 JavaScriptCore 中，是由 WKWebView 来渲染的，环境有 iOS8、iOS9、iOS10</li>
 <li>在 Android 上，小程序的 javascript 代码是通过 X5 JSCore来解析，是由 X5 基于 Mobile Chrome 37 内核来渲染的</li>
@@ -378,18 +378,18 @@
 </ul>
 <p>根据猜测就是在移动端还是由web来渲染的，并不是原生的。可能除了部分组件是Native，里面的控件都是web渲染的，后面我们来验证一下。</p>
 <h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><p>根据官方的描述它的框架是这样的：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703603023.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484703603023.png" alt="image"></p>
 <p>视图层(WXML和WXSS)负责页面的布局和样式，逻辑层(JavaScript)负责业务代码逻辑的编写，对于微信提供的这个框架，我们并不需要关心逻辑层到视图层的数据传输，视图层到逻辑层的事件系统。可以直接在逻辑业务层操作数据就行了。</p>
 <h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2><p>首先来看一下小程序的开发工具<code>微信web开发者工具</code>，显示包内容可以看到如下内容：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703359668.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484703359668.png" alt="image"></p>
 <p>从里面的结构可以看出，它是<code>NodeWebkit</code>封装的Web应用。然后看编辑器的界面：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703501181.png" alt="image"></p>
-<p>它是基于<a href="https://github.com/Microsoft/monaco-editor" target="_blank" rel="external">monaco</a>，基于浏览器的代码编辑器。</p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484703501181.png" alt="image"></p>
+<p>它是基于<a href="https://github.com/Microsoft/monaco-editor" target="_blank" rel="noopener">monaco</a>，基于浏览器的代码编辑器。</p>
 <p>我们知道微信小程序是基于微信提供的视图层(WXML+WXSS),当然这个只是一个描述，最终需要转换成js、html或css的代码，可以在开发工具里面找到：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484703969268.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484703969268.png" alt="image"></p>
 <p>这些工具负责<code>WXML和WXSS</code>的转换。</p>
 <p>上面的<code>Pf</code>指的是<code>pageFrame</code>模板文件：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484704043100.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484704043100.png" alt="image"></p>
 <p>我们所写的代码最终都会转成这样的一样文件，里面包括转换后的<code>WXML</code> <code>WXSS</code> 以及写的<code>js</code>，除了这些还会有微信提供的处理工具，如：<code>WAWebview</code>、<code>webviewSDK</code>等等。后面会讲到<code>pageFrame</code>,<code>WAWebview</code>和<code>WAService</code>。</p>
 <p>里面还提供了两个工具：</p>
 <ul>
@@ -399,31 +399,31 @@
 <p>所以从这里看来还都是和<code>web</code>相关的东西，接着往下看。</p>
 <h2 id="Button标签"><a href="#Button标签" class="headerlink" title="Button标签"></a>Button标签</h2><p>现在开始从<code>Button</code>标签入手，来看下<code>Button</code>标签是怎么转换成最终手机上显示的<code>Button</code>的。</p>
 <p>首先编写<code>wxml</code>文件<code>hello.wxml</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;button&gt;I&apos;m a Button!&lt;/button&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;button&gt;I&apos;m a Button!&lt;/button&gt;</span><br></pre></td></tr></table></figure>
 <p>然后使用上面提到的<code>wcc</code>这个工具，做一个转换：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./wcc -d hello.wxml -o hello.js</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./wcc -d hello.wxml -o hello.js</span><br></pre></td></tr></table></figure>
 <p>得到的这个<code>js</code>文件其实是一个生成工具，来生成我们Json的描述树。编写一个简单的<code>index.html</code>, 去调用这个<code>js</code>文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">	&lt;title&gt;&lt;/title&gt;</div><div class="line">	&lt;script src=&quot;./hello.js&quot;&gt;&lt;/script&gt;</div><div class="line">	&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">		var out = JSON.stringify($gwx(&apos;hello.wxml&apos;)());</div><div class="line">		document.write(out);</div><div class="line">	&lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">	</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;title&gt;&lt;/title&gt;</span><br><span class="line">	&lt;script src=&quot;./hello.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">	&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">		var out = JSON.stringify($gwx(&apos;hello.wxml&apos;)());</span><br><span class="line">		document.write(out);</span><br><span class="line">	&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <p>最终的输出为：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484704768381.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484704768381.png" alt="image"></p>
 <p>这是一个描述界面节点关系的JSON树结构，后面我们会看到这里面的<code>wx-button</code>就是手机里面加载的自定义标签。</p>
 <h2 id="WAWebview-js"><a href="#WAWebview-js" class="headerlink" title="WAWebview.js"></a>WAWebview.js</h2><p>刚刚看到了从一个<code>WXML</code>写的button到一个<code>wx-button</code>的转换过程，现在来看一下<code>wx-button</code>到底是什么，可以在<code>WAWebview.js</code>里面找到这些自定义标签的定义：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484704941744.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484704941744.png" alt="image"></p>
 <p>这里会定义标签的行为是<code>web</code>还是<code>native</code>，以及标签的属性和事件处理。还可以看看其它标签：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705005819.png" alt="image"></p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705053859.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484705005819.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484705053859.png" alt="image"></p>
 <p>这里可以猜测，<code>button</code>和<code>text</code>都是web的，而<code>textarea</code>是Native的，而在<code>wx-textarea</code>里面也可以找到这样的一个方法：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705137998.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484705137998.png" alt="image"></p>
 <p>这里通过<code>WeixinJSBridge</code>调用了Native的<code>insertTextArea</code>方法去插入一个原生的<code>textarea</code>控件。后面可以再进一步验证一下。</p>
-<h2 id="WAService-js"><a href="#WAService-js" class="headerlink" title="WAService.js"></a>WAService.js</h2><p>除了刚刚提到的<code>WAWebview.js</code>外，还有一个非常主要的js文件就是<code>WAService.js</code>。这个文件提供了官网的<a href="https://mp.weixin.qq.com/debug/wxadoc/dev/api/?t=2017112" target="_blank" rel="external">api接口</a>，比如：<code>wx.uploadFile</code></p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705333141.png" alt="image"></p>
+<h2 id="WAService-js"><a href="#WAService-js" class="headerlink" title="WAService.js"></a>WAService.js</h2><p>除了刚刚提到的<code>WAWebview.js</code>外，还有一个非常主要的js文件就是<code>WAService.js</code>。这个文件提供了官网的<a href="https://mp.weixin.qq.com/debug/wxadoc/dev/api/?t=2017112" target="_blank" rel="noopener">api接口</a>，比如：<code>wx.uploadFile</code></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484705333141.png" alt="image"></p>
 <p>里面通过<code>JSBridge</code>调用原生的<code>uploadFile</code>。</p>
 <h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>有了一个初步的了解之后，我们来通过几个方面来验证一下。首先是界面，然后看看内部的加载。</p>
 <h3 id="界面分析"><a href="#界面分析" class="headerlink" title="界面分析"></a>界面分析</h3><p>在微信打开官方的<code>小程序示例</code>，点击表单组件里面的<code>button</code>, 然后来查看它的界面结构:</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484209991866.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484209991866.png" alt="image"></p>
 <p>可以看到右边除了导航栏是原生的以外，里面的按钮demo部分都是在一个<code>YYWKWebView</code>的控件里面。</p>
 <p>而从dump出来的头文件里面可以看到：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@interface YYWKWebView : WKWebView &lt;WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, YYWebViewInterface&gt;</div><div class="line">&#123;</div><div class="line">    BOOL scalesPageToFit;</div><div class="line">    BOOL _bDisablePopup;</div><div class="line">    id &lt;YYWebViewDelegate&gt; wvDelegate;</div><div class="line">    YYWKWebViewScriptMessageHandler *_scriptMessageHandler;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@interface YYWKWebView : WKWebView &lt;WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, YYWebViewInterface&gt;</span><br><span class="line">&#123;</span><br><span class="line">    BOOL scalesPageToFit;</span><br><span class="line">    BOOL _bDisablePopup;</span><br><span class="line">    id &lt;YYWebViewDelegate&gt; wvDelegate;</span><br><span class="line">    YYWKWebViewScriptMessageHandler *_scriptMessageHandler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>YYWKWebView</code>继承自<code>WKWebView</code>, 所以里面就是一个WebView的容器。</p>
 <p>而看到的<code>Button</code>也是webview里面的控件，不是原生的。通过同样的方法看了一下官方提供的其它控件，以下控件是原生Native的空间。</p>
 <ul>
@@ -436,40 +436,40 @@
 <li>textfield</li>
 <li>scrollview</li>
 </ul>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484705504134.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484705504134.png" alt="image"></p>
 <h3 id="webview分析"><a href="#webview分析" class="headerlink" title="webview分析"></a>webview分析</h3><p>既然里面是<code>webview</code>，那么使用<code>Safari</code>提供的调试工具来看下里面<code>webview</code>加载的代码吧。</p>
 <p>手机端：</p>
 <p>进入<code>设置</code>-<code>Safari</code>-<code>高级</code> 打开<code>Web检查器</code>。</p>
 <p>Safari:</p>
 <p>在<code>偏好设置</code>-<code>高级</code> 启用开发菜单。</p>
 <p>选择微信里面的<code>webview</code>加载的url。</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484210516197.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484210516197.png" alt="image"></p>
 <p>查看页面上的元素：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484210679204.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484210679204.png" alt="image"></p>
 <p>可以看到里面的控件对应就是web里面的自定义标签。比如右边的button对应的就是html里面的自定义标签<code>&lt;wx-button&gt;</code>。</p>
 <p>那么来看下在开发的时候这个页面是怎么写的？就拿那个Loading的按钮吧。</p>
 <p>源代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;button type=&quot;primary&quot; loading=&quot;true&quot;&gt;页面主操作 Loading&lt;/button&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;button type=&quot;primary&quot; loading=&quot;true&quot;&gt;页面主操作 Loading&lt;/button&gt;</span><br></pre></td></tr></table></figure>
 <p>加载后的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;wx-button loading=&quot;&quot; type=&quot;primary&quot;&gt;页面主操作 Loading&lt;/wx-button&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;wx-button loading=&quot;&quot; type=&quot;primary&quot;&gt;页面主操作 Loading&lt;/wx-button&gt;</span><br></pre></td></tr></table></figure>
 <p>小程序会把wxml里面的标签转成对应的自定义标签。</p>
 <p>直接在<code>Safari</code>里面修改对应的html代码也会马上反映到界面上面：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484211312381.png" alt="image"></p>
-<h2 id="小程序生成过程"><a href="#小程序生成过程" class="headerlink" title="小程序生成过程"></a>小程序生成过程</h2><p>我们开发编写的文件分三种<code>wxml</code>、<code>wxss</code>、<code>js</code>，<code>wxml</code>的转换刚刚也看到了首先转成json的结构树，然后根据<code>WAWebview.js</code>里面的定义转成自定义标签或者原生控件。<code>wxss</code>转成最终的<code>css</code>样式，这里就是拿的<a href="https://weui.io/" target="_blank" rel="external">weui</a>那一套。<code>js</code>转成真正的js代码。最后都会转成一个文件<code>page-frame.html</code>。</p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484211312381.png" alt="image"></p>
+<h2 id="小程序生成过程"><a href="#小程序生成过程" class="headerlink" title="小程序生成过程"></a>小程序生成过程</h2><p>我们开发编写的文件分三种<code>wxml</code>、<code>wxss</code>、<code>js</code>，<code>wxml</code>的转换刚刚也看到了首先转成json的结构树，然后根据<code>WAWebview.js</code>里面的定义转成自定义标签或者原生控件。<code>wxss</code>转成最终的<code>css</code>样式，这里就是拿的<a href="https://weui.io/" target="_blank" rel="noopener">weui</a>那一套。<code>js</code>转成真正的js代码。最后都会转成一个文件<code>page-frame.html</code>。</p>
 <p>所以在<code>Safari</code>调试工具里面看到的页面都是<code>page-frame.html</code>。</p>
 <h2 id="小程序加载"><a href="#小程序加载" class="headerlink" title="小程序加载"></a>小程序加载</h2><p>接下来来简单看看从点击小程序到小程序加载的大致过程：</p>
 <p>首先来到发现里面的小程序，点击进去后就能看到打开过的小程序列表，还是从点击官方的<code>小程序示例</code>, 开始！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">cy# [[[UIWindow keyWindow] rootViewController] _printHierarchy].toString()</div><div class="line">`&lt;MMTabBarController 0x16a86340&gt;, state: appeared, view: &lt;UILayoutContainerView 0x169181f0&gt;</div><div class="line">   | &lt;MMUINavigationController 0x16a69ad0&gt;, state: disappeared, view: &lt;UILayoutContainerView 0x16a6a2f0&gt; not in the window</div><div class="line">   |    | &lt;NewMainFrameViewController 0x15bcbe00&gt;, state: disappeared, view:  (view not loaded)</div><div class="line">   | &lt;MMUINavigationController 0x16a72800&gt;, state: disappeared, view: &lt;UILayoutContainerView 0x16a72b60&gt; not in the window</div><div class="line">   |    | &lt;ContactsViewController 0x1637e800&gt;, state: disappeared, view:  (view not loaded)</div><div class="line">   | &lt;MMUINavigationController 0x16a78a70&gt;, state: appeared, view: &lt;UILayoutContainerView 0x16a78d60&gt;</div><div class="line">   |    | &lt;FindFriendEntryViewController 0x16384e00&gt;, state: disappeared, view: &lt;MMUIHookView 0x16a7b020&gt; not in the window</div><div class="line">   |    | &lt;WAMainListViewController 0x15c72a00&gt;, state: appeared, view: &lt;UIView 0x16be5770&gt;</div><div class="line">   | &lt;MMUINavigationController 0x16a7fd30&gt;, state: disappeared, view: &lt;UILayoutContainerView 0x16a80020&gt; not in the window</div><div class="line">   |    | &lt;MoreViewController 0x16382c00&gt;, state: disappeared, view:  (view not loaded)`</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cy# [[[UIWindow keyWindow] rootViewController] _printHierarchy].toString()</span><br><span class="line">`&lt;MMTabBarController 0x16a86340&gt;, state: appeared, view: &lt;UILayoutContainerView 0x169181f0&gt;</span><br><span class="line">   | &lt;MMUINavigationController 0x16a69ad0&gt;, state: disappeared, view: &lt;UILayoutContainerView 0x16a6a2f0&gt; not in the window</span><br><span class="line">   |    | &lt;NewMainFrameViewController 0x15bcbe00&gt;, state: disappeared, view:  (view not loaded)</span><br><span class="line">   | &lt;MMUINavigationController 0x16a72800&gt;, state: disappeared, view: &lt;UILayoutContainerView 0x16a72b60&gt; not in the window</span><br><span class="line">   |    | &lt;ContactsViewController 0x1637e800&gt;, state: disappeared, view:  (view not loaded)</span><br><span class="line">   | &lt;MMUINavigationController 0x16a78a70&gt;, state: appeared, view: &lt;UILayoutContainerView 0x16a78d60&gt;</span><br><span class="line">   |    | &lt;FindFriendEntryViewController 0x16384e00&gt;, state: disappeared, view: &lt;MMUIHookView 0x16a7b020&gt; not in the window</span><br><span class="line">   |    | &lt;WAMainListViewController 0x15c72a00&gt;, state: appeared, view: &lt;UIView 0x16be5770&gt;</span><br><span class="line">   | &lt;MMUINavigationController 0x16a7fd30&gt;, state: disappeared, view: &lt;UILayoutContainerView 0x16a80020&gt; not in the window</span><br><span class="line">   |    | &lt;MoreViewController 0x16382c00&gt;, state: disappeared, view:  (view not loaded)`</span><br></pre></td></tr></table></figure>
 <p>当前的<code>ViewController</code>是<code>WAMainListViewController</code>, 里面是个tabview，所以点击事件的相应函数是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-[WAMainListViewController tableView:didSelectRowAtIndexPath:]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-[WAMainListViewController tableView:didSelectRowAtIndexPath:]</span><br></pre></td></tr></table></figure>
 <p>从IDA里面看流程就是从历史列表中取出当前点击的对象<code>WAAppItemData</code>，然后调用:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">WAAppContactPreLoader openAppWithUserName:navigationController:fromScene:debugMode:onSuccess:onFailed:</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WAAppContactPreLoader openAppWithUserName:navigationController:fromScene:debugMode:onSuccess:onFailed:</span><br></pre></td></tr></table></figure>
 <p>这里的username是一个小程序id的标示：<code>gh_d43f693ca31f@app</code>，通过手机扫码等到的url，解密后也会有一个这样的标示。</p>
 <p>如果已经加载过了的会直接打开，否则会有一个loading加载的页面去加载资源。</p>
 <p>如果是新的小程序会根据这个标示去查询小程序的信息, 包括小程序的名字，描述以及webappinfo, 然后去拉取url。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    AppConfig =     &#123;</div><div class="line">        VersionList =         (</div><div class="line">                        &#123;</div><div class="line">                type = 1;</div><div class="line">                version = 3;</div><div class="line">            &#125;</div><div class="line">        );</div><div class="line">    &#125;;</div><div class="line">    Appid = wxe5f52902cf4de896;</div><div class="line">    Network =     &#123;</div><div class="line">        DownloadDomain =         (</div><div class="line">            &quot;https://stream.weixin.qq.com&quot;,</div><div class="line">            &quot;https://54330679.qcloud.la&quot;,</div><div class="line">            &quot;https://14592619.qcloud.la&quot;</div><div class="line">        );</div><div class="line">        RequestDomain =         (</div><div class="line">            &quot;https://stream.weixin.qq.com&quot;,</div><div class="line">            &quot;https://54330679.qcloud.la&quot;,</div><div class="line">            &quot;https://14592619.qcloud.la&quot;</div><div class="line">        );</div><div class="line">        UploadDomain =         (</div><div class="line">            &quot;https://stream.weixin.qq.com&quot;,</div><div class="line">            &quot;https://54330679.qcloud.la&quot;,</div><div class="line">            &quot;https://14592619.qcloud.la&quot;</div><div class="line">        );</div><div class="line">        WsRequestDomain =         (</div><div class="line">            &quot;wss://stream.weixin.qq.com&quot;,</div><div class="line">            &quot;wss://ws.qcloud.com&quot;,</div><div class="line">            &quot;wss://14592619.qcloud.la&quot;,</div><div class="line">            &quot;wss://14592619.ws.qcloud.la&quot;</div><div class="line">        );</div><div class="line">    &#125;;</div><div class="line">    RoundedSquareIconUrl = &quot;http://mmbiz.qpic.cn/mmbiz_png/Cr5VxZfYgAIeW02ZwDHUJmWlzbE3jhKUcLfMic4UrYHp2cdv30wDb6mXCVG4cJ9vtRA9prjWjMVhv27AnOQicWAA/0?wx_fmt=png&quot;;</div><div class="line">    RunningFlagInfo =     &#123;</div><div class="line">        RunningFlag = 512;</div><div class="line">        StopServiceTime = 1472041769;</div><div class="line">    &#125;;</div><div class="line">    Setting =     &#123;</div><div class="line">        ExpiresAtList = 5184000;</div><div class="line">        MaxBackgroundLifespan = 300;</div><div class="line">        MaxCodeSize = 1;</div><div class="line">        MaxDownloadConcurrent = 10;</div><div class="line">        MaxFileStorageSize = 10;</div><div class="line">        MaxLocalstorageSize = 10;</div><div class="line">        MaxRequestConcurrent = 10;</div><div class="line">        MaxUploadConcurrent = 10;</div><div class="line">        MaxWebviewDepth = 5;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    AppConfig =     &#123;</span><br><span class="line">        VersionList =         (</span><br><span class="line">                        &#123;</span><br><span class="line">                type = 1;</span><br><span class="line">                version = 3;</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;;</span><br><span class="line">    Appid = wxe5f52902cf4de896;</span><br><span class="line">    Network =     &#123;</span><br><span class="line">        DownloadDomain =         (</span><br><span class="line">            &quot;https://stream.weixin.qq.com&quot;,</span><br><span class="line">            &quot;https://54330679.qcloud.la&quot;,</span><br><span class="line">            &quot;https://14592619.qcloud.la&quot;</span><br><span class="line">        );</span><br><span class="line">        RequestDomain =         (</span><br><span class="line">            &quot;https://stream.weixin.qq.com&quot;,</span><br><span class="line">            &quot;https://54330679.qcloud.la&quot;,</span><br><span class="line">            &quot;https://14592619.qcloud.la&quot;</span><br><span class="line">        );</span><br><span class="line">        UploadDomain =         (</span><br><span class="line">            &quot;https://stream.weixin.qq.com&quot;,</span><br><span class="line">            &quot;https://54330679.qcloud.la&quot;,</span><br><span class="line">            &quot;https://14592619.qcloud.la&quot;</span><br><span class="line">        );</span><br><span class="line">        WsRequestDomain =         (</span><br><span class="line">            &quot;wss://stream.weixin.qq.com&quot;,</span><br><span class="line">            &quot;wss://ws.qcloud.com&quot;,</span><br><span class="line">            &quot;wss://14592619.qcloud.la&quot;,</span><br><span class="line">            &quot;wss://14592619.ws.qcloud.la&quot;</span><br><span class="line">        );</span><br><span class="line">    &#125;;</span><br><span class="line">    RoundedSquareIconUrl = &quot;http://mmbiz.qpic.cn/mmbiz_png/Cr5VxZfYgAIeW02ZwDHUJmWlzbE3jhKUcLfMic4UrYHp2cdv30wDb6mXCVG4cJ9vtRA9prjWjMVhv27AnOQicWAA/0?wx_fmt=png&quot;;</span><br><span class="line">    RunningFlagInfo =     &#123;</span><br><span class="line">        RunningFlag = 512;</span><br><span class="line">        StopServiceTime = 1472041769;</span><br><span class="line">    &#125;;</span><br><span class="line">    Setting =     &#123;</span><br><span class="line">        ExpiresAtList = 5184000;</span><br><span class="line">        MaxBackgroundLifespan = 300;</span><br><span class="line">        MaxCodeSize = 1;</span><br><span class="line">        MaxDownloadConcurrent = 10;</span><br><span class="line">        MaxFileStorageSize = 10;</span><br><span class="line">        MaxLocalstorageSize = 10;</span><br><span class="line">        MaxRequestConcurrent = 10;</span><br><span class="line">        MaxUploadConcurrent = 10;</span><br><span class="line">        MaxWebviewDepth = 5;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后会获取到小程序主界面的url, 生成一个page-frame.html的页面, 再通过webview打开。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://res.servicewechat.com/weapp/release/wxe5f52902cf4de896/13/page/component/index.html</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://res.servicewechat.com/weapp/release/wxe5f52902cf4de896/13/page/component/index.html</span><br></pre></td></tr></table></figure>
 <p>小程序的生命周期是通过<code>WAWebViewController</code>调用JSApi告诉小程序。小程序里面的接口也是通过JSApi接口来和Native交互的。</p>
 <p>上面的流程分析的不是很完整，很多细节没有去分析了~~~ </p>
 <h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><p>目前小程序只面向<code>企业</code>，<code>政府</code>,<code>媒体</code>，认证通过之后可以创建一个小程序，然后会给一个<code>appid</code>。里面分为三个身份：</p>
@@ -479,7 +479,7 @@
 <li>体验者</li>
 </ul>
 <p>流程是这样的：</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1484706074992.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1484706074992.png" alt="image"></p>
 <h2 id="题外"><a href="#题外" class="headerlink" title="题外"></a>题外</h2><p>微信小程序只能通过摄像头扫码识别打开，不能通过本地图片识别二维码打开。在前面看到加载小程序的类<code>WAAppContactPreLoader</code>，里面有个<code>-[WAAppContactPreLoader openAppWithQRFullUrl:fromScene:]</code>,scene表示二维码识别的来源，1012表示图片识别的，1011表示摄像头扫码的，改一下就能从本地长按打开小程序了。</p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>所以这样来看微信小程序主要是通过它定义的描述层，把我们写的标签根据<code>WAWebview.js</code>转成对应的自定义标签或Native控件，小程序提供的API由<code>WAService.js</code>提供。这次只是一个很简单的分析，很多东西都还没有深入研究，大家请轻拍。</p>
 
@@ -792,7 +792,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -98,14 +98,14 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="在台式机的虚拟机Ubuntu系统中搭建无线网络模拟环境遇到的一些坑~">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098022480.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098042590.png">
-<meta property="og:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098106145.png">
-<meta property="og:updated_time" content="2016-06-30T16:57:54.000Z">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1467098022480.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1467098042590.png">
+<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1467098106145.png">
+<meta property="og:updated_time" content="2019-01-02T13:57:29.588Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="augmented-traffic-control模拟网络环境">
 <meta name="twitter:description" content="在台式机的虚拟机Ubuntu系统中搭建无线网络模拟环境遇到的一些坑~">
-<meta name="twitter:image" content="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098022480.png">
+<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1467098022480.png">
 
 
 
@@ -364,19 +364,19 @@
 </ul>
 <p>最后决定使用<code>ATC</code>在台式机器装个ubuntu系统搭建无线wifi。</p>
 <h3 id="Ubuntu共享wifi热点"><a href="#Ubuntu共享wifi热点" class="headerlink" title="Ubuntu共享wifi热点"></a>Ubuntu共享wifi热点</h3><p>手上有的是一个TP-Link 725的小型USB无线网卡，官网本身没有提供Linux的驱动，使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ethtool -i wlan0</div></pre></td></tr></table></figure>
-<p>查看了下网卡的芯片型号，并在github上面找了一个驱动程序<a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="external">RTL8188EU</a>，安装重启后按照步骤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ethtool -i wlan0</span><br></pre></td></tr></table></figure>
+<p>查看了下网卡的芯片型号，并在github上面找了一个驱动程序<a href="https://github.com/lwfinger/rtl8188eu" target="_blank" rel="noopener">RTL8188EU</a>，安装重启后按照步骤：</p>
 <p>1 . 新建一个wifi。</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098022480.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1467098022480.png" alt="image"></p>
 <p>2 . 设置wifi的名字、模式、密码、ipv4选择共享给其它计算机、最后保存。</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098042590.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1467098042590.png" alt="image"></p>
 <p>3 . 一般这个步骤后，电脑会自动连接这个wifi，同时也把这个wifi作为热点共享出去了，如果没有的话，选择连接到隐藏的wifi选择刚刚创建的wifi连接就好了。</p>
 <p>但是我使用的<code>TP-Link 725</code>多次没有连接成功，或者开启wifi热点了也上不去网，同时了解到<code>ad-hoc</code>模式的热点Android手机是搜索不到的，只有<code>AP</code>模式的热点才能搜到，这需要网卡本身和驱动同时支持。</p>
-<p>所以我换了一个tenda U1 的无线网卡，网上说明是支持软AP的，然后去官网找驱动，官网上的linux驱动最高只支持到4.0的内核，我是ubuntu 14.04，内核版本是4.2.0-38，所以在github上面找到一个驱动<a href="https://github.com/Mange/rtl8192eu-linux-driver" target="_blank" rel="external">rtl8192eu-linux-driver</a>，安装重启，能够开启wifi热点，不过是ad-hoc模式的。所以需要切换到AP模式才能让Android手机搜到连接。</p>
+<p>所以我换了一个tenda U1 的无线网卡，网上说明是支持软AP的，然后去官网找驱动，官网上的linux驱动最高只支持到4.0的内核，我是ubuntu 14.04，内核版本是4.2.0-38，所以在github上面找到一个驱动<a href="https://github.com/Mange/rtl8192eu-linux-driver" target="_blank" rel="noopener">rtl8192eu-linux-driver</a>，安装重启，能够开启wifi热点，不过是ad-hoc模式的。所以需要切换到AP模式才能让Android手机搜到连接。</p>
 <p>1 .  安装Ap-hotspot</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo add-apt-repository ppa:nilarimogard/webupd8</div><div class="line"></div><div class="line">sudo apt-get update</div><div class="line"></div><div class="line">sudo apt-get install ap-hotspot</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:nilarimogard/webupd8</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install ap-hotspot</span><br></pre></td></tr></table></figure>
 <p>2 . 配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ap-hotspot configure</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ap-hotspot configure</span><br></pre></td></tr></table></figure>
 <p>然后显示：</p>
 <p><code>Your wireless card or driver does not support Access Point mode</code></p>
 <p>明明买的时候写的是支持软AP的啊，怎么就不行了呢？</p>
@@ -385,31 +385,31 @@
 <p>阿西吧，看来是真不支持了。后来看到有人也遇到同样的问题，最后买的<code>水晶 MW150U</code>。</p>
 <p>再去买了一个水晶的USB网卡，插上后，驱动都不用装，开启AP模式，连接，完全没有问题。</p>
 <h3 id="配置augmented-traffic-control"><a href="#配置augmented-traffic-control" class="headerlink" title="配置augmented-traffic-control"></a>配置augmented-traffic-control</h3><p>1 . 安装pip</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install python-pip</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python-pip</span><br></pre></td></tr></table></figure>
 <p>2 . 安装ATC</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install atc_thrift atcd django-atc-api django-atc-demo-ui django-atc-profile-storage</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install atc_thrift atcd django-atc-api django-atc-demo-ui django-atc-profile-storage</span><br></pre></td></tr></table></figure>
 <p>3 . 创建app</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">django-admin startproject atcui</div><div class="line">cd atcui</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject atcui</span><br><span class="line">cd atcui</span><br></pre></td></tr></table></figure>
 <p>4 . 打开<code>atcui/settings.py</code>增加以下内容到<code>INSTALLED_APPS</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">INSTALLED_APPS = (</div><div class="line">    ...</div><div class="line">    # Django ATC API</div><div class="line">    &apos;rest_framework&apos;,</div><div class="line">    &apos;atc_api&apos;,</div><div class="line">    # Django ATC Demo UI</div><div class="line">    &apos;bootstrap_themes&apos;,</div><div class="line">    &apos;django_static_jquery&apos;,</div><div class="line">    &apos;atc_demo_ui&apos;,</div><div class="line">    # Django ATC Profile Storage</div><div class="line">    &apos;atc_profile_storage&apos;,</div><div class="line">)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    ...</span><br><span class="line">    # Django ATC API</span><br><span class="line">    &apos;rest_framework&apos;,</span><br><span class="line">    &apos;atc_api&apos;,</span><br><span class="line">    # Django ATC Demo UI</span><br><span class="line">    &apos;bootstrap_themes&apos;,</span><br><span class="line">    &apos;django_static_jquery&apos;,</span><br><span class="line">    &apos;atc_demo_ui&apos;,</span><br><span class="line">    # Django ATC Profile Storage</span><br><span class="line">    &apos;atc_profile_storage&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>5 . 打开<code>atcui/urls.py</code>,增加以下内容到<code>urlpatterns</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">from django.views.generic.base import RedirectView</div><div class="line">from django.conf.urls import include   #官网少加了这一句</div><div class="line"></div><div class="line">urlpatterns = patterns(&apos;&apos;,</div><div class="line">    ...</div><div class="line">    # Django ATC API</div><div class="line">    url(r&apos;^api/v1/&apos;, include(&apos;atc_api.urls&apos;)),</div><div class="line">    # Django ATC Demo UI</div><div class="line">    url(r&apos;^atc_demo_ui/&apos;, include(&apos;atc_demo_ui.urls&apos;)),</div><div class="line">    # Django ATC profile storage</div><div class="line">    url(r&apos;^api/v1/profiles/&apos;, include(&apos;atc_profile_storage.urls&apos;)),</div><div class="line">    url(r&apos;^$&apos;, RedirectView.as_view(url=&apos;/atc_demo_ui/&apos;, permanent=False)),</div><div class="line">)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from django.views.generic.base import RedirectView</span><br><span class="line">from django.conf.urls import include   #官网少加了这一句</span><br><span class="line"></span><br><span class="line">urlpatterns = patterns(&apos;&apos;,</span><br><span class="line">    ...</span><br><span class="line">    # Django ATC API</span><br><span class="line">    url(r&apos;^api/v1/&apos;, include(&apos;atc_api.urls&apos;)),</span><br><span class="line">    # Django ATC Demo UI</span><br><span class="line">    url(r&apos;^atc_demo_ui/&apos;, include(&apos;atc_demo_ui.urls&apos;)),</span><br><span class="line">    # Django ATC profile storage</span><br><span class="line">    url(r&apos;^api/v1/profiles/&apos;, include(&apos;atc_profile_storage.urls&apos;)),</span><br><span class="line">    url(r&apos;^$&apos;, RedirectView.as_view(url=&apos;/atc_demo_ui/&apos;, permanent=False)),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>6 . 更新配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py migrate</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
 <p>7 . 运行ATC</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo atcd</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo atcd</span><br></pre></td></tr></table></figure>
 <p>可以通过<code>-atcd-wan</code>和<code>--atcd-lan</code>来指定网卡。</p>
 <p>8 . 运行网站</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py runserver 0.0.0.0:8000</div></pre></td></tr></table></figure>
-<p>9 . 访问<a href="http://localhost:8000" target="_blank" rel="external">http://localhost:8000</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver 0.0.0.0:8000</span><br></pre></td></tr></table></figure>
+<p>9 . 访问<a href="http://localhost:8000" target="_blank" rel="noopener">http://localhost:8000</a></p>
 <p>发现页面是乱的，，，阿西吧，查看源代码发现导入css和js的代码乱了。</p>
 <p>手动找到<code>/usr/local/lib/python2.7/dist-packages/atc_demo_ui/templates/atc_demo_ui/base.html</code>, 进行修改。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> &lt;!-- Bootstrap CSS --&gt;</div><div class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/bootstrap/themes/default/css/bootstrap.min.css&quot; type=&quot;text/css&quot;/&gt;</div><div class="line">   &lt;!--&#123;% bootstrap_styles theme=&apos;default&apos; type=&apos;min.css&apos; %&#125;--&gt;</div><div class="line">   &lt;!-- Bootstrap JS --&gt;</div><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/static/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">   &lt;!--&#123;% bootstrap_script use_min=True %&#125;--&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> &lt;!-- Bootstrap CSS --&gt;</span><br><span class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/bootstrap/themes/default/css/bootstrap.min.css&quot; type=&quot;text/css&quot;/&gt;</span><br><span class="line">   &lt;!--&#123;% bootstrap_styles theme=&apos;default&apos; type=&apos;min.css&apos; %&#125;--&gt;</span><br><span class="line">   &lt;!-- Bootstrap JS --&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/static/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">   &lt;!--&#123;% bootstrap_script use_min=True %&#125;--&gt;</span><br></pre></td></tr></table></figure>
 <p>重新访问后，页面正常了。</p>
 <p>10 . 导入官方常用网络状态的设置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/facebook/augmented-traffic-control.git</div><div class="line">utils/restore-profiles.sh localhost:8000</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/facebook/augmented-traffic-control.git</span><br><span class="line">utils/restore-profiles.sh localhost:8000</span><br></pre></td></tr></table></figure>
 <p>选好    指定的模式，然后<code>Update Shaping</code>就可以了。</p>
-<p><img src="http://7xtdl4.com1.z0.glb.clouddn.com/script_1467098106145.png" alt="image"></p>
+<p><img src="http://img.cdn.blogfshare.com/script_1467098106145.png" alt="image"></p>
 
       
     </div>
@@ -720,7 +720,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
