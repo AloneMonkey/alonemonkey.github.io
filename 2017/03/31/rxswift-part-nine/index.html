@@ -98,12 +98,12 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="RxSwift中发生的错误应该怎么处理？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490794130730.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.593Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490794130730.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.358Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - 使用Result传递Error">
 <meta name="twitter:description" content="RxSwift中发生的错误应该怎么处理？">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1490794130730.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1490794130730.png">
 
 
 
@@ -349,7 +349,7 @@
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我们知道一个可被观察序列在它们收到<code>error</code>或者<code>completed</code>事件的时候会终止，终止也就意味着它的订阅者不会收到任何新的消息了。当我们开始学习<code>Rx</code>的时候可能还不会意识到这条规则的后果。</p>
 <h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><p>很多的应用通常会在点击某个按钮的时候发网络请求，下面来看看这个例子。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490794130730.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490794130730.png" alt="image"></p>
 <p>点击<code>Success</code>模拟调用一个api请求，返回成功，同样，点击<code>Failure</code>触发<code>error</code>，点击会增加计数。</p>
 <h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><p>首先把成功的点击返回<code>true</code>，失败的点击返回<code>false</code>，然后合并成单个序列。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">let successCount = Observable</span><br><span class="line">        .of(success.rx.tap.map &#123; true &#125;, failure.rx.tap.map &#123; false &#125;)</span><br><span class="line">        .merge()</span><br><span class="line">        .flatMap &#123;</span><br><span class="line">            [unowned self] performWithSuccess in</span><br><span class="line">            return self.performAPICall(shouldEndWithSuccess: performWithSuccess)</span><br><span class="line">        &#125;.scan(0) &#123; accumulator, _ in</span><br><span class="line">            return accumulator + 1</span><br><span class="line">        &#125;.map &#123; &quot;\($0)&quot; &#125;</span><br><span class="line">    </span><br><span class="line">    successCount.bindTo(self.successCount.rx.text)</span><br><span class="line">        .disposed(by: disposeBag)</span><br><span class="line">    </span><br><span class="line">    successCount.subscribe(</span><br><span class="line">        onDisposed:&#123;</span><br><span class="line">            print(&quot;dispose&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    ).disposed(by: disposeBag)</span><br><span class="line">  </span><br><span class="line">private func performAPICall(shouldEndWithSuccess: Bool) -&gt; Observable&lt;Void&gt; &#123;</span><br><span class="line">	if shouldEndWithSuccess &#123;</span><br><span class="line">		return .just(())</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		return .error(SampleError())</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
@@ -654,7 +654,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -689,7 +689,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

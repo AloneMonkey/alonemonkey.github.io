@@ -98,15 +98,15 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="本文以最常见的用户注册界面为例，学习RxSwift在实践中的更多应用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490535465031.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490539454404.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490545656582.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490618590053.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.593Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490535465031.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490539454404.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490545656582.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490618590053.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.356Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - 用户注册">
 <meta name="twitter:description" content="本文以最常见的用户注册界面为例，学习RxSwift在实践中的更多应用。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1490535465031.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1490535465031.png">
 
 
 
@@ -361,12 +361,12 @@
 </ul>
 <p>在这里其实可以把很多处理归并到<code>被观察者 - 订阅者</code>模式，通过某种事件触发某种行为，某种行为依赖不同事件的状态，所以我们可以通过<code>RxSwift</code>很方便的去解决我们的问题。</p>
 <h3 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h3><p>新建项目<code>RxSwiftRegister</code>，<code>pod</code>引入<code>RxSwift</code>和<code>RxCocoa</code>。先来设计一个简单的界面，界面上会有账号和密码的输入框，注册按钮，以及提示信息，然后绑定到<code>LoginViewController</code>。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490535465031.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490535465031.png" alt="image"></p>
 <h3 id="验证为空"><a href="#验证为空" class="headerlink" title="验证为空"></a>验证为空</h3><p>这里需要验证用户名是不是为空，是否已经注册，密码是否为空，重复密码是否一致。</p>
 <p>为了让逻辑与视图分离，这里我们使用<code>MVVM</code>模式，如果你还不知道<code>MVVM</code>可以自己先了解一下。</p>
 <p>新建<code>LoginViewModel</code>文件，接受账号、密码、重复密码作为被观察者，然后对其中的<code>text</code>进行验证处理，返回一个验证的结果(暂时用Bool表示)。</p>
 <p>文件目录:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490539454404.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490539454404.png" alt="image"></p>
 <p><code>LoginViewModel</code>编写如下代码:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class RegisterViewModel &#123;</span><br><span class="line">    let validatedUsername: Observable&lt;Bool&gt;</span><br><span class="line">    let validatedPassword: Observable&lt;Bool&gt;</span><br><span class="line">    let validatedPasswordRepeated: Observable&lt;Bool&gt;</span><br><span class="line">    </span><br><span class="line">    init(input:(</span><br><span class="line">        username: Observable&lt;String&gt;,</span><br><span class="line">        password: Observable&lt;String&gt;,</span><br><span class="line">        repeatedPassword: Observable&lt;String&gt;,</span><br><span class="line">        registerTap: Observable&lt;Void&gt;</span><br><span class="line">        ))&#123;</span><br><span class="line">        </span><br><span class="line">        validatedUsername = input.username.map&#123;</span><br><span class="line">            username in</span><br><span class="line">            return username == &quot;&quot; ? false : true</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        validatedPassword = input.password.map&#123;</span><br><span class="line">            password in</span><br><span class="line">            return password == &quot;&quot; ? false : true</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        validatedPasswordRepeated = Observable.combineLatest(input.password, input.repeatedPassword)&#123;</span><br><span class="line">            password, repeatedPassword in</span><br><span class="line">            if repeatedPassword == &quot;&quot;&#123;</span><br><span class="line">                return false</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            if password != repeatedPassword&#123;</span><br><span class="line">                return false</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            return true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这里只是简单验证是否为空，后面再改进。</p>
@@ -390,7 +390,7 @@
 <p>然后绑定:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">viewModel.validatedUsername</span><br><span class="line">    .bindTo(usernameValidation.rx.validationResult)</span><br><span class="line">    .disposed(by: disposeBag)</span><br><span class="line">        </span><br><span class="line">viewModel.validatedPassword</span><br><span class="line">    .bindTo(passwordValidation.rx.validationResult)</span><br><span class="line">    .disposed(by: disposeBag)</span><br><span class="line"></span><br><span class="line">viewModel.validatedPasswordRepeated</span><br><span class="line">    .bindTo(repeatedPasswordValidation.rx.validationResult)</span><br><span class="line">    .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
 <p>效果如下:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490545656582.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490545656582.png" alt="image"></p>
 <h3 id="注册按钮状态"><a href="#注册按钮状态" class="headerlink" title="注册按钮状态"></a>注册按钮状态</h3><p>接下来需要根据上面的验证结果来确定注册按钮的可点击状态，只有当账号、密码、重复密码都验证通过之后才会变成可点击的状态。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">let registerEnabled: Observable&lt;Bool&gt;</span><br><span class="line"></span><br><span class="line">registerEnabled = Observable.combineLatest(validatedUsername, validatedPassword, validatedPasswordRepeated)&#123;</span><br><span class="line">    username, password, repeatedPassword in</span><br><span class="line">    username.isValid &amp;&amp;</span><br><span class="line">    password.isValid &amp;&amp;</span><br><span class="line">    repeatedPassword.isValid</span><br><span class="line">    &#125;</span><br><span class="line">    .distinctUntilChanged()</span><br><span class="line">    .shareReplay(1)</span><br><span class="line"></span><br><span class="line">viewModel.registerEnabled.subscribe(</span><br><span class="line">    onNext:&#123;</span><br><span class="line">        [weak self] valid in</span><br><span class="line">        guard let `self` = self else&#123;</span><br><span class="line">            return</span><br><span class="line">        &#125;</span><br><span class="line">        self.register.isEnabled = valid</span><br><span class="line">        self.register.alpha = valid ? 1.0 : 0.5</span><br><span class="line">    &#125;</span><br><span class="line">).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
 <p>这里有几点：</p>
@@ -412,7 +412,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//合并注册点击和账号密码序列，每次注册点击，从第二个序列取最新的值</span><br><span class="line">let usernameAndPassword = Observable.combineLatest(input.username, input.password) &#123; ($0, $1) &#125;</span><br><span class="line">        </span><br><span class="line">registered = input.registerTap.withLatestFrom(usernameAndPassword)</span><br><span class="line">    .flatMapLatest&#123;</span><br><span class="line">        (username, password) in</span><br><span class="line">        return API.register(username, password: password)</span><br><span class="line">                .observeOn(MainScheduler.instance)</span><br><span class="line">                .catchErrorJustReturn(false)</span><br><span class="line">                .trackActivity(registering)</span><br><span class="line">    &#125;.shareReplay(1)</span><br></pre></td></tr></table></figure>
 <p><code>trackActivity</code>是官方例子里面的，用于监控序列的计算中和结束。</p>
 <p>到此这个例子就结束了，如图:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490618590053.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490618590053.png" alt="image"></p>
 <h3 id="项目优化"><a href="#项目优化" class="headerlink" title="项目优化"></a>项目优化</h3><p>有几点交互需要优化一下:</p>
 <ul>
 <li>点击背景收起键盘</li>
@@ -698,7 +698,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -733,7 +733,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

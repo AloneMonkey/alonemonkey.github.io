@@ -98,25 +98,25 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="除了iOS上面的逆向，其实Mac上面的逆向原理都差不多，这篇文章就带大家来试一把Mac上面的逆向。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496202790459.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496202987912.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496203071610.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496203184764.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496203632361.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496214065433.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496216671572.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496284722475.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496285419802.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496287517422.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496287617990.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496288222865.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496288264564.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1496288458933.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.592Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496202790459.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496202987912.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496203071610.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496203184764.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496203632361.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496214065433.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496216671572.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496284722475.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496285419802.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496287517422.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496287617990.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496288222865.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496288264564.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1496288458933.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.364Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一篇文章走进Mac逆向的世界">
 <meta name="twitter:description" content="除了iOS上面的逆向，其实Mac上面的逆向原理都差不多，这篇文章就带大家来试一把Mac上面的逆向。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1496202790459.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1496202790459.png">
 
 
 
@@ -368,14 +368,14 @@
 <h3 id="界面分析"><a href="#界面分析" class="headerlink" title="界面分析"></a>界面分析</h3><p>要分析QQ撤回的动作，这个动作是有在界面上面体现的，别人撤回一条消息后，那条消息会变成被撤回的通知。所以先分析界面上负责处理该状态的类，然后再去看类的调用。</p>
 <p>在Mac上面也有类似iOS <code>Reveal</code>的工具叫做<a href="https://www.interface-inspector.com/" target="_blank" rel="noopener">Interface Inspector</a>。</p>
 <p>下载下来后打开，发现是一个需要<code>License</code>的货，既然遇到了那就搞一搞吧。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496202790459.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496202790459.png" alt="image"></p>
 <p>首先从界面关键词<code>Register</code>入手吧，拖到<code>hopper</code>,在<code>Strings</code>里面搜索<code>Register</code>。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496202987912.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496202987912.png" alt="image"></p>
 <p>找到之后按<code>x</code>查找引用关系，发现是在<code>-[SMEnterLicenseViewController loadView]</code>这个函数里面存在这个字符串。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496203071610.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496203071610.png" alt="image"></p>
 <p>继续找到<code>action</code>为<code>-[SMEnterLicenseViewController register:]</code>。</p>
 <p>里面会调用<code>[r14 enterLicenseViewControllerDidSelectRegister:r15 withLicenseName:r12 code:rbx];</code></p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496203184764.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496203184764.png" alt="image"></p>
 <p>这里<code>registerLicenseWithName:code:</code>里面是通过<code>[SMLicenseManager verifyLicenseWithName:code:]</code>验证的。</p>
 <p>那直接修改代码返回<code>YES</code>。</p>
 <p><code>Modify -&gt; Assemble Instruction...</code></p>
@@ -384,7 +384,7 @@
 <p>生成一个新的可执行文件，<code>File -&gt; Produce New Executable...</code>。</p>
 <p>选择<code>Remove Signature</code>。</p>
 <p>替换原可执行文件，然后打开，弹出了:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496203632361.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496203632361.png" alt="image"></p>
 <p>看来它还验证签名了。</p>
 <p>那么找到启动时的回调:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-[SMAppDelegate applicationWillFinishLaunching:]</span><br></pre></td></tr></table></figure>
@@ -397,7 +397,7 @@
 <p>重新打开不显示那个签名问题，但是直接闪退了。</p>
 <p>猜测某些地方还有检测，然后<code>exit</code>或者<code>terminate</code>了。</p>
 <p>在<code>Strings</code>中查找字符串找到<code>terminate:</code>的引用。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496214065433.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496214065433.png" alt="image"></p>
 <p>查看每一处调用，发现这么一段代码:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void ___24+[SMLicenseManager load]_block_invoke(void * _block) &#123;</span><br><span class="line">    if ([SMLicenseManager verifyLicenseWithName:@&quot;Test User&quot; code:@&quot;GAWAE-8C69D-7LZ5H-9D8M3-HVEG7-KHNQC-CQ7RF-SEPQC-CRF82-G47U5-H6DKAB-8SKA7-EWSCM-7Q7SV-MYF4&quot;] != 0x0) &#123;</span><br><span class="line">            [*_NSApp terminate:0x0];</span><br><span class="line">    &#125;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>作者自己拿了假的<code>License</code>测试，如果通过就直接退出了。</p>
@@ -406,7 +406,7 @@
 <p>额，好像有点扯远了，不过本文的目的就是为了学习Mac逆向的分析过程，所以这一部分并不是多余的。</p>
 <p>当然这里还有坑，如何你发现<code>attach process</code>的时候报错的话，请参考<a href="http://bbs.iosre.com/t/fix-bug-for-interface-inspector-on-macos-serria/5665" target="_blank" rel="noopener">Fix Bug for Interface Inspector on macOS Serria</a>这篇文章重新编译<code>mach_inject_bundle_stub.bundle</code>。</p>
 <p>终于准备好了，附加到QQ，选中聊天界面。可以找到<code>MQAIOChatViewController</code>这样的一个<code>ViewController</code>。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496216671572.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496216671572.png" alt="image"></p>
 <p>下面通过动态跟踪函数调用来看看这个类的调用流程。</p>
 <h3 id="动态跟踪"><a href="#动态跟踪" class="headerlink" title="动态跟踪"></a>动态跟踪</h3><p>动态跟踪的方法有多种，除了iOS逆向中使用的<a href="https://www.frida.re/" target="_blank" rel="noopener">Frida</a>, lldb , Mac上面还可以使用Dtrace。</p>
 <h4 id="Frida"><a href="#Frida" class="headerlink" title="Frida"></a>Frida</h4><p><code>Frida</code>是一个通过<code>js</code>和<code>Native</code>交互的跨平台工具，可以通过<code>frida QQ</code>的方式附加，查看当前加载的类，类的方法等等。除此外还可以加载自己的<code>js</code>脚本<code>frida QQ -l trace.js</code>。</p>
@@ -452,32 +452,32 @@
 <h3 id="动态库注入"><a href="#动态库注入" class="headerlink" title="动态库注入"></a>动态库注入</h3><p>动态库注入可以通过<code>DYLD_INSERT_LIBRARIES</code>注入，也可以直接注入到可执行文件的<code>Load Command</code>。</p>
 <p>这里为了方便就直接通过环境变量注入了。</p>
 <p>点击<code>Build Phases</code>左上角的<code>+</code>，然后点击<code>New Run Script Phase</code>。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496284722475.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496284722475.png" alt="image"></p>
 <p>写入脚本:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $&#123;TARGET_BUILD_DIR&#125;</span><br><span class="line">export DYLD_INSERT_LIBRARIES=./libMacQQRevoke.dylib &amp;&amp; /Applications/QQ.app/Contents/MacOS/QQ</span><br></pre></td></tr></table></figure>
 <p><code>Command + B</code>， 注入动态库，运行QQ。</p>
 <p>然后撤回消息，发现消息还在，并且控制台有如下输出。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496285419802.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496285419802.png" alt="image"></p>
 <p>也就是Hook生效了，但是重启QQ后，那条消息还是变成了撤回状态。</p>
 <p>这个时候需要继续往上层调用去探索。</p>
 <h3 id="符号还原-Xcode调试"><a href="#符号还原-Xcode调试" class="headerlink" title="符号还原+Xcode调试"></a>符号还原+Xcode调试</h3><p>为了能看到<code>revokeMessages:</code>被调用的堆栈，先使用<a href="https://github.com/tobefuturer/restore-symbol" target="_blank" rel="noopener">restore-symbol</a>还原符号，然后再使用<a href="https://github.com/steakknife/unsign" target="_blank" rel="noopener">unsign</a>去掉签名。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./restore-symbol QQ -o QQ_symbol</span><br><span class="line">mv QQ_symbol QQ</span><br><span class="line">./unsign QQ</span><br><span class="line">mv QQ.unsigned QQ</span><br></pre></td></tr></table></figure>
 <p>替换原可执行文件之后，在<code>new_MQAIOChatViewController_revokeMessages</code>断点，<code>Command + B</code>重新运行。</p>
 <p>然后选择<code>Debug -&gt; Attach to Process</code>。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496287517422.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496287517422.png" alt="image"></p>
 <p>附加到QQ进程。</p>
 <p>撤回消息，Xcode便断在了<code>new_MQAIOChatViewController_revokeMessages</code>。</p>
 <p>查看堆栈如下:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496287617990.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496287617990.png" alt="image"></p>
 <p>因为block的符号没恢复，所以看来是block里面调用过来的。</p>
 <p>找到block内存地址<code>0x103a69663</code>减去加载基地址<code>0x0000000003757000</code>,对应到文件偏移<code>0x0000000100312663</code>。</p>
 <p><code>Hopper</code>加载文件按<code>g</code>跳转到指定地址:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496288222865.png" alt="image"></p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496288264564.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496288222865.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496288264564.png" alt="image"></p>
 <p>所以可以找到是从:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-[BHMessageChatModel revokeMessageModel:]</span><br><span class="line">-[MQAIOChatViewController chatMessageModel]</span><br></pre></td></tr></table></figure>
 <p>调过来的。<br>在<code>revokeMessageModel</code>下断点<code>b -[BHMessageChatModel revokeMessageModel:]</code>，再撤回，可以看到调用堆栈。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1496288458933.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1496288458933.png" alt="image"></p>
 <p>这下应该就比较清楚了。</p>
 <p>那么就在比较上层的调用中去处理，比如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-[RecallProcessor solveRecallNotify:isOnline:]</span><br><span class="line">-[QQMessageRevokeEngine handleRecallNotify:isOnline:]</span><br></pre></td></tr></table></figure>
@@ -614,8 +614,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/06/02/ios-book-pr/" rel="prev" title="iOS成长之路开售！">
-                iOS成长之路开售！ <i class="fa fa-chevron-right"></i>
+              <a href="/2017/06/02/writing-an-llvm-pass/" rel="prev" title="0x01 Xcode调试一个LLVM Pass">
+                0x01 Xcode调试一个LLVM Pass <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -771,7 +771,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -806,7 +806,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

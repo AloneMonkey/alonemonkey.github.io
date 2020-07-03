@@ -98,13 +98,13 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="文件描述符的本质是什么？fork对文件描述符有什么影响？Linux管道是怎么实现的？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1463051325459.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1463053626831.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.588Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1463051325459.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1463053626831.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.326Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 从文件描述符到管道">
 <meta name="twitter:description" content="文件描述符的本质是什么？fork对文件描述符有什么影响？Linux管道是怎么实现的？">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1463051325459.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1463051325459.png">
 
 
 
@@ -349,7 +349,7 @@
 
       
         <h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>文件描述符的本质是数组元素的下标：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1463051325459.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1463051325459.png" alt="image"></p>
 <p>右侧的表成为<code>i</code>节点表，该数组的一个元素对应于一个物理文件。</p>
 <p>中间的表称为文件表，一个结构体中有很多字段，其中3个字段比较重要：</p>
 <ul>
@@ -376,7 +376,7 @@
 <li>数据的读出和写入：一个进程向管道中写的内容被管道另一端的进程读出。写入的内容每次都添加在管道缓冲区的末尾，并且每次都是从缓冲区的头部读出数据。</li>
 </ul>
 <h2 id="pip进程管道"><a href="#pip进程管道" class="headerlink" title="pip进程管道"></a>pip进程管道</h2><p>利用pipe创建的管道包含两个文件描述符fd[0]以及fd[1]，需要注意的是，该处是文件描述符而不是文件流，对该文件描述符进行读写必须采用read和write系统调用，管道的两端是固定了任务的。即一端只能用于读，由描述字fd[0]表示，称其为管道读端；另一端则只能用于写，由描述字fd[1]来表示，称其为管道写端。如果试图从管道写端读取数据，或者向管道读端写入数据都将导致错误发生。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1463053626831.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/script_1463053626831.png" alt=""></p>
 <ol>
 <li>父进程调用pipe开辟管道，得到两个文件描述符指向管道的两端。</li>
 <li>父进程调用fork创建子进程，那么子进程也有两个文件描述符指向同一管道。</li>
@@ -715,7 +715,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -750,7 +750,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

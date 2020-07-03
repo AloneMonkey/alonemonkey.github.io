@@ -98,12 +98,12 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="有tableview的地方大都会有搜索功能，如何使用RxSwift写一个简单的搜索功能，请看本文内容。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1491380143544.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.591Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1491380143544.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.361Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - 城市搜索">
 <meta name="twitter:description" content="有tableview的地方大都会有搜索功能，如何使用RxSwift写一个简单的搜索功能，请看本文内容。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1491380143544.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1491380143544.png">
 
 
 
@@ -348,7 +348,7 @@
 
       
         <h3 id="Demo介绍"><a href="#Demo介绍" class="headerlink" title="Demo介绍"></a>Demo介绍</h3><p>这是一个通过<code>SearchBar</code>来搜索<code>tableview</code>内容的一个简单的例子，界面如下:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1491380143544.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1491380143544.png" alt="image"></p>
 <h3 id="mock数据"><a href="#mock数据" class="headerlink" title="mock数据"></a>mock数据</h3><p>首先添加一个<code>mock</code>数据到<code>tableview</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//mock数据</span><br><span class="line">var shownCities = [String]() // Data source for UITableView</span><br><span class="line"></span><br><span class="line">let allCities = [&quot;ChangSha&quot;,</span><br><span class="line">                    &quot;HangZhou&quot;,</span><br><span class="line">                    &quot;ShangHai&quot;,</span><br><span class="line">                    &quot;BeiJing&quot;,</span><br><span class="line">                    &quot;ShenZhen&quot;,</span><br><span class="line">                    &quot;New York&quot;,</span><br><span class="line">                    &quot;London&quot;,</span><br><span class="line">                    &quot;Oslo&quot;,</span><br><span class="line">                    &quot;Warsaw&quot;,</span><br><span class="line">                    &quot;Berlin&quot;,</span><br><span class="line">                    &quot;Praga&quot;] // Our mocked API data source</span><br><span class="line"></span><br><span class="line">//数据源</span><br><span class="line">let dataSource = RxTableViewSectionedReloadDataSource&lt;SectionModel&lt;String, String&gt;&gt;()</span><br><span class="line"></span><br><span class="line">dataSource.configureCell = &#123;</span><br><span class="line">    (_, tv, indexPath, element) in</span><br><span class="line">    let cell = tv.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!</span><br><span class="line">    cell.textLabel?.text = &quot;\(element)&quot;</span><br><span class="line">    return cell</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="获取输入"><a href="#获取输入" class="headerlink" title="获取输入"></a>获取输入</h3><p>获取用户的搜索输入，并简单判断前缀来返回结果:</p>
@@ -638,7 +638,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -673,7 +673,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

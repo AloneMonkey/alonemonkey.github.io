@@ -98,13 +98,13 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="笔者原来使用的WordPress搭建的blog，但是感觉已经被我折腾的不像博客了，不如一起来搭建一个静态博客。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1463733643686.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1463735892433.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.592Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1463733643686.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1463735892433.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用jekyll和hexo搭建免费博客">
 <meta name="twitter:description" content="笔者原来使用的WordPress搭建的blog，但是感觉已经被我折腾的不像博客了，不如一起来搭建一个静态博客。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1463733643686.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1463733643686.png">
 
 
 
@@ -348,7 +348,7 @@
       
 
       
-        <h2 id="why静态博客？"><a href="#why静态博客？" class="headerlink" title="why静态博客？"></a>why静态博客？</h2><p>一方面是我觉得我原来这个<a href="http://www.blogfshare.com" target="_blank" rel="noopener">使用WordPress搭建的blog</a>,已经被我折腾的不像博客了，里面的文章都是通过html保存在数据库的，一个影响查询速度，另一个每次备份还得从数据库去拉出一堆可读性很差的html。再者还是觉得WordPress有点笨重，而且做二次开发也比较蛋疼。加上我现在喜欢使用makedown来写东西，而WordPress支持makedown又要装一堆插件，实在是受不了了，所以自己折腾了几个静态博客搭建的框架，一个是Ruby写的jekyll，一个是node-js写的hexo。至于区别的话，hexo生成静态页面的速度要比较快，jekyll是把原文上传github，可以直接生成博客，也可以用在线编辑器处理，hexo是本地生成html再上传。至于用哪个可以自己两个都尝试一下，哪个用的爽用哪个咯。如果你在想没有空间怎么办，那么<code>github Pages</code>完全能满足你。</p>
+        <h2 id="why静态博客？"><a href="#why静态博客？" class="headerlink" title="why静态博客？"></a>why静态博客？</h2><p>一方面是我觉得我原来这个<a href="http://www.alonemonkey.com">使用WordPress搭建的blog</a>,已经被我折腾的不像博客了，里面的文章都是通过html保存在数据库的，一个影响查询速度，另一个每次备份还得从数据库去拉出一堆可读性很差的html。再者还是觉得WordPress有点笨重，而且做二次开发也比较蛋疼。加上我现在喜欢使用makedown来写东西，而WordPress支持makedown又要装一堆插件，实在是受不了了，所以自己折腾了几个静态博客搭建的框架，一个是Ruby写的jekyll，一个是node-js写的hexo。至于区别的话，hexo生成静态页面的速度要比较快，jekyll是把原文上传github，可以直接生成博客，也可以用在线编辑器处理，hexo是本地生成html再上传。至于用哪个可以自己两个都尝试一下，哪个用的爽用哪个咯。如果你在想没有空间怎么办，那么<code>github Pages</code>完全能满足你。</p>
 <h2 id="Github-Pages是什么"><a href="#Github-Pages是什么" class="headerlink" title="Github Pages是什么?"></a>Github Pages是什么?</h2><p>首先Github是什么就不用我说了，世界第一<code>基佬</code>交流会所(滑稽)。Github Pages有300M的空间可以用来搭建自己的个人站点，<a href="https://pages.github.com/" target="_blank" rel="noopener">主页在这里</a>。你可以按照上面的步骤建一个<code>repository</code>，然后传一个<code>index.html</code>直接访问就能看到效果，所以空间问题我们就解决了，for free！</p>
 <h2 id="jekyll搭建静态博客"><a href="#jekyll搭建静态博客" class="headerlink" title="jekyll搭建静态博客"></a>jekyll搭建静态博客</h2><p>下面先来介绍一个怎么使用jekyll来搭建属于自己的blog。<a href="http://jekyll.bootcss.com/" target="_blank" rel="noopener">官网地址</a></p>
 <h3 id="安装jekyll"><a href="#安装jekyll" class="headerlink" title="安装jekyll"></a>安装jekyll</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gem install jekyll</span><br><span class="line">jekyll new my-awesome-site</span><br><span class="line">cd my-awesome-site</span><br><span class="line">jekyll serve</span><br></pre></td></tr></table></figure>
@@ -401,7 +401,7 @@
 <p>安装完成后，如果你要配置你自己的站点信息，那么你就要修改<code>_config.yml</code>这个文件。里面可以配置站点名称，描述，多说，统计，友链等等。</p>
 <h3 id="使用Hux主题"><a href="#使用Hux主题" class="headerlink" title="使用Hux主题"></a>使用Hux主题</h3><p>默认的主题不是很喜欢？客官可以找<a href="http://jekyllthemes.org/" target="_blank" rel="noopener">jekyllthemes</a>这个上面找找，个人觉得<a href="https://github.com/Huxpro/huxpro.github.io" target="_blank" rel="noopener">Hux</a>这个主题还是不错的，喜欢的直接下载，重新修改里面配置就能为自己所用了。</p>
 <p>关于配置文件里面多说的duoshuo_username是什么，在多说创建站点的时候，这个框框里面填的就是你的duoshuo_username：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1463733643686.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1463733643686.png" alt="image"></p>
 <p>配置完在本地预览没有问题了，就可以直接把代码上传到github，然后访问yourusername.github.io就能看到你刚刚创建的blog了。</p>
 <h3 id="域名绑定"><a href="#域名绑定" class="headerlink" title="域名绑定"></a>域名绑定</h3><p>如果你不想使用yourusername.github.io，也可以绑定自己的域名，将域名的CNAME指向yourusername.github.io，然后在github下面新建一个CNAME文件，里面写上你的域名，然后就能通过域名直接访问到yourusername.github.io了。</p>
 <h2 id="hexo搭建静态博客"><a href="#hexo搭建静态博客" class="headerlink" title="hexo搭建静态博客"></a>hexo搭建静态博客</h2><p>上面说了，萝卜白菜各有所爱，下面也来介绍下如何使用<code>hexo</code>搭建静态博客。<a href="https://hexo.io/" target="_blank" rel="noopener">这是它的官网</a>，当然空间我们使用的还是Github Pages。</p>
@@ -485,7 +485,7 @@
 <p>先要安装deployer-git</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 <h2 id="国内国外访问不同的Pages服务"><a href="#国内国外访问不同的Pages服务" class="headerlink" title="国内国外访问不同的Pages服务"></a>国内国外访问不同的Pages服务</h2><p>同时使用了coding和github之后，由于github访问速度可能有点慢，可以通过DnsPod让国内用户访问coding，让国外用户访问github。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1463735892433.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1463735892433.png" alt="image"></p>
 <p>好了，基本介绍的也差不多了。大家自己摸索吧，有问题可以直接在下面留言~~~</p>
 <p><strong>Just enjoy it！</strong></p>
 
@@ -606,8 +606,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/25/aes-and-des/" rel="prev" title="DES和AES算法详解">
-                DES和AES算法详解 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/05/25/encrypt-jar-class/" rel="prev" title="jar包加密保护解决方案">
+                jar包加密保护解决方案 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -763,7 +763,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -798,7 +798,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -98,13 +98,13 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="尝试iOS Unity3D游戏逆向，脚本转成的c函数hook，以当前流行的旅行的青蛙为例。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/hexo/il2cppdumper.jpg">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/hexo/gamemaster_cloverpointstock.jpg">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.593Z">
+<meta property="og:image" content="http://img.alonemonkey.com/hexo/il2cppdumper.jpg">
+<meta property="og:image" content="http://img.alonemonkey.com/hexo/gamemaster_cloverpointstock.jpg">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="旅行的青蛙Unity游戏逆向修改--iOS篇">
 <meta name="twitter:description" content="尝试iOS Unity3D游戏逆向，脚本转成的c函数hook，以当前流行的旅行的青蛙为例。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/hexo/il2cppdumper.jpg">
+<meta name="twitter:image" content="http://img.alonemonkey.com/hexo/il2cppdumper.jpg">
 
 
 
@@ -351,10 +351,10 @@
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前写了一篇分析Android C#脚本的文章，主要也是为了给这篇文章做铺垫吧，因为在iOS现在都是IL2CPP模式，C#脚本已经被转成了c代码。所以要单独分析iOS的话难度会大很多，如果从Android的C#脚本入手的话，因为iOS和Android脚本都是一样的话，可以从Android分析的函数名来对应iOS的c函数然后进行hook修改。</p>
 <h3 id="提取ipa"><a href="#提取ipa" class="headerlink" title="提取ipa"></a>提取ipa</h3><p>首先从越狱设备上面提取旅行青蛙的ipa包，使用<a href="https://github.com/AloneMonkey/frida-ios-dump" target="_blank" rel="noopener">frida-ios-dump</a>一键提取即可。由于是日文名字，先通过<code>./dump.py -l</code>把名字列出来，然后复制名字或者通过bundle id去dump就可以了。</p>
 <h3 id="IL2CPP符号还原"><a href="#IL2CPP符号还原" class="headerlink" title="IL2CPP符号还原"></a>IL2CPP符号还原</h3><p>由于使用IL2CPP选项编译unity游戏，会生成cpp的代码，直接使用IDA看是看不到函数和函数名的，而且游戏中使用的字符串都被保存在global-metadata.dat的资源文件里。首先要通过提取global-metadata.dat文件里面的字符串对对应的c函数进行符号还原。具体也有现成的文章:<a href="https://www.nevermoe.com/?p=572" target="_blank" rel="noopener">还原使用IL2CPP编译的unity游戏的symbol</a>，github上面也有线程的项目也做这件事情<a href="https://github.com/Perfare/Il2CppDumper" target="_blank" rel="noopener">Il2CppDumper</a>。下载release的工具，运行Il2CppDumper.exe并依次选择il2cpp的可执行文件和global-metadata.dat文件，然后选择Auto(Plus)模式，将生成dump.cs文件和script.py脚本。使用IDA打开可执行文件然后使用script.py脚本即可还原符号。</p>
-<p><img src="http://img.cdn.blogfshare.com/hexo/il2cppdumper.jpg" alt=""></p>
+<p><img src="http://img.alonemonkey.com/hexo/il2cppdumper.jpg" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Making method name...</span><br><span class="line">Make method name done</span><br><span class="line">Setting String...</span><br><span class="line">Set string done</span><br><span class="line">Making function...</span><br><span class="line">Make function done, please wait for IDA to complete the analysis</span><br><span class="line">Script finish !</span><br></pre></td></tr></table></figure>
 <h3 id="根据函数hook代码"><a href="#根据函数hook代码" class="headerlink" title="根据函数hook代码"></a>根据函数hook代码</h3><p>还原之后就可以根据之前分析到的函数名来hook对应的代码了，首先是三叶草的数目通过<code>SuperGameMaster.CloverPointStock()</code>获取的，在IDA搜索<code>CloverPointStock</code>如下:</p>
-<p><img src="http://img.cdn.blogfshare.com/hexo/gamemaster_cloverpointstock.jpg" alt=""></p>
+<p><img src="http://img.alonemonkey.com/hexo/gamemaster_cloverpointstock.jpg" alt=""></p>
 <p>接着就可以直接hook这个函数了，由于要inline hook目前是在越狱机器上面，后面会讲到非越狱机器hook的方案。使用<a href="https://github.com/AloneMonkey/MonkeyDev" target="_blank" rel="noopener">MonkeyDev</a>新建一个<code>Logos Tweak</code>项目，清空<code>.xm</code>的内容并写入如下内容:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;substrate.h&gt;</span><br><span class="line">#import &lt;dlfcn.h&gt;</span><br><span class="line">#import &lt;mach-o/dyld.h&gt;</span><br><span class="line"></span><br><span class="line">int (*old_clover_point_stock)(void);</span><br><span class="line"></span><br><span class="line">int new_clover_point_stock(void)</span><br><span class="line">&#123;</span><br><span class="line">    return 9999;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">%ctor</span><br><span class="line">&#123;</span><br><span class="line">    @autoreleasepool</span><br><span class="line">    &#123;</span><br><span class="line">        unsigned long clover_point_stock = _dyld_get_image_vmaddr_slide(0) + 0x100093A2C;</span><br><span class="line">        MSHookFunction((void *)clover_point_stock, (void *)&amp;new_clover_point_stock, (void **)&amp;old_clover_point_stock);</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后在build settings里面设置端口和设备密码然后command + b安装就能看到效果了，其它函数的hook也是一样的:</p>
@@ -638,7 +638,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -673,7 +673,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

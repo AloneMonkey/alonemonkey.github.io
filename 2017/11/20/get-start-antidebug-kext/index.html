@@ -98,14 +98,14 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="本文主要是在现在有的一些文章和代码的基础上面笔者自己的一个尝试，了解Mac下kext开发的流程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20171120-184118.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20171120-112922.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20171120-172025.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.593Z">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20171120-184118.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20171120-112922.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20171120-172025.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.370Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动手写一个简单的Mac内核反反调试扩展">
 <meta name="twitter:description" content="本文主要是在现在有的一些文章和代码的基础上面笔者自己的一个尝试，了解Mac下kext开发的流程">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/WX20171120-184118.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/WX20171120-184118.png">
 
 
 
@@ -349,7 +349,7 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在Windows上面用户直接操作的东西都是在应用层在权限方面有很多限制，所以大部分的安全厂商和外挂、木马的对抗都是在内核层，看谁在内核层接管的时机最早，隐蔽性最高。使用到的技术有SSDT、Shadow SSDT Hook、DKOM、Inline Hook等等来达到隐藏进程、隐藏端口、隐藏恶意文件、篡改用户行为、键盘网络监控等等、之前的博客也有写过一些相关的技术文章<a href="http://www.blogfshare.com/category/kernel" target="_blank" rel="noopener">Windows内核</a>，感兴趣的可以看看。而在Mac平台虽然这种对抗现在很少，但是我们也可以开发自己的内核扩展模块来达到隐藏进程、隐藏文件、监控网络等操作。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在Windows上面用户直接操作的东西都是在应用层在权限方面有很多限制，所以大部分的安全厂商和外挂、木马的对抗都是在内核层，看谁在内核层接管的时机最早，隐蔽性最高。使用到的技术有SSDT、Shadow SSDT Hook、DKOM、Inline Hook等等来达到隐藏进程、隐藏端口、隐藏恶意文件、篡改用户行为、键盘网络监控等等、之前的博客也有写过一些相关的技术文章<a href="http://www.alonemonkey.com/category/kernel">Windows内核</a>，感兴趣的可以看看。而在Mac平台虽然这种对抗现在很少，但是我们也可以开发自己的内核扩展模块来达到隐藏进程、隐藏文件、监控网络等操作。</p>
 <h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><ul>
 <li><p>安装虚拟机和系统: 在编写Windows内核驱动的时候要需要准备环境，当时是通过Windows安装VM虚拟机加上Windbg来调试内核以及内核驱动的。所以Mac内核的调试也可以按照这个套路，笔者的环境是VMware Fusion加macos 10.12。首先安装VMware Fusion这个没什么好说的，然后下载macos 10.12的系统镜像文件<a href="https://plus.google.com/+SysAdminsHowtos/posts/6e98eRghsw1" target="_blank" rel="noopener">下载地址</a>，下完安装并设置网络为桥接模式。</p>
 </li>
@@ -371,7 +371,7 @@
 <ul>
 <li>清除kext缓存: 先运行<code>uanme -v</code>查看xnu源码版本，然后运行<code>sudo kextcache -invalidate /</code>和<code>sudo reboot</code>清除内核缓存使用新的内核加载然后重启，重启之后被调试的系统会显示IP等待被调试器附加如下图:</li>
 </ul>
-<p><img src="http://img.cdn.blogfshare.com/WX20171120-184118.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20171120-184118.png" alt=""></p>
 <ul>
 <li>配置源码进行调试: 为了能够在调试的时候能对应到源码，从<a href="https://opensource.apple.com/tarballs/xnu/" target="_blank" rel="noopener">苹果开源代码</a>下载上一步看到的xnu版本的代码放到<code>/Library/Caches/com.apple.xbs/Sources/xnu/</code>下面。并将如下设置加到<code>~/.lldbinit</code>文件:</li>
 </ul>
@@ -379,7 +379,7 @@
 <p>然后运行如下命令就可以开始内核调试:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">lldb /Library/Developer/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development</span><br><span class="line">(lldb) kdp-remote 虚拟机IP地址</span><br><span class="line">.........</span><br><span class="line">Process 1 stopped</span><br><span class="line">* thread #2, name = &apos;0xffffff800b777b00&apos;, queue = &apos;0x0&apos;, stop reason = signal SIGSTOP</span><br><span class="line">    frame #0: 0xffffff800520ea14 kernel.development`kdp_register_send_receive(send=(IONetworkingFamily`IOKernelDebugger::kdpTransmitDispatcher(void*, unsigned int) at IOKernelDebugger.cpp:369), receive=(IONetworkingFamily`IOKernelDebugger::kdpReceiveDispatcher(void*, unsigned int*, unsigned int) at IOKernelDebugger.cpp:353)) at kdp_udp.c:478 [opt]</span><br><span class="line">   475 	kdp_unregister_send_receive(</span><br><span class="line">   476 		__unused kdp_send_t	send,</span><br><span class="line">   477 		__unused kdp_receive_t	receive)</span><br><span class="line">-&gt; 478 	&#123;</span><br><span class="line">   479 		if (current_debugger == KDP_CUR_DB)</span><br><span class="line">   480 			current_debugger = NO_CUR_DB;</span><br><span class="line">   481 		kdp_flag &amp;= ~KDP_READY;</span><br><span class="line">Target 0: (kernel.development) stopped.</span><br><span class="line">(lldb)</span><br></pre></td></tr></table></figure>
 <h3 id="编写内核扩展"><a href="#编写内核扩展" class="headerlink" title="编写内核扩展"></a>编写内核扩展</h3><p>环境准备好之后就可以开始编写和调试内核扩展了，编写的过程还是在自己的系统完成然后在拷贝到虚拟机里面所以最好保证主系统和虚拟机系统大版本一致，首先使用Xcode就可以通过如下方式直接创建内核扩展模块。</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20171120-112922.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20171120-112922.png" alt=""></p>
 <p>创建出来的工程中会有如下两个函数，分别是驱动加载和卸载时调用的函数，一般用于加载的时候初始化设备驱动、hook函数，卸载的时候还原hook、删除设备驱动等等:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;mach/mach_types.h&gt;</span><br><span class="line">#include &lt;libkern/libkern.h&gt;   //printf所在头文件</span><br><span class="line"></span><br><span class="line">kern_return_t HelloWorld_start(kmod_info_t * ki, void *d);</span><br><span class="line">kern_return_t HelloWorld_stop(kmod_info_t *ki, void *d);</span><br><span class="line"></span><br><span class="line">kern_return_t HelloWorld_start(kmod_info_t * ki, void *d)</span><br><span class="line">&#123;</span><br><span class="line">    asm(&quot;int $3&quot;);</span><br><span class="line">    printf(&quot;HelloWorld_start...\n&quot;);</span><br><span class="line">    return KERN_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">kern_return_t HelloWorld_stop(kmod_info_t *ki, void *d)</span><br><span class="line">&#123;</span><br><span class="line">    printf(&quot;HelloWorld_stop...\n&quot;);</span><br><span class="line">    return KERN_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>分别在上面两个函数中使用printf打印输出，在kext中printf函数是在libkern中的，所以要include该头文件。另外为了在加载的时候能找到符号还要在<code>Info.plist</code>中的<code>OSBundleLibraries</code>加上<code>com.apple.kpi.libkern    16.0.0</code>，后面这个版本号可以在被调试的机器上面运行<code>kextstat</code>看到， 在<code>Build Setting</code>设置<code>Debug Information Format</code>为<code>DWARF with DSYM File</code> 即在Debug也生成符号文件方便源码调试， 为了让调试器主动断下来便在模块加载的时候使用<code>int 3</code>主要触发断点。</p>
@@ -393,7 +393,7 @@
 <p>我们知道在Windows平台有一个叫SSDT的东西，SSDT 的全称是 System Services Descriptor Table，系统服务描述符表，里面保存 Windows 系统服务地址的数组，通过修改该数组的函数地址就可以达到hook的效果，而在XNU中也有一个系统调用的表叫sysent，在<code>bsd/sys/sysent.h</code>可以找到其定义:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct sysent &#123;		/* system call table */</span><br><span class="line">	sy_call_t	*sy_call;	/* implementing function */</span><br><span class="line">#if CONFIG_REQUIRES_U32_MUNGING || (__arm__ &amp;&amp; (__BIGGEST_ALIGNMENT__ &gt; 4))</span><br><span class="line">	sy_munge_t	*sy_arg_munge32; /* system call arguments munger for 32-bit process */</span><br><span class="line">#endif</span><br><span class="line">	int32_t		sy_return_type; /* system call return types */</span><br><span class="line">	int16_t		sy_narg;	/* number of args */</span><br><span class="line">	uint16_t	sy_arg_bytes;	/* Total size of arguments in bytes for</span><br><span class="line">					 * 32-bit system calls</span><br><span class="line">					 */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>所以如果能够找到这个表在内存中的位置然后修改其中ptrace和sysctl在表中对应的sy_call就可以接管ptrace和sysctl的调用了，但是因为这个符号不导出只能从内核文件分析找到在内存在模块加载的基地址然后加上文件中对应的位置确定sysent。首先使用IDA打开文件<code>/Library/Developer/KDKs/KDK_10.12_16A323.kdk/System/Library/Kernels/kernel.development</code>搜索找到符号<code>sysent</code>位于<code>__constdata</code>处，根据上面的结构体将IDA显示结果手动解析如下图所示:</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20171120-172025.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20171120-172025.png" alt=""></p>
 <p>可以通过搜索sysent表中前面几个符号的地址来确定sysent在<code>__constdata</code>的位置，由于KASLR所以首先要找到内核模块加载后在内存中的基地址，在10.11之后可以通过<code>vm_kernel_unslide_or_perm_external</code>来计算偏移，之前的话可以在内存中搜索文件头:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">m_offset_t func_address = (vm_offset_t) vm_kernel_unslide_or_perm_external;</span><br><span class="line">vm_offset_t func_address_unslid = 0;</span><br><span class="line">vm_kernel_unslide_or_perm_external(func_address, &amp;func_address_unslid);</span><br><span class="line">g_kernel_slide = func_address - func_address_unslid;</span><br></pre></td></tr></table></figure>
 <p>得到内核加载在内存中的偏移之后剩下就是macho文件格式的解析与处理，首先获取<code>__CONST,__constdata</code>并该section中找<code>sysent</code>所在的位置:</p>
@@ -680,7 +680,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -715,7 +715,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -98,13 +98,13 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="在学习从网络获取数据然后更新视图之前，先来了解Moya，它是一个基于Alamofire封装的网络抽象层。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490776469921.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490776597007.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.593Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490776469921.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490776597007.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.358Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - Moya + ObjectMapper">
 <meta name="twitter:description" content="在学习从网络获取数据然后更新视图之前，先来了解Moya，它是一个基于Alamofire封装的网络抽象层。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1490776469921.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1490776469921.png">
 
 
 
@@ -349,9 +349,9 @@
 
       
         <h3 id="什么是Moya？"><a href="#什么是Moya？" class="headerlink" title="什么是Moya？"></a>什么是Moya？</h3><p><code>Moya</code>是一个基于<code>Alamofire</code>封装的一个抽象层，让我们更加关注自己的业务处理。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490776469921.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490776469921.png" alt="image"></p>
 <p>同时还可以通过中间件的方式拦截和修改请求，mock数据等等。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490776597007.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490776597007.png" alt="image"></p>
 <h3 id="使用Moya"><a href="#使用Moya" class="headerlink" title="使用Moya"></a>使用Moya</h3><p>来看一个简单的例子吧，在<code>Moya</code>中要发送一个网络请求，需要定义个枚举并实现<code>TargetType</code>协议中的方法。如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">//根据不同的枚举类型来配置不同的参数</span><br><span class="line">enum User&#123;</span><br><span class="line">    case list(Int,Int)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extension User : TargetType&#123;</span><br><span class="line">    var baseURL : URL&#123;</span><br><span class="line">        return URL(string: &quot;http://www.alonemonkey.com&quot;)!</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    var path: String&#123;</span><br><span class="line">        switch self &#123;</span><br><span class="line">        case .list:</span><br><span class="line">            return &quot;userlist&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    var method: Moya.Method&#123;</span><br><span class="line">        switch self &#123;</span><br><span class="line">        case .list:</span><br><span class="line">            return .get</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    var parameters: [String: Any]?&#123;</span><br><span class="line">        switch self&#123;</span><br><span class="line">        case .list(let start, let size):</span><br><span class="line">            return [&quot;start&quot;: start, &quot;size&quot;: size]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    var parameterEncoding: ParameterEncoding&#123;</span><br><span class="line">        return URLEncoding.default</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    var task: Task&#123;</span><br><span class="line">        return .request</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    var sampleData: Data&#123;</span><br><span class="line">        switch self &#123;</span><br><span class="line">        case .list(_, _):</span><br><span class="line">            if let path = Bundle.main.path(forResource: &quot;UserList&quot;, ofType: &quot;json&quot;) &#123;</span><br><span class="line">                do &#123;</span><br><span class="line">                    let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)</span><br><span class="line">                    return data</span><br><span class="line">                &#125; catch let error &#123;</span><br><span class="line">                    print(error.localizedDescription)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return Data()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面参数的函数大家看名字也就知道了。</p>
@@ -659,7 +659,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -694,7 +694,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

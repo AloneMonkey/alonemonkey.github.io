@@ -98,14 +98,14 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="jar包放出去就被别人破解了咋办，用JD-GUI简直就是看源代码，本文通过两个解决方案来介绍如何保护jar中的class文件。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1464175094004.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1464179773827.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1464180315561.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.594Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1464175094004.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1464179773827.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1464180315561.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.346Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jar包加密保护解决方案">
 <meta name="twitter:description" content="jar包放出去就被别人破解了咋办，用JD-GUI简直就是看源代码，本文通过两个解决方案来介绍如何保护jar中的class文件。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1464175094004.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1464175094004.png">
 
 
 
@@ -352,7 +352,7 @@
         <h3 id="为什么需要保护？"><a href="#为什么需要保护？" class="headerlink" title="为什么需要保护？"></a>为什么需要保护？</h3><p>我用java写了一个程序如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">package com.monkey.demo;</span><br><span class="line"></span><br><span class="line">// App.java</span><br><span class="line"></span><br><span class="line">public class App</span><br><span class="line">&#123;</span><br><span class="line">  static public void main( String args[] ) throws Exception &#123;</span><br><span class="line">    System.out.println( &quot;This is your application.&quot; );</span><br><span class="line">    System.out.print( &quot;Args: &quot; );</span><br><span class="line">    for (int a=0; a&lt;args.length; ++a)</span><br><span class="line">      System.out.print( args[a]+&quot; &quot; );</span><br><span class="line">    System.out.println( &quot;&quot; );</span><br><span class="line">    </span><br><span class="line">    new App().new AppChild().print();</span><br><span class="line">    </span><br><span class="line">    new Foo();</span><br><span class="line">    new Bar();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  public class AppChild&#123;</span><br><span class="line">	  public void print()&#123;</span><br><span class="line">		  System.out.println(&quot;haha ....&quot;);</span><br><span class="line">	  &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后编译生成<code>.class</code>文件后，我发布出去了，别人拿到我的<code>.class</code>文件拖到<code>JD-GUI</code>里面看到的是这样：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1464175094004.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1464175094004.png" alt="image"></p>
 <p>玩毛线，看源代码一样，当然你也可以使用<code>ProGuard</code>混淆，不过别人有点耐心还是能分析出来的。另外你还可以修改class文件里面的某些字段，这些字段对运行没有影响，但是能导致别人无法反编译。这里我们暂且不讨论这种方式，分别讨论下使用<code>ClassLoader</code>和<code>jvmti</code>对class文件加密解密的方案。</p>
 <h3 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h3><p>Java运行时装入字节码的机制隐含地意味着可以对字节码进行修改。JVM每次装入类文件时都需要一个称为ClassLoader的对象，这个对象负责把新的类装入正在运行的JVM。JVM给ClassLoader一个包含了待装入类（比如java.lang.Object）名字的字符串，然后由ClassLoader负责找到类文件，装入原始数据，并把它转换成一个Class对象。</p>
 <p>所以我们可以通过自定义一个ClassLoader，然后先对class进行解密之后，再加载到JVM。大致流程如下：</p>
@@ -390,11 +390,11 @@
 <h3 id="实际案例-1"><a href="#实际案例-1" class="headerlink" title="实际案例"></a>实际案例</h3><p>这里写了一个简单的例子，<a href="https://github.com/AloneMonkey/JarEncrypt" target="_blank" rel="noopener">代码在github</a>。</p>
 <p>首先加密jar包：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">javac Encrypt.java</span><br><span class="line">java -Djava.library.path=. -cp . Encrypt -src jardemo.jar</span><br></pre></td></tr></table></figure>
-<p><img src="http://img.cdn.blogfshare.com/script_1464179773827.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1464179773827.png" alt="image"></p>
 <p>然后会得到一个<code>jardemo_encrypt.jar</code>文件，如果现在直接去运行该文件的话肯定是会出错的，所以要做解密。</p>
 <p>先编译生成一个解密的动态库<code>libdecrypt.dylib</code>。然后运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar -agentlib:decrypt jardemo_encrypt.jar</span><br></pre></td></tr></table></figure>
-<p><img src="http://img.cdn.blogfshare.com/script_1464180315561.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1464180315561.png" alt="image"></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总的来说，使用jvmti提供的监控api，方便了我们直接对class的操作，所以第二个方案更好一些，当然其中具体使用怎么样的加密，以及如何去保证加密不被破解就需要各位发挥自己的空间了。</p>
 
       
@@ -506,16 +506,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/25/aes-and-des/" rel="next" title="DES和AES算法详解">
-                <i class="fa fa-chevron-left"></i> DES和AES算法详解
+              <a href="/2016/05/20/blog-by-jekyll-hexo/" rel="next" title="使用jekyll和hexo搭建免费博客">
+                <i class="fa fa-chevron-left"></i> 使用jekyll和hexo搭建免费博客
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/06/15/chromium-source-compile/" rel="prev" title="Mac下载编译chromium源码">
-                Mac下载编译chromium源码 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/05/25/aes-and-des/" rel="prev" title="DES和AES算法详解">
+                DES和AES算法详解 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -671,7 +671,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -706,7 +706,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

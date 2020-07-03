@@ -98,28 +98,28 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="近来微信小程序十分火热，终于解放了我手机的存储空间，那么抛开这些不说，小程序到底是怎么实现的呢？是真正的Native吗？本文以iOS端为例，一探究竟！">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703603023.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703359668.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703501181.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484703969268.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484704043100.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484704768381.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484704941744.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705005819.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705053859.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705137998.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705333141.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484209991866.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484705504134.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484210516197.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484210679204.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484211312381.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1484706074992.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.591Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484703603023.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484703359668.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484703501181.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484703969268.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484704043100.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484704768381.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484704941744.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484705005819.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484705053859.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484705137998.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484705333141.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484209991866.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484705504134.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484210516197.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484210679204.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484211312381.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1484706074992.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.350Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="细说微信小程序">
 <meta name="twitter:description" content="近来微信小程序十分火热，终于解放了我手机的存储空间，那么抛开这些不说，小程序到底是怎么实现的呢？是真正的Native吗？本文以iOS端为例，一探究竟！">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1484703603023.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1484703603023.png">
 
 
 
@@ -378,18 +378,18 @@
 </ul>
 <p>根据猜测就是在移动端还是由web来渲染的，并不是原生的。可能除了部分组件是Native，里面的控件都是web渲染的，后面我们来验证一下。</p>
 <h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><p>根据官方的描述它的框架是这样的：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484703603023.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484703603023.png" alt="image"></p>
 <p>视图层(WXML和WXSS)负责页面的布局和样式，逻辑层(JavaScript)负责业务代码逻辑的编写，对于微信提供的这个框架，我们并不需要关心逻辑层到视图层的数据传输，视图层到逻辑层的事件系统。可以直接在逻辑业务层操作数据就行了。</p>
 <h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2><p>首先来看一下小程序的开发工具<code>微信web开发者工具</code>，显示包内容可以看到如下内容：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484703359668.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484703359668.png" alt="image"></p>
 <p>从里面的结构可以看出，它是<code>NodeWebkit</code>封装的Web应用。然后看编辑器的界面：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484703501181.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484703501181.png" alt="image"></p>
 <p>它是基于<a href="https://github.com/Microsoft/monaco-editor" target="_blank" rel="noopener">monaco</a>，基于浏览器的代码编辑器。</p>
 <p>我们知道微信小程序是基于微信提供的视图层(WXML+WXSS),当然这个只是一个描述，最终需要转换成js、html或css的代码，可以在开发工具里面找到：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484703969268.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484703969268.png" alt="image"></p>
 <p>这些工具负责<code>WXML和WXSS</code>的转换。</p>
 <p>上面的<code>Pf</code>指的是<code>pageFrame</code>模板文件：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484704043100.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484704043100.png" alt="image"></p>
 <p>我们所写的代码最终都会转成这样的一样文件，里面包括转换后的<code>WXML</code> <code>WXSS</code> 以及写的<code>js</code>，除了这些还会有微信提供的处理工具，如：<code>WAWebview</code>、<code>webviewSDK</code>等等。后面会讲到<code>pageFrame</code>,<code>WAWebview</code>和<code>WAService</code>。</p>
 <p>里面还提供了两个工具：</p>
 <ul>
@@ -405,22 +405,22 @@
 <p>得到的这个<code>js</code>文件其实是一个生成工具，来生成我们Json的描述树。编写一个简单的<code>index.html</code>, 去调用这个<code>js</code>文件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;title&gt;&lt;/title&gt;</span><br><span class="line">	&lt;script src=&quot;./hello.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">	&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">		var out = JSON.stringify($gwx(&apos;hello.wxml&apos;)());</span><br><span class="line">		document.write(out);</span><br><span class="line">	&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <p>最终的输出为：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484704768381.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484704768381.png" alt="image"></p>
 <p>这是一个描述界面节点关系的JSON树结构，后面我们会看到这里面的<code>wx-button</code>就是手机里面加载的自定义标签。</p>
 <h2 id="WAWebview-js"><a href="#WAWebview-js" class="headerlink" title="WAWebview.js"></a>WAWebview.js</h2><p>刚刚看到了从一个<code>WXML</code>写的button到一个<code>wx-button</code>的转换过程，现在来看一下<code>wx-button</code>到底是什么，可以在<code>WAWebview.js</code>里面找到这些自定义标签的定义：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484704941744.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484704941744.png" alt="image"></p>
 <p>这里会定义标签的行为是<code>web</code>还是<code>native</code>，以及标签的属性和事件处理。还可以看看其它标签：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484705005819.png" alt="image"></p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484705053859.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484705005819.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484705053859.png" alt="image"></p>
 <p>这里可以猜测，<code>button</code>和<code>text</code>都是web的，而<code>textarea</code>是Native的，而在<code>wx-textarea</code>里面也可以找到这样的一个方法：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484705137998.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484705137998.png" alt="image"></p>
 <p>这里通过<code>WeixinJSBridge</code>调用了Native的<code>insertTextArea</code>方法去插入一个原生的<code>textarea</code>控件。后面可以再进一步验证一下。</p>
 <h2 id="WAService-js"><a href="#WAService-js" class="headerlink" title="WAService.js"></a>WAService.js</h2><p>除了刚刚提到的<code>WAWebview.js</code>外，还有一个非常主要的js文件就是<code>WAService.js</code>。这个文件提供了官网的<a href="https://mp.weixin.qq.com/debug/wxadoc/dev/api/?t=2017112" target="_blank" rel="noopener">api接口</a>，比如：<code>wx.uploadFile</code></p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484705333141.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484705333141.png" alt="image"></p>
 <p>里面通过<code>JSBridge</code>调用原生的<code>uploadFile</code>。</p>
 <h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>有了一个初步的了解之后，我们来通过几个方面来验证一下。首先是界面，然后看看内部的加载。</p>
 <h3 id="界面分析"><a href="#界面分析" class="headerlink" title="界面分析"></a>界面分析</h3><p>在微信打开官方的<code>小程序示例</code>，点击表单组件里面的<code>button</code>, 然后来查看它的界面结构:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484209991866.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484209991866.png" alt="image"></p>
 <p>可以看到右边除了导航栏是原生的以外，里面的按钮demo部分都是在一个<code>YYWKWebView</code>的控件里面。</p>
 <p>而从dump出来的头文件里面可以看到：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@interface YYWKWebView : WKWebView &lt;WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, YYWebViewInterface&gt;</span><br><span class="line">&#123;</span><br><span class="line">    BOOL scalesPageToFit;</span><br><span class="line">    BOOL _bDisablePopup;</span><br><span class="line">    id &lt;YYWebViewDelegate&gt; wvDelegate;</span><br><span class="line">    YYWKWebViewScriptMessageHandler *_scriptMessageHandler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -436,16 +436,16 @@
 <li>textfield</li>
 <li>scrollview</li>
 </ul>
-<p><img src="http://img.cdn.blogfshare.com/script_1484705504134.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484705504134.png" alt="image"></p>
 <h3 id="webview分析"><a href="#webview分析" class="headerlink" title="webview分析"></a>webview分析</h3><p>既然里面是<code>webview</code>，那么使用<code>Safari</code>提供的调试工具来看下里面<code>webview</code>加载的代码吧。</p>
 <p>手机端：</p>
 <p>进入<code>设置</code>-<code>Safari</code>-<code>高级</code> 打开<code>Web检查器</code>。</p>
 <p>Safari:</p>
 <p>在<code>偏好设置</code>-<code>高级</code> 启用开发菜单。</p>
 <p>选择微信里面的<code>webview</code>加载的url。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484210516197.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484210516197.png" alt="image"></p>
 <p>查看页面上的元素：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484210679204.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484210679204.png" alt="image"></p>
 <p>可以看到里面的控件对应就是web里面的自定义标签。比如右边的button对应的就是html里面的自定义标签<code>&lt;wx-button&gt;</code>。</p>
 <p>那么来看下在开发的时候这个页面是怎么写的？就拿那个Loading的按钮吧。</p>
 <p>源代码：</p>
@@ -454,7 +454,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;wx-button loading=&quot;&quot; type=&quot;primary&quot;&gt;页面主操作 Loading&lt;/wx-button&gt;</span><br></pre></td></tr></table></figure>
 <p>小程序会把wxml里面的标签转成对应的自定义标签。</p>
 <p>直接在<code>Safari</code>里面修改对应的html代码也会马上反映到界面上面：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484211312381.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484211312381.png" alt="image"></p>
 <h2 id="小程序生成过程"><a href="#小程序生成过程" class="headerlink" title="小程序生成过程"></a>小程序生成过程</h2><p>我们开发编写的文件分三种<code>wxml</code>、<code>wxss</code>、<code>js</code>，<code>wxml</code>的转换刚刚也看到了首先转成json的结构树，然后根据<code>WAWebview.js</code>里面的定义转成自定义标签或者原生控件。<code>wxss</code>转成最终的<code>css</code>样式，这里就是拿的<a href="https://weui.io/" target="_blank" rel="noopener">weui</a>那一套。<code>js</code>转成真正的js代码。最后都会转成一个文件<code>page-frame.html</code>。</p>
 <p>所以在<code>Safari</code>调试工具里面看到的页面都是<code>page-frame.html</code>。</p>
 <h2 id="小程序加载"><a href="#小程序加载" class="headerlink" title="小程序加载"></a>小程序加载</h2><p>接下来来简单看看从点击小程序到小程序加载的大致过程：</p>
@@ -479,7 +479,7 @@
 <li>体验者</li>
 </ul>
 <p>流程是这样的：</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1484706074992.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1484706074992.png" alt="image"></p>
 <h2 id="题外"><a href="#题外" class="headerlink" title="题外"></a>题外</h2><p>微信小程序只能通过摄像头扫码识别打开，不能通过本地图片识别二维码打开。在前面看到加载小程序的类<code>WAAppContactPreLoader</code>，里面有个<code>-[WAAppContactPreLoader openAppWithQRFullUrl:fromScene:]</code>,scene表示二维码识别的来源，1012表示图片识别的，1011表示摄像头扫码的，改一下就能从本地长按打开小程序了。</p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>所以这样来看微信小程序主要是通过它定义的描述层，把我们写的标签根据<code>WAWebview.js</code>转成对应的自定义标签或Native控件，小程序提供的API由<code>WAService.js</code>提供。这次只是一个很简单的分析，很多东西都还没有深入研究，大家请轻拍。</p>
 
@@ -757,7 +757,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -792,7 +792,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

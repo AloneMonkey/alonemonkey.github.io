@@ -98,15 +98,15 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="在进行某些耗时的操作时，常常需要切换到后台线程运行，更新UI的操作要确保在主线程进行，本文来看看Rx中的线程切换。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1491484089713.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1491488110688.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1491488168714.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1491488363703.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.593Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1491484089713.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1491488110688.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1491488168714.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1491488363703.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.362Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - 多线程调度">
 <meta name="twitter:description" content="在进行某些耗时的操作时，常常需要切换到后台线程运行，更新UI的操作要确保在主线程进行，本文来看看Rx中的线程切换。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1491484089713.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1491484089713.png">
 
 
 
@@ -355,7 +355,7 @@
 <p>所以我们要在不同的线程去执行不同的操作。</p>
 <h3 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h3><p>当<code>Rx</code>进行一些操作时，如果不去主动切换线程，那么它将一直在同一个线程进行。</p>
 <p>但是调度器并不等同于线程，准确的说它是一个处理发生的上下文，这个上下文可以是一个线程也是是一个调度队列，甚至<code>OperationQueueScheduler</code>里面使用的<code>NSOperation</code>。<br>你可以在同一线程创建多个调度器，或者在不同线程使用同一个调度器，虽然有点奇怪，但是确定可以。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1491484089713.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1491484089713.png" alt="image"></p>
 <p>有两种类型的调度器，串行调度器和并行调度器。</p>
 <p>下面有几种不同的内建的调度器:</p>
 <ul>
@@ -380,16 +380,16 @@
 <p>特殊队列调度<code>NSOperationQueue</code>，适合在后台处理大块的工作。</p>
 <p>传一个并行队列给串行调度器，会把它转化成串行队列。传一个串行队列给并行调度器，也不会引起任何问题，但是还是要避免这么做。</p>
 <h3 id="subscribeOn-amp-observeOn"><a href="#subscribeOn-amp-observeOn" class="headerlink" title="subscribeOn() &amp; observeOn()"></a>subscribeOn() &amp; observeOn()</h3><h4 id="SubscribeOn"><a href="#SubscribeOn" class="headerlink" title="SubscribeOn"></a>SubscribeOn</h4><p>指定Observable自身在哪个调度器上执行</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1491488110688.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1491488110688.png" alt="image"></p>
 <h4 id="ObserveOn"><a href="#ObserveOn" class="headerlink" title="ObserveOn"></a>ObserveOn</h4><p>指定一个观察者在哪个调度器上观察这个Observable</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1491488168714.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1491488168714.png" alt="image"></p>
 <ul>
 <li><code>SubscribeOn</code>的调用切换之前的线程。</li>
 <li><code>ObserveOn</code>的调用切换之后的线程。</li>
 <li><code>ObserveOn</code>之后，不可再调用<code>SubscribeOn</code>切换之后的线程。</li>
 </ul>
 <p>再来看下两者的组合使用:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1491488363703.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1491488363703.png" alt="image"></p>
 <h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>来看一个简单的例子，使用<code>RxAlamofire</code>从<code>github</code>搜索他人的项目，然后使用<code>ObjectMapper</code>解析json，最后展示到界面。由于涉及到网络以及解析，还有UI操作所以需求切换线程。</p>
 <p>老套路，创建项目，导入<code>pod</code>:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use_frameworks!</span><br><span class="line"></span><br><span class="line">target &apos;RxSwiftMultithreading&apos; do</span><br><span class="line"></span><br><span class="line">pod &apos;RxAlamofire/RxCocoa&apos;</span><br><span class="line">pod &apos;ObjectMapper&apos;</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
@@ -683,7 +683,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -718,7 +718,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

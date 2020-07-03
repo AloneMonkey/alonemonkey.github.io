@@ -98,12 +98,12 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="RxGesture是RxSwift社区的产物，是对view手势的封装。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1491817777814.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.590Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1491817777814.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.362Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - RxGesture">
 <meta name="twitter:description" content="RxGesture是RxSwift社区的产物，是对view手势的封装。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1491817777814.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1491817777814.png">
 
 
 
@@ -363,7 +363,7 @@
 <h3 id="组合"><a href="#组合" class="headerlink" title="组合"></a>组合</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tapView.rx</span><br><span class="line">    .anyGesture(.tap(), .swipe([.up, .down]))</span><br><span class="line">    .when(.recognized)</span><br><span class="line">    .subscribe(</span><br><span class="line">        onNext: &#123;</span><br><span class="line">            _ in</span><br><span class="line">            print(&quot;tap or up down&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    ).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
 <h3 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h3><p>默认对手势是没有过滤的，所以你会收到初始化的第一个手势事件。</p>
 <p>下面是几种手势对应的状态:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1491817777814.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1491817777814.png" alt="image"></p>
 <p>还可以组合不同条件的手势:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">tapView.rx</span><br><span class="line">    .anyGesture(</span><br><span class="line">        (.tap(), when: .recognized),</span><br><span class="line">        (.pan(), when: .ended)</span><br><span class="line">    )</span><br><span class="line">    .subscribe(onNext: &#123; gesture in</span><br><span class="line">        // Called whenever:</span><br><span class="line">        // - a tap is recognized (state == .recognized)</span><br><span class="line">        // - or a pan is ended (state == .ended)</span><br><span class="line">        print(&quot;tap is recognized or pan is ended&quot;)</span><br><span class="line">    &#125;)</span><br><span class="line">    .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
 <h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>代码见github:</p>
@@ -643,7 +643,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -678,7 +678,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

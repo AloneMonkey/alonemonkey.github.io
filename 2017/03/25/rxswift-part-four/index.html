@@ -98,13 +98,13 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="通过一个简单加法运算的Demo来了解实现中的被观察者和订阅者">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490431861515.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1490434019587.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.588Z">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490431861515.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1490434019587.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.355Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RxSwift学习之旅 - 加法运算">
 <meta name="twitter:description" content="通过一个简单加法运算的Demo来了解实现中的被观察者和订阅者">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/script_1490431861515.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/script_1490431861515.png">
 
 
 
@@ -351,14 +351,14 @@
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>通过前面几篇文章了解了很多<code>RxSwift</code>中的概念和序列操作。下面从一个最基础的例子来看看实际开发中的被观察者和订阅者。</p>
 <p>这里要实现的仅仅是输入三个整数并实时把三个整数相加的结果显示出来。</p>
 <h3 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h3><p>这里没有界面设计就是拖了几个<code>UITextField</code>。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490431861515.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490431861515.png" alt="image"></p>
 <p>当每次上面的三个输入框输入改变了的话，就把三个值相加显示出来。</p>
 <h3 id="项目准备"><a href="#项目准备" class="headerlink" title="项目准备"></a>项目准备</h3><p>首先创建一个<code>Swift</code>的项目<code>RxSwiftCalculator</code>，<code>Podfile</code>内容如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use_frameworks!</span><br><span class="line"></span><br><span class="line">target &apos;RxSwiftCalculator&apos; do</span><br><span class="line"></span><br><span class="line">pod &apos;RxSwift&apos;</span><br><span class="line">pod &apos;RxCocoa&apos;</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>因为需要用到UI控件里面的Rx扩展，所有引入了<code>RxCocoa</code>。</p>
 <p><code>pod install</code>后打开<code>RxSwiftCalculator.xcworkspace</code>。</p>
 <p>把界面拖一下, 然后关联到属性。</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1490434019587.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/script_1490434019587.png" alt="image"></p>
 <h3 id="UITextField-rx-text"><a href="#UITextField-rx-text" class="headerlink" title="UITextField.rx.text"></a>UITextField.rx.text</h3><p>在这个项目里面我们要监听<code>UITextField</code>的事件，然后把里面的数字取出来相加，最后显示到<code>result</code>这个<code>Label</code>上面。</p>
 <p>所以本例中<code>UITextField</code>就是一个被观察者。</p>
 <p>在<code>RxCocoa</code>里面已经对<code>UITextField</code>进行了扩展，把的里面的文本变成一个可被观察的对象<code>text</code>，源码:</p>
@@ -673,7 +673,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -708,7 +708,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

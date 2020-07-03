@@ -98,26 +98,26 @@
 <meta property="og:site_name" content="AloneMonkey">
 <meta property="og:description" content="本文介绍的是一套逆向工具，可以在非越狱手机上给任意应用增加插件。在文末的示例中，作者拿微信举例，展示出在微信中打印收发消息的功能。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170713-185817.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-141833.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/script_1499873471085.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-142910.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-143653.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-143738.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-144848.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/6911501055198_.pic_hd.jpg">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-155633.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-163128.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-163443.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-164324.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/201501058944_.jpg">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-170518.png">
-<meta property="og:image" content="http://img.cdn.blogfshare.com/WX20170726-184350.png">
-<meta property="og:updated_time" content="2019-01-02T13:57:29.588Z">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170713-185817.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-141833.png">
+<meta property="og:image" content="http://img.alonemonkey.com/script_1499873471085.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-142910.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-143653.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-143738.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-144848.png">
+<meta property="og:image" content="http://img.alonemonkey.com/6911501055198_.pic_hd.jpg">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-155633.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-163128.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-163443.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-164324.png">
+<meta property="og:image" content="http://img.alonemonkey.com/201501058944_.jpg">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-170518.png">
+<meta property="og:image" content="http://img.alonemonkey.com/WX20170726-184350.png">
+<meta property="og:updated_time" content="2020-07-03T00:53:07.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 CocoaPods 给微信集成 SDK 打印收发消息">
 <meta name="twitter:description" content="本文介绍的是一套逆向工具，可以在非越狱手机上给任意应用增加插件。在文末的示例中，作者拿微信举例，展示出在微信中打印收发消息的功能。">
-<meta name="twitter:image" content="http://img.cdn.blogfshare.com/WX20170713-185817.png">
+<meta name="twitter:image" content="http://img.alonemonkey.com/WX20170713-185817.png">
 
 
 
@@ -405,7 +405,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./md-update</span><br></pre></td></tr></table></figure>
 <h3 id="模块介绍"><a href="#模块介绍" class="headerlink" title="模块介绍"></a>模块介绍</h3><p>安装完成之后，打开Xcode，点击<code>File - New - Project...</code>，选择iOS滑动到最下方可以看到MonkeyDev提供的模块:</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170713-185817.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/WX20170713-185817.png" alt="image"></p>
 <p>介绍下这几个模块的用途:</p>
 <h4 id="越狱模块"><a href="#越狱模块" class="headerlink" title="越狱模块"></a>越狱模块</h4><ul>
 <li>CaptainHook Tweak</li>
@@ -427,43 +427,43 @@
 <p>下面主要介绍MonkeyApp的使用，开启你的非越狱插件开发之旅~ </p>
 <h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>在开始使用前，需要准备一个砸壳后的应用，可以使用越狱手机砸壳，然后获取ipa或app，没有越狱手机直接从某助手下载越狱应用即可。</p>
 <h4 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h4><p>点击<code>File - New - Project...</code>创建iOS项目，选择<code>MonkeyApp</code>。</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-141833.png" alt="image"></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-141833.png" alt="image"></p>
 <p>创建完成之后，你会得到一个这样的工程:</p>
-<p><img src="http://img.cdn.blogfshare.com/script_1499873471085.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/script_1499873471085.png" alt=""></p>
 <p>这里我创建的项目名字就是<code>MonkeyApp</code>，所以下面对应的都是<code>MonkeyApp</code>，你自己创建的由你的项目名字而定! 另外Xcode 8需要另外在App里面增加动态库的依赖，如下:</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-142910.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-142910.png" alt=""></p>
 <p><code>MonkeyAppDylib</code>这个是将被注入目标App的动态库，你自己要hook的代码可以在<code>MonkeyAppDylib.m</code>文件里面写，我在里面写了一些Demo代码，直接运行即可看到效果，支持OC runtime的HOOK，C函数的fishhook。</p>
 <p><code>AntiAntiDebug</code>这个里面是反反调试的代码。</p>
 <p><code>fishhook</code>这个是自动集成的fishhook模块。</p>
 <p>下面Framewroks已经自动集成了<code>Reveal.framework</code>和<code>Cycript.framework</code>。</p>
 <h4 id="拖入砸壳应用编译"><a href="#拖入砸壳应用编译" class="headerlink" title="拖入砸壳应用编译"></a>拖入砸壳应用编译</h4><p>打开某助手选择应用游戏里面的越狱应用，下载一个应用就是已经砸壳了的。</p>
 <p>然后打开TargetApp目录，拷贝ipa文件到当前目录下面，如下图所示:</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-143653.png" alt=""></p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-143738.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-143653.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-143738.png" alt=""></p>
 <p>然后点击运行即可，运行后可以从控制台看到动态库已经注入成功，Reveal已经成功加载！当然手机上面也运行起来了！</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-144848.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-144848.png" alt=""></p>
 <p>打开Mac上的Reveal即可查看应用的界面结构啦！如下图所示:</p>
-<p><img src="http://img.cdn.blogfshare.com/6911501055198_.pic_hd.jpg" alt=""></p>
+<p><img src="http://img.alonemonkey.com/6911501055198_.pic_hd.jpg" alt=""></p>
 <p>默认还集成了Cycript，从<a href="http://www.cycript.org/" target="_blank" rel="noopener">Cycript</a>下载SDK，然后进去SDK目录运行如下命令即可:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./cycript -r iphoneip:6666</span><br></pre></td></tr></table></figure>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-155633.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-155633.png" alt=""></p>
 <h3 id="获取微信消息"><a href="#获取微信消息" class="headerlink" title="获取微信消息"></a>获取微信消息</h3><p>下面以一个简单获取微信收到的消息为例，来进一步介绍它的使用，首先打开<code>MonkeyAppDylib.m</code>文件，在最下面写入如下代码:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@interface CMessageWrap</span><br><span class="line">@property (nonatomic, strong) NSString* m_nsContent;</span><br><span class="line">@property (nonatomic, assign) NSInteger m_uiMessageType;</span><br><span class="line">@end</span><br><span class="line">CHDeclareClass(CMessageMgr)</span><br><span class="line"></span><br><span class="line">CHMethod2(void, CMessageMgr, AsyncOnAddMsg, NSString*, msg, MsgWrap, CMessageWrap*, msgWrap)&#123;</span><br><span class="line">    NSString* content = [msgWrap m_nsContent];</span><br><span class="line">    if([msgWrap m_uiMessageType] == 1)&#123;</span><br><span class="line">        NSLog(@&quot;收到消息: %@&quot;, content);</span><br><span class="line">    &#125;</span><br><span class="line">    CHSuper2(CMessageMgr, AsyncOnAddMsg, msg, MsgWrap, msgWrap);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CHConstructor&#123;</span><br><span class="line">    CHLoadLateClass(CMessageMgr);</span><br><span class="line">    CHClassHook2(CMessageMgr, AsyncOnAddMsg, MsgWrap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后重新运行就能看到效果了:</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-163128.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-163128.png" alt=""></p>
 <p>然后就可以愉快的开发非越狱插件了，还可以直接调试!</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-163443.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-163443.png" alt=""></p>
 <h3 id="使用CocoaPods集成SDK"><a href="#使用CocoaPods集成SDK" class="headerlink" title="使用CocoaPods集成SDK"></a>使用CocoaPods集成SDK</h3><p>MonkeyDev还支持CocoaPods给第三方应用集成SDK，新建Podfile，写入:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target &apos;MonkeyAppDylib&apos; do</span><br><span class="line">     pod &apos;FLEX&apos;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>这里的Target要设置为动态库而不是App，然后执行Pod install。然后将如下选项改回Yes。</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-164324.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-164324.png" alt=""></p>
 <p>在<code>MonkeyAppDylib.m</code>文件中加入SDK初始化代码:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;FLEX/FLEXManager.h&gt;</span><br><span class="line"></span><br><span class="line">void initCycriptServer()&#123;</span><br><span class="line">    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) &#123;</span><br><span class="line">        [[FLEXManager sharedManager] showExplorer];</span><br><span class="line">        CYListenServer(6666);</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>运行效果如下:</p>
-<p><img src="http://img.cdn.blogfshare.com/201501058944_.jpg" alt=""></p>
+<p><img src="http://img.alonemonkey.com/201501058944_.jpg" alt=""></p>
 <h3 id="非越狱插件商店"><a href="#非越狱插件商店" class="headerlink" title="非越狱插件商店"></a>非越狱插件商店</h3><p>既然可以支持CocoaPods了，那么完全可以将自己写的非越狱插件传到CocoaPods，然后通过pod一键安装！</p>
 <p>下面就将上面写的获取微信消息插件放到CocoaPods，新建<code>Cocoa Touch Framework</code>项目，然后增加头文件<code>CaptainHook.h</code>和自己的源文件<code>PrintWXMessage.m</code>，并将上面的代码拷贝过来，如下图所示:</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-170518.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-170518.png" alt=""></p>
 <p>然后生成framework弄成zip包(zip包需要包含模拟器和真机的架构才能通过本地验证)，编辑<code>PrintWXMessage.podspec</code>文件内容如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |spec|</span><br><span class="line">  spec.name             = &quot;PrintWXMessage&quot;</span><br><span class="line">  spec.version          = &quot;1.0.0&quot;</span><br><span class="line">  spec.summary          = &quot;Print WX Message for MonkeyDev&quot;</span><br><span class="line">  spec.description      = &lt;&lt;-DESC</span><br><span class="line">                          - Print WX Message for MonkeyDev</span><br><span class="line">                        DESC</span><br><span class="line"></span><br><span class="line">  spec.homepage         = &quot;https://github.com/AloneMonkey/MonkeyDev&quot;</span><br><span class="line"></span><br><span class="line">  spec.license          = &#123; :type =&gt; &quot;BSD&quot;, :file =&gt; &quot;LICENSE&quot; &#125;</span><br><span class="line">  spec.author           = &#123; &quot;AloneMonkey&quot; =&gt; &quot;liupeiqing1993@163.com&quot; &#125;</span><br><span class="line">  spec.social_media_url = &quot;http://weibo.com/xiaoqing28&quot;</span><br><span class="line">  spec.platform         = :ios, &quot;8.0&quot;</span><br><span class="line">  spec.source           = &#123; :http =&gt; &quot;https://github.com/AloneMonkey/MonkeyDevPod/raw/master/PrintWXMessage/LatestBuild/PrintWXMessage.zip&quot;&#125;</span><br><span class="line">  spec.vendored_frameworks = &quot;PrintWXMessage.framework&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>这里source直接写的是zip包的地址，里面就是笔者生成的framework动态库。</p>
@@ -475,7 +475,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">source &apos;https://github.com/AloneMonkey/MonkeyDevSpecs.git&apos;</span><br><span class="line"></span><br><span class="line">target &apos;MonkeyAppDylib&apos; do</span><br><span class="line">     pod &apos;PrintWXMessage&apos;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">~ MonkeyApp pod install</span><br><span class="line">Cloning spec repo `alonemonkey` from `https://github.com/AloneMonkey/MonkeyDevSpecs.git`</span><br><span class="line">Analyzing dependencies</span><br><span class="line">Downloading dependencies</span><br><span class="line">Installing PrintWXMessage (1.0.0)</span><br><span class="line">Generating Pods project</span><br><span class="line">Integrating client project</span><br><span class="line"></span><br><span class="line">[!] Please close any current Xcode sessions and use `MonkeyPod.xcworkspace` for this project from now on.</span><br><span class="line">Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.</span><br></pre></td></tr></table></figure>
 <p>运行即可看到插件已经完美集成成功！！！</p>
-<p><img src="http://img.cdn.blogfshare.com/WX20170726-184350.png" alt=""></p>
+<p><img src="http://img.alonemonkey.com/WX20170726-184350.png" alt=""></p>
 <p>MonkeyDev项目地址请点击阅读原文查看。</p>
 
       
@@ -752,7 +752,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.blogfshare.com/" title="Coder" target="_blank">Coder</a>
+                  <a href="http://www.alonemonkey.com/" title="Coder" target="_blank">Coder</a>
                 </li>
               
             </ul>
@@ -787,7 +787,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
